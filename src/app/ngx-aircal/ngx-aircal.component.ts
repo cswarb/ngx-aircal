@@ -91,7 +91,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
         
         if (this.options.nextMonthWrapAround) {
             nextWrapArounddateObj = moment(date).startOf("month").add(iterator, "day");
-            nextWrapArounddateObj["isLastMonth"] = true; //@todo - Fix this
+            nextWrapArounddateObj["isNextMonth"] = true; //@todo - Fix this
         };
 
         iterator = iterator + 1;
@@ -101,45 +101,45 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     return calendarDays;
   }
 
-  public isToday(date: any) {
-    if (!date || !this.options.highlightToday) return false;
-    return moment().format("L") === date.format("L");
-  }
-
-  public selectDate(date: any) {
-    if (!date || date.isLastMonth) return;
-
-    if (!this.selectedStartDate) {
-      this.selectedStartDate = date;
-    } else {
-      this.selectedEndDate = date;
-    };
-
-    //calculate number of days between start and end
-    if (this.options.daysSelectedCounterVisible) {
-      if (this.selectedStartDate && this.selectedEndDate) {
-        let selectedDays = moment.duration(this.selectedEndDate.diff(this.selectedStartDate));
-        this.numberOfDaysSelected.days = Math.round(selectedDays.asDays());
-        this.numberOfDaysSelected.months = Math.round(selectedDays.asMonths());
-        this.numberOfDaysSelected.years = Math.round(selectedDays.asYears());
-      };
-    };
-
-    //Fire event
-    this.dateRangeChanged();
-  }
-
-  public isSelected(date: any) {
-    if (!date) return false;
-
-    if (!!this.selectedStartDate && !!this.selectedEndDate) {
-      return this.selectedStartDate.isSameOrBefore(date) && this.selectedEndDate.isSameOrAfter(date);
-    };
-
-    if (this.selectedStartDate) {
-      return this.selectedStartDate.isSame(date);
+    public isToday(date: any) {
+        if (!date || !this.options.highlightToday) return false;
+        return moment().format("L") === date.format("L");
     }
-  }
+
+    public selectDate(date: any) {
+        if (!date || date.isLastMonth || date.isNextMonth) return;
+
+        if (!this.selectedStartDate) {
+            this.selectedStartDate = date;
+        } else {
+            this.selectedEndDate = date;
+        };
+
+        //calculate number of days between start and end
+        if (this.options.daysSelectedCounterVisible) {
+            if (this.selectedStartDate && this.selectedEndDate) {
+                let selectedDays = moment.duration(this.selectedEndDate.diff(this.selectedStartDate));
+                this.numberOfDaysSelected.days = Math.round(selectedDays.asDays());
+                this.numberOfDaysSelected.months = Math.round(selectedDays.asMonths());
+                this.numberOfDaysSelected.years = Math.round(selectedDays.asYears());
+            };
+        };
+
+        //Fire event
+        this.dateRangeChanged();
+    }
+
+    public isSelected(date: any) {
+        if (!date) return false;
+
+        if (!!this.selectedStartDate && !!this.selectedEndDate) {
+            return this.selectedStartDate.isSameOrBefore(date) && this.selectedEndDate.isSameOrAfter(date);
+        };
+
+        if (this.selectedStartDate) {
+            return this.selectedStartDate.isSame(date);
+        }
+    }
 
   public dateRangeCommitted() {
     this.onDateRangeCommitted.next(

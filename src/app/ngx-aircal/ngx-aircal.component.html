@@ -24,7 +24,7 @@
       <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
     </div>
     <div class="flex-container flex-wrap">
-      <div *ngFor="let day of daysArray" class="aircal__days" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day.isLastMonth), 'aircal--istoday': isToday(day), 'aircal--selected': isSelected(day)}">{{day?.date()}}</div>
+      <div *ngFor="let day of daysArray" class="aircal__days" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day.isLastMonth || day.isNextMonth), 'aircal--istoday': isToday(day), 'aircal--selected': isSelected(day) && !day.isNextMonth}">{{day?.date()}}</div>
     </div>
 
     <div class="flex-container aircal__actions">
