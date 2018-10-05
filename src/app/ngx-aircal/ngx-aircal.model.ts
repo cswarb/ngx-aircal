@@ -12,6 +12,7 @@ export class AircalOptions {
   public selectionShortcuts?: any = {"7D": "7 Days", "14D": "14 Days", "1M": "1 Month", "6M": "6 Months", "1Y": "1 Year"}; //@todo
   public dateFormat?: string;
   public previousMonthWrapAround?: boolean = true;
+  public nextMonthWrapAround?: boolean = true;
   public daysSelectedCounterVisible?: boolean = true;
   public width?: string;
   public height?: string;

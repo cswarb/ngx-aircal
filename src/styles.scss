@@ -21,11 +21,14 @@
 .flex-center {
   justify-content: center;
   align-items: center;
+      text-align: center;
 }
 
 .aircal {
-  width: 240px;
+  width: 280px;
   font-family: sans-serif;
+  position: relative;
+  left: 1px;
   &__meta {
     display: flex;
     justify-content: space-between;
@@ -94,8 +97,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
+    margin-top: -1px;
+    margin-left: -1px;
     border: 1px solid rgb(228, 231, 231);
+    // outline: 1px solid rgb(228, 231, 231);
     color: rgb(72, 72, 72);
     padding: 0.25rem;
     font-size: 0.8rem;
@@ -124,6 +129,7 @@
   }
   &--inactive {
     opacity: 0.3;
+    pointer-events: none;
   }
   &--selected {
     background-color: rgb(0, 166, 153);
@@ -132,5 +138,41 @@
   }
   &--istoday:not(.aircal--selected) {
     color: rgb(0, 122, 135);
+  }
+}
+
+
+
+.flex {
+  &__single {
+    flex: 1;
+  }
+}
+
+
+
+table {
+  font-family: sans-serif;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  thead {
+
+  }
+  tbody {
+
+    tr {
+
+      td {
+        box-sizing: border-box;
+        font-size: 14px;
+        text-align: center;
+        color: rgb(202, 204, 205);
+        background: rgb(255, 255, 255);
+        border-width: 1px;
+        border-style: solid;
+        border-color: rgb(228, 231, 231);
+        border-image: initial;
+      }
+    }
   }
 }

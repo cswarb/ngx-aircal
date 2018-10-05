@@ -24,9 +24,7 @@
       <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
     </div>
     <div class="flex-container flex-wrap">
-      <div *ngFor="let day of daysArray">
-        <div class="aircal__days" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day.isLastMonth), 'aircal--istoday': isToday(day), 'aircal--selected': isSelected(day)}">{{day?.date()}}</div>
-      </div>
+      <div *ngFor="let day of daysArray" class="aircal__days" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day.isLastMonth), 'aircal--istoday': isToday(day), 'aircal--selected': isSelected(day)}">{{day?.date()}}</div>
     </div>
 
     <div class="flex-container aircal__actions">
@@ -38,3 +36,58 @@
   </div>
 
 </div>
+
+
+
+<!-- <table>
+  <thead>
+
+  </thead>
+  <tbody>
+    <tr>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+    </tr>
+    <tr>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+    </tr>
+    <tr>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+    </tr>
+    <tr>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+    </tr>
+    <tr>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+      <td class="aircal__days" style="display: table-cell;">1</td>
+    </tr>
+  </tbody>
+</table> -->

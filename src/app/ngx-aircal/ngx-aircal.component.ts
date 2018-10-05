@@ -12,6 +12,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
   public date = moment();
   public daysArray: Array<any> = [];
   public currentMonth: string = "";
+  public calendarSpaces: number = 35;
 
   public selectedStartDate = null;
   public selectedEndDate = null;
@@ -72,12 +73,34 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
     //Pull in the previous months values to fill in the empty space
     for (let i = 0; i < currentMonth.weekday(); i++) {
-      let dateObj = null;
-      if (this.options.previousMonthWrapAround) {
-        dateObj = moment(date).startOf("month").subtract(i + 1, "day");
-        dateObj["isLastMonth"] = true; //@todo - Fix this
-      };
-      calendarDays.unshift(dateObj);
+      let previousWrapArounddateObj = null;
+      let nextWrapArounddateObj = null;
+
+        if (this.options.previousMonthWrapAround) {
+          previousWrapArounddateObj = moment(date).startOf("month").subtract(i + 1, "day");
+          previousWrapArounddateObj["isLastMonth"] = true; //@todo - Fix this
+        };
+
+      calendarDays.unshift(previousWrapArounddateObj);
+    };
+
+    if (this.options.nextMonthWrapAround) {
+      //35 spaces on calendar total
+      let spacesLeft = this.calendarSpaces - calendarDays.length,
+        nextMonth = moment(currentMonth).add(1, "months"),
+        daysInNextMonth = Array.from(new Array(nextMonth.daysInMonth()).keys());
+        
+      daysInNextMonth = daysInNextMonth.slice(0, spacesLeft);
+
+      var nextMonthsCalendarDays = daysInNextMonth.map((e) => {
+          var nextCalDay = moment(nextMonth).add(e, "day");
+          nextCalDay["isLastMonth"] = true; //@todo - Fix this
+          return nextCalDay;
+      });
+
+      nextMonthsCalendarDays.forEach((nextMonthsCalendarDay: any) => {
+        calendarDays.push(nextMonthsCalendarDay);
+      });
     };
 
     return calendarDays;
@@ -89,6 +112,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
   }
 
   public selectDate(date: any) {
+    if (!date || date.isLastMonth) return;
+
     if (!this.selectedStartDate) {
       this.selectedStartDate = date;
     } else {
