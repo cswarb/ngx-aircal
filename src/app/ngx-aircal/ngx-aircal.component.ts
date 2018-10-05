@@ -65,16 +65,16 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
   public createAircal(date: Object): Array<any> {
     var currentMonth = moment(date).startOf("month"),
-      days = Array.from(new Array(currentMonth.daysInMonth()).keys());
+        nextMonth = moment(currentMonth).add(1, "months"),
+        days = Array.from(new Array(currentMonth.daysInMonth()).keys());
 
     var calendarDays = days.map((e) => {
       return moment(currentMonth).add(e, "day");
     });
 
     //Pull in the previous months values to fill in the empty space
-    for (let i = 0; i < currentMonth.weekday(); i++) {
+    for (let i = 1; i < currentMonth.weekday(); i++) {
       let previousWrapArounddateObj = null;
-      let nextWrapArounddateObj = null;
 
         if (this.options.previousMonthWrapAround) {
           previousWrapArounddateObj = moment(date).startOf("month").subtract(i + 1, "day");
@@ -83,24 +83,19 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
       calendarDays.unshift(previousWrapArounddateObj);
     };
-
-    if (this.options.nextMonthWrapAround) {
-      //35 spaces on calendar total
-      let spacesLeft = this.calendarSpaces - calendarDays.length,
-        nextMonth = moment(currentMonth).add(1, "months"),
-        daysInNextMonth = Array.from(new Array(nextMonth.daysInMonth()).keys());
+    
+    //See if there is any space left for next months wraparound
+    let iterator = 0;
+    while (calendarDays.length < this.calendarSpaces) {
+        let nextWrapArounddateObj = null;
         
-      daysInNextMonth = daysInNextMonth.slice(0, spacesLeft);
+        if (this.options.nextMonthWrapAround) {
+            nextWrapArounddateObj = moment(date).startOf("month").add(iterator, "day");
+            nextWrapArounddateObj["isLastMonth"] = true; //@todo - Fix this
+        };
 
-      var nextMonthsCalendarDays = daysInNextMonth.map((e) => {
-          var nextCalDay = moment(nextMonth).add(e, "day");
-          nextCalDay["isLastMonth"] = true; //@todo - Fix this
-          return nextCalDay;
-      });
-
-      nextMonthsCalendarDays.forEach((nextMonthsCalendarDay: any) => {
-        calendarDays.push(nextMonthsCalendarDay);
-      });
+        iterator = iterator + 1;
+        calendarDays.push(nextWrapArounddateObj);
     };
 
     return calendarDays;
