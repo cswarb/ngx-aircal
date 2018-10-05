@@ -1,0 +1,136 @@
+/* Add application styles & imports to this file! */
+* {
+  box-sizing: border-box;
+}
+.bold {
+  font-weight: 700;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-column {
+      flex-flow: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.aircal {
+  width: 240px;
+  font-family: sans-serif;
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__text {
+    color: rgb(72, 72, 72);
+    &__month {
+      font-weight: 700;
+    }
+  }
+  &__icon {
+    background-size: 1rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.7;
+    &__next {
+      background-image: url("https://image.flaticon.com/icons/svg/66/66831.svg");
+    }
+    &__prev {
+      background-image: url("https://image.flaticon.com/icons/svg/109/109618.svg");
+    }
+    &:hover {
+      cursor: pointer;
+      opacity: 0.5;
+    }
+  }
+  &__button {
+    outline: none;
+    border: 0;
+    margin: 1rem 0;
+    background: transparent;
+    color: rgb(72, 72, 72);
+    font-size: 0.85rem;
+    justify-content: space-between;
+    align-content: space-between;
+    &:hover:not(:disabled) {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    &:disabled {
+      opacity: 0.2;
+      &:hover {
+        cursor: auto;
+      }
+    }
+    &--apply {
+      color: rgb(0, 166, 153);
+    }
+    &--cancel {
+      // color: red;
+    }
+  }
+  &__actions {
+    margin: 1rem 0;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    > button:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+  &__days {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    border: 1px solid rgb(228, 231, 231);
+    color: rgb(72, 72, 72);
+    padding: 0.25rem;
+    font-size: 0.8rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    text-align: center;
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(228, 231, 231);
+      &.aircal--selected {
+        background-color: darken(rgb(0, 166, 153), 5%);
+      }
+    }
+  }
+  &__daysofweek {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    color: rgb(72, 72, 72);
+    padding: 0.25rem;
+    font-size: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    text-align: center;
+  }
+  &--inactive {
+    opacity: 0.3;
+  }
+  &--selected {
+    background-color: rgb(0, 166, 153);
+    color: white;
+    border-color: rgb(0, 166, 153);
+  }
+  &--istoday:not(.aircal--selected) {
+    color: rgb(0, 122, 135);
+  }
+}
