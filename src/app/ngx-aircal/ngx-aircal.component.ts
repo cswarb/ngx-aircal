@@ -10,8 +10,9 @@ import { AircalOptions, AircalResponse, AircalFormResponse } from "./ngx-aircal.
 })
 export class NgxAircalComponent implements OnInit, OnDestroy {
   public date = moment();
+  public nextMonthDate = moment().add(1, "month");
   public daysArray: Array<any> = [];
-  public currentMonth: string = "";
+  public nextMonthDaysArray: Array<any> = [];
   public calendarSpaces: number = 35;
 
   public selectedStartDate = null;
@@ -49,17 +50,22 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.daysArray = this.createAircal(this.date);
+    this.nextMonthDaysArray = this.createAircal(moment(this.date).add(1, "month"));
   }
 
   public prevMonth(): any {
     this.date = this.date.subtract(1, "month");
+    this.nextMonthDate = moment(this.date).add(1, "month");
     this.daysArray = this.createAircal(this.date);
+    this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
     this.calendarViewChanged();
   }
 
-  public nextMonth(date: Object): any {
+  public nextMonth(): any {
     this.date = this.date.add(1, "month");
+    this.nextMonthDate = moment(this.date).add(1, "month");
     this.daysArray = this.createAircal(this.date);
+    this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
     this.calendarViewChanged();
   }
 

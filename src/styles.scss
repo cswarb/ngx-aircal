@@ -24,11 +24,26 @@
       text-align: center;
 }
 
+.flex-align-top {
+  align-items: flex-start;
+}
+
 .aircal {
-  width: 280px;
+  width: 560px;
   font-family: sans-serif;
   position: relative;
   left: 1px;
+  margin: 5rem auto;
+  &__cal {
+    &--double {
+      &:first-child {
+        margin-right: 0.75rem;
+      }
+      &:last-child {
+        margin-left: 0.75rem;
+      }
+    }
+  }
   &__meta {
     display: flex;
     justify-content: space-between;
@@ -38,6 +53,8 @@
     color: rgb(72, 72, 72);
     &__month {
       font-weight: 700;
+      margin: 0;
+      flex: 1;
     }
   }
   &__icon {
