@@ -12,7 +12,9 @@ export class AppComponent {
 
   constructor() {
     this.calendarOptions = new AircalOptions({
-      // defaultStart: {year: "2018", month: "06"},
+      // defaultStart: new AircalDateModel({
+      //   year: "2018", month: "06"
+      // }),      
       minYear: 2017,
       maxYear: 2019,
       // startDate: new AircalDateModel({

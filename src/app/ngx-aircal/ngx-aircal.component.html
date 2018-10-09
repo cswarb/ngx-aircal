@@ -6,6 +6,12 @@
       selected</p>
     <p *ngIf="numberOfDaysSelected?.years > 0">{{numberOfDaysSelected?.years}} year<span *ngIf="numberOfDaysSelected?.years > 1">s</span>
       selected</p>
+      <div>
+        <select #selectedShortcutRange (change)="selectionShortcutChanged(selectedShortcutRange.value)">
+          <option selected="selected" value="" disabled="disabled">Selection shortcuts</option>
+          <option *ngFor="let item of ObjectKeys(options.selectionShortcuts)" [value]="item">{{options?.selectionShortcuts[item]}}</option>
+        </select>
+      </div>
   </div>
   <div class="flex-container flex-center flex-align-top">
     <div class="aircal__cal--double flex-container flex-column">

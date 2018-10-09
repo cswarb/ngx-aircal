@@ -52,6 +52,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     this.onDateRangeChanged.unsubscribe();
   }
 
+  public selectionShortcutChanged(item: any) {
+    console.log(item, " :test"); 
+  }
+
   ngOnInit() {
     console.log(this.options, "options");
 
@@ -70,7 +74,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
     if(this.options.defaultStart) {
       this.date = moment(
-        `${this.options.defaultStart.year}${this.options.defaultStart.month}01`
+        `${this.options.defaultStart.year}${this.options.defaultStart.month}${this.options.defaultStart.day}`
       );
 
       this.nextMonthDate = moment(this.date).add(1, "month");
@@ -165,7 +169,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
         let nextWrapArounddateObj = null;
         
         if (this.options.nextMonthWrapAround) {
-            nextWrapArounddateObj = moment(date).startOf("month").add(iterator, "day");
+            nextWrapArounddateObj = moment(date).add(1, "month").startOf("month").add(iterator, "day");
             nextWrapArounddateObj["isNextMonth"] = true; //@todo - Fix this
         };
 

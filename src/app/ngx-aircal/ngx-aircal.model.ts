@@ -16,8 +16,24 @@ export class AircalModel {
   }
 }
 
+
+
+
+
+
+//TODO
+/*
+- Create form handlers
+- Handle scenario where user updates options on the fly (e.g. updating the disableFormHere props)
+-
+- Export as a plugin
+*/
+
+
+
 export class AircalOptions {
-  public defaultStart?: any; //@todo
+  public defaultStart?: AircalDateModel | null = null;
+  public inlineMode: boolean = false; //Display the calendar without a form input @todo
   public startDate?: AircalDateModel | null = null;
   public endDate?: AircalDateModel | null = null;
   public dayLabels: any = {"Mo": "Mo", "Tu": "Tu", "We": "We", "Th": "Th", "Fr": "Fr", "Sa": "Sa", "Su": "Su"};
@@ -49,7 +65,7 @@ export class AircalOptions {
 export class AircalDateModel {
   public year: string;
   public month: string;
-  public day: string;
+  public day?: string = "01";
 
   constructor(
     init?: AircalDateModel
