@@ -76,6 +76,17 @@
       cursor: pointer;
       opacity: 0.5;
     }
+    &__button {
+      border: 0;
+      outline: none;
+      &:disabled {
+        opacity: 0.2;
+        &:hover {
+          opacity: 0.2;
+          cursor: not-allowed;
+        }
+      }
+    }
   }
   &__button {
     outline: none;

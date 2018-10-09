@@ -10,7 +10,7 @@
   <div class="flex-container flex-center flex-align-top">
     <div class="aircal__cal--double flex-container flex-column">
       <div class="aircal__meta">
-        <div (click)="prevMonth()" class="aircal__icon aircal__icon__prev"></div>
+        <button [disabled]="options?.disablePreviousSelection || disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
         <p class="aircal__text aircal__text__month">{{date.format("MMMM")}} {{date.format("YYYY")}}</p>
         <!-- <div (click)="nextMonth()" class="aircal__icon aircal__icon__next"></div> -->
       </div>
@@ -25,7 +25,7 @@
       <div class="aircal__meta">
         <!-- <div (click)="prevMonth()" class="aircal__icon aircal__icon__prev"></div> -->
         <p class="aircal__text aircal__text__month">{{nextMonthDate.format("MMMM")}} {{nextMonthDate.format("YYYY")}}</p>
-        <div (click)="nextMonth()" class="aircal__icon aircal__icon__next"></div>
+        <button [disabled]="options?.disableForwardSelection || disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
       </div>
       <div class="flex-container">
         <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>

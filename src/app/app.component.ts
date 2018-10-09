@@ -12,8 +12,19 @@ export class AppComponent {
 
   constructor() {
     this.calendarOptions = new AircalOptions({
-      applyText: "Set Date",
-      clearText: "Clear me"
+      // defaultStart: {year: "2018", month: "06"},
+      minYear: 2017,
+      maxYear: 2019,
+      // startDate: new AircalDateModel({
+      //   year: "2018",
+      //   month: "06",
+      //   day: "27"
+      // }),
+      // endDate: new AircalDateModel({
+      //   year: "2018",
+      //   month: "10",
+      //   day: "27"
+      // }),
     });
   }
 

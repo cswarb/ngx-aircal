@@ -17,8 +17,9 @@ export class AircalModel {
 }
 
 export class AircalOptions {
-  public startDate?: AircalDateModel = null;
-  public endDate?: AircalDateModel = null;
+  public defaultStart?: any; //@todo
+  public startDate?: AircalDateModel | null = null;
+  public endDate?: AircalDateModel | null = null;
   public dayLabels: any = {"Mo": "Mo", "Tu": "Tu", "We": "We", "Th": "Th", "Fr": "Fr", "Sa": "Sa", "Su": "Su"};
   public selectionShortcuts?: any = {"7D": "7 Days", "14D": "14 Days", "1M": "1 Month", "6M": "6 Months", "1Y": "1 Year"}; //@todo
   public dateFormat?: string = "DD/MM/YYYY";
@@ -31,10 +32,12 @@ export class AircalOptions {
   public clearText?: string = "Clear";
   public highlightToday?: boolean = true;
   public showClearBtn?: boolean = true;
-  public minYear?: number = 0; //@todo
-  public maxYear?: number = 9999; //@todo
-  public disableFromHereBackwards?: AircalDateModel; //@todo
-  public disableFromHereForwards?: AircalDateModel; //@todo
+  public minYear?: number = 1000;
+  public maxYear?: number = 9999;
+  public disablePreviousSelection?: boolean = false;
+  public disableForwardSelection?: boolean = false;
+  public disableFromHereBackwards?: AircalDateModel | null = null; //@todo
+  public disableFromHereForwards?: AircalDateModel | null = null; //@todo
   public monthSelector?: boolean = false; //@todo
   public yearSelector?: boolean = false; //@todo
 
@@ -44,9 +47,9 @@ export class AircalOptions {
 }
 
 export class AircalDateModel {
-  public year: number;
-  public month: number;
-  public day: number;
+  public year: string;
+  public month: string;
+  public day: string;
 
   constructor(
     init?: AircalDateModel

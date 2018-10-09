@@ -23,6 +23,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     years: 0
   };
 
+  //Flags
+  public disableForwardSelection: boolean = false;
+  public disablePreviousSelection: boolean = false;
+
   //Helpers
   public ObjectKeys: Function = Object.keys;
 
@@ -64,24 +68,74 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
       );
     };
 
+    if(this.options.defaultStart) {
+      this.date = moment(
+        `${this.options.defaultStart.year}${this.options.defaultStart.month}01`
+      );
+
+      this.nextMonthDate = moment(this.date).add(1, "month");
+    };
+
     this.daysArray = this.createAircal(this.date);
-    this.nextMonthDaysArray = this.createAircal(moment(this.date).add(1, "month"));
+    this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
+  }
+
+  public canSelectPreviousMonth(): boolean {
+    //See what year the user will be navigating to
+    var goingToYear = moment(this.date).subtract(1, "month").year();
+
+    //Compare to the minYear option
+    return !!(goingToYear > this.options.minYear);
+  }
+  
+  public canSelectNextMonth(): boolean {
+    //See what year the user will be navigating to
+    var goingToYear = moment(this.nextMonthDate).add(1, "month").year();
+
+    //Compare to the minYear option
+    return !!(goingToYear < this.options.maxYear);
   }
 
   public prevMonth(): any {
-    this.date = this.date.subtract(1, "month");
-    this.nextMonthDate = moment(this.date).add(1, "month");
-    this.daysArray = this.createAircal(this.date);
-    this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
-    this.calendarViewChanged();
+    if (this.canSelectPreviousMonth()) {
+      this.date = this.date.subtract(1, "month");
+      this.nextMonthDate = moment(this.date).add(1, "month");
+      this.daysArray = this.createAircal(this.date);
+      this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
+      this.calendarViewChanged();
+    };
+
+    //Check the month before to see if we should disable the button
+    if (!this.canSelectPreviousMonth()) {
+      this.disablePreviousSelection = true;
+    };
+
+    //Check the month after to see if we should disable the button
+    if (this.canSelectNextMonth()) {
+      // disableForwardSelection
+      // disablePreviousSelection
+      this.disableForwardSelection = false;
+    };
   }
 
   public nextMonth(): any {
-    this.date = this.date.add(1, "month");
-    this.nextMonthDate = moment(this.date).add(1, "month");
-    this.daysArray = this.createAircal(this.date);
-    this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
-    this.calendarViewChanged();
+    if (this.canSelectNextMonth()) {
+      this.date = this.date.add(1, "month");
+      this.nextMonthDate = moment(this.date).add(1, "month");
+      this.daysArray = this.createAircal(this.date);
+      this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
+      this.calendarViewChanged();
+    };
+
+    //Check the month before to see if we should disable the button
+    if (this.canSelectPreviousMonth()) {
+      this.disablePreviousSelection = false;
+    };
+
+    //Check the month after to see if we should disable the button
+    if (!this.canSelectNextMonth()) {
+      this.disableForwardSelection = true;
+    };
   }
 
   public createAircal(date: Object): Array<any> {
@@ -197,15 +251,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
   }
 
   public calendarViewChanged() {
-    this.onCalendarViewChanged.next(
-      new AircalFormResponse(
-        this.selectedStartDate,
-        this.selectedEndDate,
-        moment(this.selectedStartDate).format(this.options.dateFormat),
-        moment(this.selectedEndDate).format(this.options.dateFormat),
-        true
-      )
-    );
+    this.onCalendarViewChanged.next();
   }
 
   public dateRangeCleared() {
@@ -215,13 +261,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     airModel.numberOfDaysSelected.days = 0;
     airModel.numberOfDaysSelected.months = 0;
     airModel.numberOfDaysSelected.years = 0;
-
-    this.selectedStartDate = airModel.selectedStartDate;
-    this.selectedEndDate = airModel.selectedEndDate;
-    this.numberOfDaysSelected.days = airModel.numberOfDaysSelected.days;
-    this.numberOfDaysSelected.months = airModel.numberOfDaysSelected.months;
-    this.numberOfDaysSelected.years = airModel.numberOfDaysSelected.years;
-
+    
     this.onDateRangeCleared.next(
       new AircalFormResponse(
         this.selectedStartDate,
@@ -231,6 +271,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
         true
       )
     );
+
+    this.selectedStartDate = airModel.selectedStartDate;
+    this.selectedEndDate = airModel.selectedEndDate;
+    this.numberOfDaysSelected.days = airModel.numberOfDaysSelected.days;
+    this.numberOfDaysSelected.months = airModel.numberOfDaysSelected.months;
+    this.numberOfDaysSelected.years = airModel.numberOfDaysSelected.years;
   }
 
 }
