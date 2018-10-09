@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { AircalOptions } from "./ngx-aircal/ngx-aircal.model";
+import { AircalOptions, AircalDateModel } from "./ngx-aircal/ngx-aircal.model";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,10 @@ export class AppComponent {
   public calendarOptions;
 
   constructor() {
-    this.calendarOptions = new AircalOptions();
+    this.calendarOptions = new AircalOptions({
+      applyText: "Set Date",
+      clearText: "Clear me"
+    });
   }
 
   public onDateRangeCommitted(event: any) {

@@ -2,18 +2,18 @@ import { Component, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import * as moment from "moment";
 import { Subject } from "rxjs";
 
-import { AircalOptions, AircalResponse, AircalFormResponse } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, AircalFormResponse, AIRCAL_CALENDAR_SPACES, AircalModel } from "./ngx-aircal.model";
 
 @Component({
-  selector: 'ngx-aircal',
-  templateUrl: './ngx-aircal.component.html'
+  selector: "ngx-aircal",
+  templateUrl: "./ngx-aircal.component.html"
 })
 export class NgxAircalComponent implements OnInit, OnDestroy {
   public date = moment();
   public nextMonthDate = moment().add(1, "month");
   public daysArray: Array<any> = [];
   public nextMonthDaysArray: Array<any> = [];
-  public calendarSpaces: number = 35;
+  public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
 
   public selectedStartDate = null;
   public selectedEndDate = null;
@@ -37,7 +37,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
   @Output() onDateRangeChanged: Subject<any> = new Subject();
 
   constructor() {
-    console.log(this.options, "options");
+    
   }
 
   ngOnDestroy() {
@@ -49,6 +49,21 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.options, "options");
+
+    //Initialise start and end date from options is valid
+    if(this.options.startDate) {
+      this.selectedStartDate = moment(
+        `${this.options.startDate.year}${this.options.startDate.month}${this.options.startDate.day}`
+      );
+    };
+
+    if(this.options.endDate) {
+      this.selectedEndDate = moment(
+        `${this.options.endDate.year}${this.options.endDate.month}${this.options.endDate.day}`
+      );
+    };
+
     this.daysArray = this.createAircal(this.date);
     this.nextMonthDaysArray = this.createAircal(moment(this.date).add(1, "month"));
   }
@@ -151,7 +166,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     this.onDateRangeCommitted.next(
       new AircalResponse(
         this.selectedStartDate,
-        this.selectedEndDate
+        this.selectedEndDate,
+        moment(this.selectedStartDate).format(this.options.dateFormat),
+        moment(this.selectedEndDate).format(this.options.dateFormat),
       )
     );
   }
@@ -160,7 +177,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     this.onDateRangeChanged.next(
       new AircalResponse(
         this.selectedStartDate,
-        this.selectedEndDate
+        this.selectedEndDate,
+        moment(this.selectedStartDate).format(this.options.dateFormat),
+        moment(this.selectedEndDate).format(this.options.dateFormat),
       )
     );
   }
@@ -170,6 +189,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
       new AircalFormResponse(
         this.selectedStartDate,
         this.selectedEndDate,
+        moment(this.selectedStartDate).format(this.options.dateFormat),
+        moment(this.selectedEndDate).format(this.options.dateFormat),
         true
       )
     );
@@ -180,22 +201,33 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
       new AircalFormResponse(
         this.selectedStartDate,
         this.selectedEndDate,
+        moment(this.selectedStartDate).format(this.options.dateFormat),
+        moment(this.selectedEndDate).format(this.options.dateFormat),
         true
       )
     );
   }
 
   public dateRangeCleared() {
-    this.selectedEndDate = null;
-    this.selectedStartDate = null;
-    this.numberOfDaysSelected.days = 0;
-    this.numberOfDaysSelected.months = 0;
-    this.numberOfDaysSelected.years = 0;
+    var airModel = new AircalModel();
+    airModel.selectedStartDate = null;
+    airModel.selectedEndDate = null;
+    airModel.numberOfDaysSelected.days = 0;
+    airModel.numberOfDaysSelected.months = 0;
+    airModel.numberOfDaysSelected.years = 0;
+
+    this.selectedStartDate = airModel.selectedStartDate;
+    this.selectedEndDate = airModel.selectedEndDate;
+    this.numberOfDaysSelected.days = airModel.numberOfDaysSelected.days;
+    this.numberOfDaysSelected.months = airModel.numberOfDaysSelected.months;
+    this.numberOfDaysSelected.years = airModel.numberOfDaysSelected.years;
 
     this.onDateRangeCleared.next(
       new AircalFormResponse(
         this.selectedStartDate,
         this.selectedEndDate,
+        moment(this.selectedStartDate).format(this.options.dateFormat),
+        moment(this.selectedEndDate).format(this.options.dateFormat),
         true
       )
     );

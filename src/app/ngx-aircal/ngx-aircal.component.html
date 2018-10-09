@@ -1,4 +1,4 @@
-<div class="aircal flex-container flex-center flex-column">
+<div class="aircal flex-container flex-center flex-column" [style.width]="options?.width" [style.height]="options?.height">
   <div *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta">
     <p *ngIf="numberOfDaysSelected?.days > 0">{{numberOfDaysSelected?.days}} day<span *ngIf="numberOfDaysSelected?.days > 1">s</span>
       selected</p>
