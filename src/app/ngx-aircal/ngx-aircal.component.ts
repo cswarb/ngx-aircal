@@ -156,7 +156,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
       let previousWrapArounddateObj = null;
 
         if (this.options.previousMonthWrapAround) {
-          previousWrapArounddateObj = moment(date).startOf("month").subtract(i + 1, "day");
+          previousWrapArounddateObj = moment(date).startOf("month").subtract(i, "day");
           previousWrapArounddateObj["isLastMonth"] = true; //@todo - Fix this
         };
 
