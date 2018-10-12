@@ -190,13 +190,21 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
         if (!this.selectedStartDate) {
             this.selectedStartDate = date;
-        } else {
+        } else if (this.selectedStartDate && !this.selectedEndDate) {
             this.selectedEndDate = date;
-        };
+        } else {
+          //both are selected - is the date selected closer to the start or the end?          
+            var diffFromStart = Math.abs(Math.round(moment.duration(moment(date).diff(this.selectedStartDate)).as("days"))),
+                diffFromEnd = Math.abs(Math.round(moment.duration(moment(date).diff(this.selectedEndDate)).as("days")));
 
-        //calculate number of days between start and end
-        if (this.options.daysSelectedCounterVisible) {
-            if (this.selectedStartDate && this.selectedEndDate) {
+            if (diffFromStart > diffFromEnd) {
+                this.selectedEndDate = date;
+            } else {
+                this.selectedStartDate = date;
+            };
+
+            //calculate number of days between start and end
+            if (this.options.daysSelectedCounterVisible) {
                 let selectedDays = moment.duration(this.selectedEndDate.diff(this.selectedStartDate));
                 this.numberOfDaysSelected.days = Math.round(selectedDays.asDays());
                 this.numberOfDaysSelected.months = Math.round(selectedDays.asMonths());
