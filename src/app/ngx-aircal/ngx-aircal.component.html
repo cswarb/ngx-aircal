@@ -1,52 +1,69 @@
 <div class="aircal flex-container flex-center flex-column" [style.width]="options?.width" [style.height]="options?.height">
-  <div *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta">
-    <p *ngIf="numberOfDaysSelected?.days > 0">{{numberOfDaysSelected?.days}} day<span *ngIf="numberOfDaysSelected?.days > 1">s</span>
-      selected</p>
-    <p *ngIf="numberOfDaysSelected?.months > 0">{{numberOfDaysSelected?.months}} month<span *ngIf="numberOfDaysSelected?.months > 1">s</span>
-      selected</p>
-    <p *ngIf="numberOfDaysSelected?.years > 0">{{numberOfDaysSelected?.years}} year<span *ngIf="numberOfDaysSelected?.years > 1">s</span>
-      selected</p>
-      <div>
-        <select #selectedShortcutRange (change)="selectionShortcutChanged(selectedShortcutRange.value)">
-          <option selected="selected" value="" disabled="disabled">Selection shortcuts</option>
-          <option *ngFor="let item of ObjectKeys(options.selectionShortcuts)" [value]="item">{{options?.selectionShortcuts[item]}}</option>
-        </select>
-      </div>
-  </div>
-  <div class="flex-container flex-center flex-align-top">
-    <div class="aircal__cal--double flex-container flex-column">
-      <div class="aircal__meta">
-        <button [disabled]="options?.disablePreviousSelection || disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
-        <p class="aircal__text aircal__text__month">{{date.format("MMMM")}} {{date.format("YYYY")}}</p>
-        <!-- <div (click)="nextMonth()" class="aircal__icon aircal__icon__next"></div> -->
-      </div>
-      <div class="flex-container">
-        <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
-      </div>
-      <div class="flex-container flex-wrap">
-        <div *ngFor="let day of daysArray" class="aircal__days" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day.isLastMonth || day.isNextMonth), 'aircal--istoday': isToday(day), 'aircal--selected': isSelected(day) && (!day.isNextMonth || !day.isLastMonth)}">{{day?.date()}}</div>
-      </div>
+    <div *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta">
+        <p *ngIf="numberOfDaysSelected?.days > 0">{{numberOfDaysSelected?.days}} day<span *ngIf="numberOfDaysSelected?.days > 1">s</span> selected</p>
+        <p *ngIf="numberOfDaysSelected?.months > 0">{{numberOfDaysSelected?.months}} month<span *ngIf="numberOfDaysSelected?.months > 1">s</span> selected</p>
+        <p *ngIf="numberOfDaysSelected?.years > 0">{{numberOfDaysSelected?.years}} year<span *ngIf="numberOfDaysSelected?.years > 1">s</span> selected</p>
+        <div>
+            <select #selectedShortcutRange [disabled]="!selectedStartDate" (change)="selectionShortcutChanged(selectedShortcutRange.value)">
+                <option selected="selected" value="" disabled="disabled">Selection shortcuts</option>
+                <option *ngFor="let item of ObjectKeys(options.selectionShortcuts)" [value]="item">{{options?.selectionShortcuts[item]}}</option>
+            </select>
+        </div>
     </div>
-    <div class="aircal__cal--double flex-container flex-column">
-      <div class="aircal__meta">
-        <!-- <div (click)="prevMonth()" class="aircal__icon aircal__icon__prev"></div> -->
-        <p class="aircal__text aircal__text__month">{{nextMonthDate.format("MMMM")}} {{nextMonthDate.format("YYYY")}}</p>
-        <button [disabled]="options?.disableForwardSelection || disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
-      </div>
-      <div class="flex-container">
-        <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
-      </div>
-      <div class="flex-container flex-wrap">
-        <div *ngFor="let day of nextMonthDaysArray" class="aircal__days" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day.isLastMonth || day.isNextMonth), 'aircal--istoday': isToday(day), 'aircal--selected': isSelected(day) && (!day.isNextMonth || !day.isLastMonth)}">{{day?.date()}}</div>
-      </div>
+    
+    <div class="flex-container flex-center flex-align-top">
+        <div class="aircal__cal--double flex-container flex-column">
+            <div class="aircal__meta">
+                <button [disabled]="options?.disablePreviousSelection || disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
+                <p class="aircal__text aircal__text__month">{{date.format("MMMM")}} {{date.format("YYYY")}}</p>
+            </div>
+            <div class="flex-container">
+                <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
+            </div>
+            <div class="flex-container flex-wrap">
+                <div *ngFor="let day of daysArray" 
+                class="aircal__days" 
+                (mouseenter)="isHovering(day)" 
+                (mouseleave)="isLeaving(day)"
+                (click)="selectDate(day)" 
+                [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth), 
+                    'aircal--highlighted': day?.highlight, 
+                    'aircal--istoday': isToday(day), 
+                    'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}">
+                {{day?.date()}}
+                </div>
+            </div>
+        </div>
+        
+        <div class="aircal__cal--double flex-container flex-column">
+            <div class="aircal__meta">
+                <p class="aircal__text aircal__text__month">{{nextMonthDate.format("MMMM")}} {{nextMonthDate.format("YYYY")}}</p>
+                <button [disabled]="options?.disableForwardSelection || disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
+            </div>
+            <div class="flex-container">
+                <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
+            </div>
+            <div class="flex-container flex-wrap">
+                <div *ngFor="let day of nextMonthDaysArray" 
+                    class="aircal__days" 
+                    (mouseenter)="isHovering(day)" 
+                    (mouseleave)="isLeaving(day)" 
+                    (click)="selectDate(day)" 
+                    [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth), 
+                        'aircal--highlighted': day?.highlight, 
+                        'aircal--istoday': isToday(day), 
+                        'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}">
+                    {{day?.date()}}
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="flex-container aircal__actions">
-    <button *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!selectedStartDate || !selectedEndDate"
-      (click)="dateRangeCleared()">{{options?.clearText}}</button>
-    <button class="aircal__button aircal__button--apply" [disabled]="!selectedStartDate || !selectedEndDate" (click)="dateRangeCommitted()">{{options?.applyText}}</button>
-  </div>
+    <div class="flex-container aircal__actions">
+        <button *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!selectedStartDate || !selectedEndDate"
+            (click)="dateRangeCleared()">{{options?.clearText}}</button>
+        <button class="aircal__button aircal__button--apply" [disabled]="!selectedStartDate || !selectedEndDate" (click)="dateRangeCommitted()">{{options?.applyText}}</button>
+    </div>
 </div>
 
 

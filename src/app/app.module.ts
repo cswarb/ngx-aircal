@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NgxAircalComponent } from './ngx-aircal/ngx-aircal.component';
-
+import { NgxAircalUtilsService } from './ngx-aircal/services/ngx-aircal-utils.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,9 @@ import { NgxAircalComponent } from './ngx-aircal/ngx-aircal.component';
   imports: [
     BrowserModule
   ],
-  providers: [],
+  providers: [
+    NgxAircalUtilsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

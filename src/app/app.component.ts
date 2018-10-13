@@ -8,7 +8,7 @@ import { AircalOptions, AircalDateModel } from "./ngx-aircal/ngx-aircal.model";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  public calendarOptions;
+  public calendarOptions: AircalOptions = new AircalOptions();
 
   constructor() {
     this.calendarOptions = new AircalOptions({
