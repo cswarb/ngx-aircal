@@ -1,31 +1,5 @@
-/* Add application styles & imports to this file! */
 * {
   box-sizing: border-box;
-}
-.bold {
-  font-weight: 700;
-}
-
-.flex-container {
-  display: flex;
-}
-
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
-.flex-column {
-      flex-flow: column;
-}
-
-.flex-center {
-  justify-content: center;
-  align-items: center;
-      text-align: center;
-}
-
-.flex-align-top {
-  align-items: flex-start;
 }
 
 .aircal {
@@ -36,7 +10,21 @@
   margin: 5rem auto;
   overflow: auto;
   padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-flow: column;
   &__cal {
+    display: flex;
+    flex-flow: column;
+    &__container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      align-items: flex-start;
+    }
     &--double {
       &:first-child {
         margin-right: 0.75rem;
@@ -46,10 +34,19 @@
       }
     }
   }
+  &__shortcut {
+    font-size: 1rem;
+  }
   &__meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &--column {
+      flex-flow: column nowrap;
+    }
+    &__row {
+
+    }
   }
   &__text {
     color: rgb(72, 72, 72);
@@ -115,6 +112,7 @@
     }
   }
   &__actions {
+    display: flex;
     margin: 1rem 0 0 0;
     justify-content: space-between;
     align-items: center;
@@ -123,7 +121,11 @@
       margin-right: 1rem;
     }
   }
-  &__days {
+  &__day {
+    &__container {
+      display: flex;
+      flex-wrap: wrap;
+    }
     display: flex;
     justify-content: center;
     align-items: center;
@@ -176,13 +178,6 @@
   }
 }
 
-
-
-.flex {
-  &__single {
-    flex: 1;
-  }
-}
 
 
 
