@@ -1,4 +1,19 @@
-<div data-ngx-aircal [options]="calendarOptions" (onDateRangeCommitted)="onDateRangeCommitted($event)" (onDateRangeChanged)="onDateRangeChanged($event)"
-  (onCalendarViewChanged)="onCalendarViewChanged($event)" (onInputFieldChanged)="onInputFieldChanged($event)"
-  (onDateRangeCleared)="onDateRangeCleared($event)">
-</div>
+<form [formGroup]="form" (ngSubmit)="onSubmitReactiveForms()" novalidate>
+  <div data-ngx-aircal [options]="calendarOptions" 
+    name="dateRange" 
+    formControlName="dateRange"
+    (onDateRangeCommitted)="onDateRangeCommitted($event)" 
+    (onDateRangeChanged)="onDateRangeChanged($event)"
+    (onCalendarViewChanged)="onCalendarViewChanged($event)" 
+    (onInputFieldChanged)="onInputFieldChanged($event)"
+    (onDateRangeCleared)="onDateRangeCleared($event)">
+  </div>
+
+  <!-- <input type="text" name="dateRange" formControlName="dateRange"/> -->
+  <button type="button" (click)="setDateRange()">Set date range</button>
+  <button type="button" (click)="clearDateRange()">Clear date range</button>
+
+  <br>
+
+  <button type="submit">Submit form</button>
+</form>

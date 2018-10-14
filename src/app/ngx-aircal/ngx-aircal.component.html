@@ -2,12 +2,22 @@
     <section *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta aircal__meta__rows">
         <div class="aircal__meta__row">
             <div data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
+            <input type="text" class="selection"
+                placeholder="Select Date"
+                [ngModel]="formSelectionText"
+                (ngModelChange)="onUserDateRangeInput($event)"
+                [value]="formSelectionText" 
+                [disabled]="false"
+                [readonly]="false" 
+                autocomplete="off" 
+                spellcheck="false" 
+                autocorrect="off"/>
         </div>
         <div class="aircal__meta__row aircal__meta__row__shortcuts">
-            <select class="aircal__shortcut" #selectedShortcutRange [disabled]="!aircal?.selectedStartDate" (change)="selectionShortcutChanged(selectedShortcutRange.value)">
-                <option selected="selected" value="" disabled="disabled">Selection shortcuts</option>
-                <option *ngFor="let item of ObjectKeys(options.selectionShortcuts)" [value]="item">{{options?.selectionShortcuts[item]}}</option>
-            </select>
+            <div data-aircal-select
+                [selectedStartDate]="aircal?.selectedStartDate"
+                [selectionShortcuts]="options?.selectionShortcuts" 
+                (selectionShortcutChanged)="selectionShortcutChanged($event)"></div>
         </div>
     </section>
     
@@ -18,20 +28,21 @@
                 <p class="aircal__text aircal__text__month">{{date.format("MMMM")}} {{date.format("YYYY")}}</p>
             </section>
             <div class="aircal__meta">
-                <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
+                <div aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
+                    [dayName]="dayName"
+                    [dayLabels]="options?.dayLabels"></div>
             </div>
             <div class="aircal__day__container">
-                <div *ngFor="let day of daysArray" 
-                class="aircal__day" 
-                (mouseenter)="isHovering(day)" 
-                (mouseleave)="isLeaving(day)"
-                (click)="selectDate(day)" 
-                [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth), 
-                    'aircal--highlighted': day?.highlight, 
-                    'aircal--istoday': isToday(day), 
-                    'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}">
-                <span>{{day?.date()}}</span>
-                </div>
+                <div data-aircal-day class="aircal__day" 
+                    *ngFor="let day of daysArray" 
+                    (mouseenter)="isHovering(day)"
+                    (mouseleave)="isLeaving(day)" 
+                    (click)="selectDate(day)" 
+                    [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth),
+                        'aircal--highlighted': day?.highlight,
+                        'aircal--istoday': isToday(day),
+                        'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}"
+                    [day]="day"></div>
             </div>
         </div>
         
@@ -41,20 +52,23 @@
                 <button [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
             </div>
             <div class="aircal__meta">
-                <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
+                <div aircal-aircal-daysofweek class="flex-container aircal__daysofweek" 
+                *ngFor="let dayName of ObjectKeys(options.dayLabels)" 
+                [dayName]="dayName"
+                [dayLabels]="options?.dayLabels"></div>
             </div>
             <div class="aircal__day__container">
-                <div *ngFor="let day of nextMonthDaysArray" 
-                    class="aircal__day" 
-                    (mouseenter)="isHovering(day)" 
-                    (mouseleave)="isLeaving(day)" 
-                    (click)="selectDate(day)" 
-                    [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth), 
-                        'aircal--highlighted': day?.highlight, 
-                        'aircal--istoday': isToday(day), 
-                        'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}">
-                    <span>{{day?.date()}}</span>
-                </div>
+                <div data-aircal-day 
+                    class="aircal__day"
+                    *ngFor="let day of nextMonthDaysArray"
+                    (mouseenter)="isHovering(day)"
+                    (mouseleave)="isLeaving(day)"
+                    (click)="selectDate(day)"
+                    [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth),
+                        'aircal--highlighted': day?.highlight,
+                        'aircal--istoday': isToday(day),
+                        'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}"
+                    [day]="day"></div>
             </div>
         </div>
     </div>

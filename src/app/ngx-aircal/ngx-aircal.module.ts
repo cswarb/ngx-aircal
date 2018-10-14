@@ -1,18 +1,24 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgxAircalComponent } from './ngx-aircal.component';
-import { NgxAircalUtilsService } from './services/ngx-aircal-utils.service';
-import { AircalSelectComponent } from './aircal-select/aircal-select.component';
-import { AircalDaysselectedComponent } from './aircal-daysselected/aircal-daysselected.component';
+import { NgModule, forwardRef } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { NgxAircalComponent } from "./ngx-aircal.component";
+import { NgxAircalUtilsService } from "./services/ngx-aircal-utils.service";
+import { AircalSelectComponent } from "./aircal-select/aircal-select.component";
+import { AircalDaysselectedComponent } from "./aircal-daysselected/aircal-daysselected.component";
+import { AircalDaysofweekComponent } from "./aircal-daysofweek/aircal-daysofweek.component";
+import { AircalDayComponent } from "./aircal-day/aircal-day.component";
+import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   declarations: [
     NgxAircalComponent,
     AircalSelectComponent,
-    AircalDaysselectedComponent
+    AircalDaysselectedComponent,
+    AircalDaysofweekComponent,
+    AircalDayComponent
   ],
   exports: [
     NgxAircalComponent

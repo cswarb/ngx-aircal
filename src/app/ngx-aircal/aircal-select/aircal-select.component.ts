@@ -1,15 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, Input, OnDestroy } from "@angular/core";
+import { AircalOptions, AircalModel } from "../ngx-aircal.model";
+import { Subject } from "rxjs";
 
 @Component({
-  selector: 'app-aircal-select',
-  templateUrl: './aircal-select.component.html',
-  styleUrls: ['./aircal-select.component.css']
+    selector: "[data-aircal-select]",
+    templateUrl: "./aircal-select.component.html",
+    styleUrls: ["./aircal-select.component.css"]
 })
-export class AircalSelectComponent implements OnInit {
+export class AircalSelectComponent implements OnInit, OnDestroy {
+    @Input() selectionShortcuts = new AircalOptions().selectionShortcuts;
+    @Input() selectedStartDate: any = null;
+    @Output() selectionShortcutChanged: Subject<string> = new Subject();
 
-  constructor() { }
+    //Helpers
+    public ObjectKeys: Function = Object.keys;
 
-  ngOnInit() {
-  }
+    constructor() {
+
+    }
+
+    ngOnInit() {
+
+    }
+
+    ngOnDestroy() {
+        this.selectionShortcutChanged.unsubscribe();
+    }
+
+    public onChange(evt: string) {
+        this.selectionShortcutChanged.next(evt);
+    }
 
 }

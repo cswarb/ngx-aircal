@@ -1,15 +1,24 @@
-import { Component, Input, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges } from '@angular/core';
 import * as moment from "moment";
 import { Subject } from "rxjs";
 
 import { AircalOptions, AircalResponse, AircalFormResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime } from "./ngx-aircal.model";
-import { NgxAircalUtilsService } from './services/ngx-aircal-utils.service';
+import { NgxAircalUtilsService } from "./services/ngx-aircal-utils.service";
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
+
+export const MYDRP_VALUE_ACCESSOR: any = {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => NgxAircalComponent),
+    multi: true
+};
 
 @Component({
     selector: "[data-ngx-aircal]",
-    templateUrl: "./ngx-aircal.component.html"
+    templateUrl: "./ngx-aircal.component.html",
+    providers: [MYDRP_VALUE_ACCESSOR]
 })
-export class NgxAircalComponent implements OnInit, OnDestroy {
+export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
+    //Props
     public date = moment();
     public nextMonthDate = moment().add(1, "month");
     public daysArray: Array<any> = [];
@@ -17,6 +26,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
     public allDaysArray: Array<any> = [];
     public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
 
+    //Form
+    onChangeCb: (_: any) => void = () => { };
+    onTouchedCb: () => void = () => { };
+
+    //Form model
+    public formSelectionText: string = "";
+
+    //Model
     public aircal: AircalModel = new AircalModel();
 
     //Helpers
@@ -73,6 +90,72 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
         this.createCalendars();
     }
 
+    writeValue(value: Object): void {
+        //The initial form value passed from the parent must be written in here...
+        console.log("writeValue: ", value);
+        
+        // if (value && value["beginDate"] && value["endDate"]) {
+        //     this.beginDate = this.parseSelectedDate(value["beginDate"]);
+        //     this.endDate = this.parseSelectedDate(value["endDate"]);
+        //     let begin: string = this.formatDate(this.beginDate);
+        //     let end: string = this.formatDate(this.endDate);
+        //     this.selectionDayTxt = begin + " - " + end;
+        //     this.titleAreaText = this.selectionDayTxt;
+        //     this.inputFieldChanged.emit({ value: this.selectionDayTxt, dateRangeFormat: this.dateRangeFormat, valid: true });
+        // }
+        // else if (value === null || value === "") {
+        //     this.clearRangeValues();
+        //     this.inputFieldChanged.emit({ value: "", dateRangeFormat: this.dateRangeFormat, valid: false });
+        // }
+        // this.invalidDateRange = false;
+    }
+
+    registerOnChange(fn: any): void {
+        // this.onChangeCb = fn;
+    }
+
+    registerOnTouched(fn: any): void {
+        // this.onTouchedCb = fn;
+    }
+
+    ngOnChanges(value) {
+        //When options values change, this fires...
+        console.log("ngOnChanges: ", value);
+        
+        // if (this.widget && this.widget.slider('value') !== this.value) {
+        //     this.widget.slider('value', this.value);
+        // }
+    }
+
+    onUserDateRangeInput(value: string) {
+        //When the form has a date manually entered, this fires...
+        //What if the calendar changes it itself though? It needs to update the form.
+        console.log("onUserDateRangeInput: ", value);
+        
+        // this.invalidDateRange = false;
+        // if (value.length === 0) {
+        //     if (this.drus.isInitializedDate(this.beginDate) && this.drus.isInitializedDate(this.endDate)) {
+        //         this.clearDateRange();
+        //     }
+        //     else {
+        //         this.inputFieldChanged.emit({ value: value, dateRangeFormat: this.dateRangeFormat, valid: false });
+        //     }
+        // }
+        // else {
+        //     let daterange: IMyDateRange = this.drus.isDateRangeValid(value, this.opts.dateFormat, this.opts.minYear, this.opts.maxYear, this.opts.disableUntil, this.opts.disableSince, this.opts.disableDates, this.opts.disableDateRanges, this.opts.enableDates, this.opts.monthLabels);
+        //     if (this.drus.isInitializedDate(daterange.beginDate) && this.drus.isInitializedDate(daterange.endDate)) {
+        //         this.beginDate = daterange.beginDate;
+        //         this.endDate = daterange.endDate;
+        //         this.rangeSelected();
+        //     }
+        //     else {
+        //         this.invalidDateRange = true;
+        //         this.onChangeCb(null);
+        //         this.onTouchedCb();
+        //         this.inputFieldChanged.emit({ value: value, dateRangeFormat: this.dateRangeFormat, valid: false });
+        //     }
+    }
+
     private createCalendars(): void {
         //Ensure this.date and this.nextMonthDate are calculated and set beforehand
         this.daysArray = this.createAircal(this.date);
@@ -89,7 +172,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
 
         //Set the end date
         if (newSelectedEndDate.year() < this.options.maxYear) {
-            this.selectDate(newSelectedEndDate);
+            this.selectDateShortcut(newSelectedEndDate);
         };
     }
 
@@ -224,6 +307,20 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
         return moment().format("L") === date.format("L");
     }
 
+    private selectDateShortcut(newEndDate: any) {
+        this.aircal.selectedEndDate = newEndDate;
+
+        //calculate number of days between start and end
+        if (this.options.daysSelectedCounterVisible) {
+            if (!this.aircal.selectedEndDate) return;
+            let selectedDays = moment.duration(this.aircal.selectedEndDate.diff(this.aircal.selectedStartDate));
+            this.aircal.numberOfDaysSelected.days = Math.round(selectedDays.asDays());
+        };
+
+        //Fire event
+        this.dateRangeChanged();
+    }
+
     public selectDate(date: any): void {
         if (!date || date.isLastMonth || date.isNextMonth) return;
 
@@ -240,7 +337,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy {
                 this.aircal.selectedEndDate = date;
             } else {
                 this.aircal.selectedStartDate = date;
-            };
+            };            
+        };
+
+        //Update the form
+        if (this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
+            this.formSelectionText = `${this.aircal.selectedStartDate} - ${this.aircal.selectedEndDate}`;
         };
 
         //calculate number of days between start and end

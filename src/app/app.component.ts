@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
-
-import { AircalOptions, AircalDateModel } from "./ngx-aircal/ngx-aircal.model";
+import { Component } from "@angular/core";
+import { FormGroup, FormControl, FormBuilder, Validators } from "@angular/forms";
+import { AircalOptions, AircalDateModel, AircalDayLabels } from "./ngx-aircal/ngx-aircal.model";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
   public calendarOptions: AircalOptions = new AircalOptions();
+  public form: FormGroup;
 
-  constructor() {
+  constructor(
+    private _FormBuilder: FormBuilder
+  ) {
     this.calendarOptions = new AircalOptions({
       // defaultStart: new AircalDateModel({
       //   year: "2018", month: "06"
@@ -28,6 +31,36 @@ export class AppComponent {
       //   day: "27"
       // }),
     });
+
+    this.form = this._FormBuilder.group({
+      dateRange: ["", Validators.required]
+    });
+  }
+
+  public setDateRange(): void {
+    this.form.patchValue({
+      dateRange: {
+        startDate: new AircalDateModel({
+          year: "2018",
+          month: "6",
+          day: "27"
+        }),
+        endDate: new AircalDateModel({
+          year: "2018",
+          month: "10",
+          day: "27"
+        })
+      }
+    });
+  }
+
+  public clearDateRange(): void {
+    // Clear the date range using the patchValue function
+    this.form.patchValue({ dateRange: "" });
+  }
+
+  public onSubmitReactiveForms() {
+    console.log("form submit: ", this.form);
   }
 
   public onDateRangeCommitted(event: any) {

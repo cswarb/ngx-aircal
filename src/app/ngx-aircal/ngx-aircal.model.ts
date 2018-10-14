@@ -2,8 +2,8 @@ export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
 
 export class AircalModel {
-    public selectedStartDate: any = null;
-    public selectedEndDate: any = null;
+    public selectedStartDate: any = null; //Display obj
+    public selectedEndDate: any = null; //Display obj
     public numberOfDaysSelected: AircalSelectedTime = new AircalSelectedTime();
     public disableForwardSelection: boolean = false;
     public disablePreviousSelection: boolean = false;
@@ -23,12 +23,26 @@ export class AircalSelectedTime {
     }
 }
 
+export class AircalDayLabels {
+    public mo: string = "Mo";
+    public tu: string = "Tu";
+    public we: string = "We";
+    public th: string = "Th";
+    public fr: string = "Fr";
+    public sa: string = "Sa";
+    public su: string = "Su";
+
+    constructor(init?: Partial<AircalDayLabels>) {
+        Object.assign(this, init);
+    }
+}
+
 export class AircalOptions {
     public defaultStart?: AircalDateModel = new AircalDateModel();
     public inlineMode: boolean = false; //Display the calendar without a form input @todo
     public startDate?: AircalDateModel = new AircalDateModel();
     public endDate?: AircalDateModel = new AircalDateModel();
-    public dayLabels: any = {"Mo": "Mo", "Tu": "Tu", "We": "We", "Th": "Th", "Fr": "Fr", "Sa": "Sa", "Su": "Su"};
+    public dayLabels: AircalDayLabels = new AircalDayLabels();
     public selectionShortcuts?: any = {"7.days": "7 Days", "14.days": "14 Days", "1.months": "1 Month", "6.months": "6 Months", "1.years": "1 Year"};
     public dateFormat?: string = "DD/MM/YYYY";
     public previousMonthWrapAround?: boolean = true;
