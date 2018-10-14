@@ -1,21 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-
 import { AppComponent } from './app.component';
-import { NgxAircalComponent } from './ngx-aircal/ngx-aircal.component';
-import { NgxAircalUtilsService } from './ngx-aircal/services/ngx-aircal-utils.service';
+import { NgxAircalModule } from './ngx-aircal/ngx-aircal.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NgxAircalComponent
+    AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    NgxAircalModule
   ],
   providers: [
-    NgxAircalUtilsService
+    
   ],
   bootstrap: [AppComponent]
 })

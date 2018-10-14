@@ -35,7 +35,7 @@
     }
   }
   &__shortcut {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
   &__meta {
     display: flex;
@@ -44,8 +44,23 @@
     &--column {
       flex-flow: column nowrap;
     }
+    &__rows {
+      width: 100%;
+      margin: 1rem 0;
+    }
     &__row {
-
+      display: flex;
+      &__item {
+        color: rgb(202, 204, 205);
+        font-size: 0.8rem;
+        margin: 0;
+        &--highlight {
+          color: rgb(149, 163, 177);
+        }
+      }
+      &__shortcuts {
+        align-self: flex-end;
+      }
     }
   }
   &__text {
@@ -175,6 +190,11 @@
     width: 2.5rem;
     height: 2.5rem;
     text-align: center;
+  }
+  &__helper {
+    &--bold {
+      font-weight: 700;
+    }
   }
 }
 

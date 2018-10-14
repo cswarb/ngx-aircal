@@ -1,12 +1,10 @@
-<div class="aircal" [style.width]="options?.width" [style.height]="options?.height">
-    <section *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta aircal__meta--column">
+<div class="aircal" [ngStyle]="{'width': options?.width, 'height': options?.height}">
+    <section *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta aircal__meta__rows">
         <div class="aircal__meta__row">
-            <p *ngIf="numberOfDaysSelected?.days > 0">{{numberOfDaysSelected?.days}} day<span *ngIf="numberOfDaysSelected?.days > 1">s</span> selected</p>
-            <p *ngIf="numberOfDaysSelected?.months > 0">{{numberOfDaysSelected?.months}} month<span *ngIf="numberOfDaysSelected?.months > 1">s</span> selected</p>
-            <p *ngIf="numberOfDaysSelected?.years > 0">{{numberOfDaysSelected?.years}} year<span *ngIf="numberOfDaysSelected?.years > 1">s</span> selected</p>
+            <div data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
         </div>
-        <div class="aircal__meta__row">
-            <select class="aircal__shortcut" #selectedShortcutRange [disabled]="!selectedStartDate" (change)="selectionShortcutChanged(selectedShortcutRange.value)">
+        <div class="aircal__meta__row aircal__meta__row__shortcuts">
+            <select class="aircal__shortcut" #selectedShortcutRange [disabled]="!aircal?.selectedStartDate" (change)="selectionShortcutChanged(selectedShortcutRange.value)">
                 <option selected="selected" value="" disabled="disabled">Selection shortcuts</option>
                 <option *ngFor="let item of ObjectKeys(options.selectionShortcuts)" [value]="item">{{options?.selectionShortcuts[item]}}</option>
             </select>
@@ -16,7 +14,7 @@
     <div class="aircal__cal__container">
         <div class="aircal__cal aircal__cal--double">
             <section class="aircal__meta">
-                <button [disabled]="options?.disablePreviousSelection || disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
+                <button [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
                 <p class="aircal__text aircal__text__month">{{date.format("MMMM")}} {{date.format("YYYY")}}</p>
             </section>
             <div class="aircal__meta">
@@ -40,7 +38,7 @@
         <div class="aircal__cal aircal__cal--double">
             <div class="aircal__meta">
                 <p class="aircal__text aircal__text__month">{{nextMonthDate.format("MMMM")}} {{nextMonthDate.format("YYYY")}}</p>
-                <button [disabled]="options?.disableForwardSelection || disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
+                <button [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
             </div>
             <div class="aircal__meta">
                 <div class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)">{{options.dayLabels[dayName]}}</div>
@@ -62,9 +60,9 @@
     </div>
 
     <div class="aircal__actions">
-        <button *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!selectedStartDate || !selectedEndDate"
+        <button *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate"
             (click)="dateRangeCleared()">{{options?.clearText}}</button>
-        <button class="aircal__button aircal__button--apply" [disabled]="!selectedStartDate || !selectedEndDate" (click)="dateRangeCommitted()">{{options?.applyText}}</button>
+        <button class="aircal__button aircal__button--apply" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate" (click)="dateRangeCommitted()">{{options?.applyText}}</button>
     </div>
 </div>
 
