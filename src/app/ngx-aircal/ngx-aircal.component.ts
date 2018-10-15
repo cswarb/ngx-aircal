@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges } fr
 import * as moment from "moment";
 import { Subject } from "rxjs";
 
-import { AircalOptions, AircalResponse, AircalFormResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, AircalFormResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalDateModel } from "./ngx-aircal.model";
 import { NgxAircalUtilsService } from "./services/ngx-aircal-utils.service";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 
@@ -90,31 +90,60 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.createCalendars();
     }
 
-    writeValue(value: Object): void {
+    /**
+     * Reactive form / ngModel / Options updates change detection
+     */
+    private formatDate(date: any): string {
+        // let formatted: string = this.opts.dateFormat.replace("yyyy", val.year).replace("dd", this.preZero(val.day));
+        return moment(date).format(this.options.dateFormat)
+    }
+
+    public writeValue(value: {startDate?: any, endDate?: any}): void {
         //The initial form value passed from the parent must be written in here...
         console.log("writeValue: ", value);
         
-        // if (value && value["beginDate"] && value["endDate"]) {
-        //     this.beginDate = this.parseSelectedDate(value["beginDate"]);
-        //     this.endDate = this.parseSelectedDate(value["endDate"]);
-        //     let begin: string = this.formatDate(this.beginDate);
-        //     let end: string = this.formatDate(this.endDate);
-        //     this.selectionDayTxt = begin + " - " + end;
-        //     this.titleAreaText = this.selectionDayTxt;
-        //     this.inputFieldChanged.emit({ value: this.selectionDayTxt, dateRangeFormat: this.dateRangeFormat, valid: true });
-        // }
-        // else if (value === null || value === "") {
-        //     this.clearRangeValues();
-        //     this.inputFieldChanged.emit({ value: "", dateRangeFormat: this.dateRangeFormat, valid: false });
-        // }
-        // this.invalidDateRange = false;
+        if (value && value.startDate && value.endDate) {
+            this.aircal.selectedStartDate = moment(this.parseSelectedDate(value.startDate).toDateStr());
+            this.aircal.selectedEndDate = moment(this.parseSelectedDate(value.endDate).toDateStr());
+
+            let begin: string = this.formatDate(this.parseSelectedDate(value.startDate).toDateStr()),
+                end: string = this.formatDate(this.parseSelectedDate(value.endDate).toDateStr());
+
+            this.formSelectionText = begin + " - " + end;
+
+            // this.inputFieldChanged.emit({ value: this.selectionDayTxt, dateRangeFormat: this.dateRangeFormat, valid: true });
+        } else if (value === null || value === "") {
+            this.dateRangeCleared();
+            // this.inputFieldChanged.emit({ value: "", dateRangeFormat: this.dateRangeFormat, valid: false });
+        };
+    }
+    private parseSelectedDate(selectedDate: AircalDateModel | string): AircalDateModel {
+        //Take into account date format
+        let date: AircalDateModel = new AircalDateModel();
+
+        console.log("selectedDate: ", selectedDate);
+        
+
+        if (typeof selectedDate === "string") {
+            let sd: string = "" + selectedDate;
+            // moment([2012, 0, 31]).month(1).format(this.options.dateFormat);
+            // date.day = moment().days();
+
+            // date.month = 
+
+            // date.year = 
+        } else if (typeof selectedDate === "object") {
+            date = selectedDate;
+        };
+
+        return date;
     }
 
-    registerOnChange(fn: any): void {
+    public registerOnChange(fn: any): void {
         // this.onChangeCb = fn;
     }
 
-    registerOnTouched(fn: any): void {
+    public registerOnTouched(fn: any): void {
         // this.onTouchedCb = fn;
     }
 
@@ -127,35 +156,35 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         // }
     }
 
-    onUserDateRangeInput(value: string) {
+    public onUserDateRangeInput(value: string) {
         //When the form has a date manually entered, this fires...
         //What if the calendar changes it itself though? It needs to update the form.
         console.log("onUserDateRangeInput: ", value);
         
-        // this.invalidDateRange = false;
-        // if (value.length === 0) {
-        //     if (this.drus.isInitializedDate(this.beginDate) && this.drus.isInitializedDate(this.endDate)) {
-        //         this.clearDateRange();
-        //     }
-        //     else {
-        //         this.inputFieldChanged.emit({ value: value, dateRangeFormat: this.dateRangeFormat, valid: false });
-        //     }
-        // }
-        // else {
-        //     let daterange: IMyDateRange = this.drus.isDateRangeValid(value, this.opts.dateFormat, this.opts.minYear, this.opts.maxYear, this.opts.disableUntil, this.opts.disableSince, this.opts.disableDates, this.opts.disableDateRanges, this.opts.enableDates, this.opts.monthLabels);
-        //     if (this.drus.isInitializedDate(daterange.beginDate) && this.drus.isInitializedDate(daterange.endDate)) {
-        //         this.beginDate = daterange.beginDate;
-        //         this.endDate = daterange.endDate;
-        //         this.rangeSelected();
-        //     }
-        //     else {
-        //         this.invalidDateRange = true;
-        //         this.onChangeCb(null);
-        //         this.onTouchedCb();
-        //         this.inputFieldChanged.emit({ value: value, dateRangeFormat: this.dateRangeFormat, valid: false });
-        //     }
+        if (value.length === 0) {
+            // if (this.drus.isInitializedDate(this.beginDate) && this.drus.isInitializedDate(this.endDate)) {
+            //     this.clearDateRange();
+            // }
+            // else {
+            //     this.inputFieldChanged.emit({ value: value, dateRangeFormat: this.dateRangeFormat, valid: false });
+            // }
+        } else {
+            // let daterange: IMyDateRange = this.drus.isDateRangeValid(value, this.opts.dateFormat, this.opts.minYear, this.opts.maxYear, this.opts.disableUntil, this.opts.disableSince, this.opts.disableDates, this.opts.disableDateRanges, this.opts.enableDates, this.opts.monthLabels);
+            // if (this.drus.isInitializedDate(daterange.beginDate) && this.drus.isInitializedDate(daterange.endDate)) {
+            //     // this.beginDate = daterange.beginDate;
+            //     // this.endDate = daterange.endDate;
+            //     // this.rangeSelected();
+            // }
+            // else {
+            //     this.onChangeCb(null);
+            //     this.onTouchedCb();
+            }
     }
 
+
+    /**
+     * Calendar functions
+     */
     private createCalendars(): void {
         //Ensure this.date and this.nextMonthDate are calculated and set beforehand
         this.daysArray = this.createAircal(this.date);
@@ -342,7 +371,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
         //Update the form
         if (this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
-            this.formSelectionText = `${this.aircal.selectedStartDate} - ${this.aircal.selectedEndDate}`;
+            this.formSelectionText = `${this.formatDate(this.aircal.selectedStartDate)} - ${this.formatDate(this.aircal.selectedEndDate)}`;
         };
 
         //calculate number of days between start and end
@@ -445,6 +474,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.aircal.selectedStartDate = freshModel.selectedStartDate;
         this.aircal.selectedEndDate = freshModel.selectedEndDate;
         this.aircal.numberOfDaysSelected.days = freshModel.numberOfDaysSelected.days;
+        this.formSelectionText = "";
 
         return model;
     }

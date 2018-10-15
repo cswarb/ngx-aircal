@@ -33,8 +33,21 @@ export class AppComponent {
     });
 
     this.form = this._FormBuilder.group({
-      dateRange: ["", Validators.required]
+      dateRange: [{
+        startDate: new AircalDateModel({
+          year: "2018",
+          month: "06",
+          day: "27"
+        }), endDate: new AircalDateModel({
+          year: "2018",
+          month: "08",
+          day: "27"
+        }) || ""
+      }, Validators.required]
     });
+
+    console.log(this.form);
+    
   }
 
   public setDateRange(): void {
@@ -42,7 +55,7 @@ export class AppComponent {
       dateRange: {
         startDate: new AircalDateModel({
           year: "2018",
-          month: "6",
+          month: "06",
           day: "27"
         }),
         endDate: new AircalDateModel({
@@ -52,11 +65,15 @@ export class AppComponent {
         })
       }
     });
+
+    console.log(this.form);
   }
 
   public clearDateRange(): void {
     // Clear the date range using the patchValue function
     this.form.patchValue({ dateRange: "" });
+
+    console.log(this.form);
   }
 
   public onSubmitReactiveForms() {
