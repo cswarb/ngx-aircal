@@ -41,6 +41,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &__input {
+      font-size: 0.8rem;
+      letter-spacing: 0.3px;
+      color: grey;
+      padding: 0.5rem 0.5rem;
+      min-width: 11rem;
+      border-radius: 2px;
+      border: 1px solid rgb(228, 231, 231);
+      &--invalid {
+        background-color: red;
+      }
+    }
     &--column {
       flex-flow: column nowrap;
     }
@@ -59,7 +71,7 @@
         }
       }
       &__shortcuts {
-        align-self: flex-end;
+        
       }
     }
   }

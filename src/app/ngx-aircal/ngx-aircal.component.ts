@@ -25,6 +25,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public nextMonthDaysArray: Array<any> = [];
     public allDaysArray: Array<any> = [];
     public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
+    public invalidDateRange: boolean = false;
+    public showCalendar: boolean = false;
 
     //Form
     onChangeCb: (_: any) => void = () => { };
@@ -64,6 +66,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     ngOnInit() {
+        this.intialiseCalendar();
+    }
+
+    public openCalendar(): void {
+        this.showCalendar = !this.showCalendar;
+    }
+
+    public intialiseCalendar(): void {
         //Initialise start and end date from options is valid
         if (this.options.startDate.isValid()) {
             this.aircal.selectedStartDate = moment(
@@ -109,7 +119,20 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             let begin: string = this.formatDate(this.parseSelectedDate(value.startDate).toDateStr()),
                 end: string = this.formatDate(this.parseSelectedDate(value.endDate).toDateStr());
 
+            // if (begin && end) {
+            //     this.invalidDateRange = false;
+            // } else {
+            //     this.invalidDateRange = true;
+            //     return;
+            // };
+
             this.formSelectionText = begin + " - " + end;
+
+            //calculate number of days between start and end
+            if (this.options.daysSelectedCounterVisible) {
+                let selectedDays = moment.duration(this.aircal.selectedEndDate.diff(this.aircal.selectedStartDate));
+                this.aircal.numberOfDaysSelected.days = Math.round(selectedDays.asDays());
+            };
 
             // this.inputFieldChanged.emit({ value: this.selectionDayTxt, dateRangeFormat: this.dateRangeFormat, valid: true });
         } else if (value === null || value === "") {
@@ -150,10 +173,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     ngOnChanges(value) {
         //When options values change, this fires...
         console.log("ngOnChanges: ", value);
-        
-        // if (this.widget && this.widget.slider('value') !== this.value) {
-        //     this.widget.slider('value', this.value);
-        // }
+        this.intialiseCalendar();
     }
 
     public onUserDateRangeInput(value: string) {
@@ -299,9 +319,20 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             days = Array.from(new Array(currentMonth.daysInMonth()).keys());
 
         let calendarDays = days.map((day: any) => {
-            return moment(currentMonth).add(day, "day");
-        });
+            let newDay = moment(currentMonth).add(day, "day");
 
+            //Check for disabled dates
+            if (this.options.disableFromHereBackwards || this.options.disableFromHereForwards) {
+                const fromHereBackwards = moment(this.options.disableFromHereBackwards.toDateStr()),
+                    fromHereForwards = moment(this.options.disableFromHereForwards.toDateStr());;
+                if (newDay < fromHereBackwards || newDay > fromHereForwards) {
+                    newDay["disabled"] = true;
+                };
+            };
+
+            return newDay;
+        });
+        
         //Pull in the previous months values to fill in the empty space
         for (let i = 1; i < currentMonth.weekday(); i++) {
             let previousWrapArounddateObj = null;
@@ -336,7 +367,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return moment().format("L") === date.format("L");
     }
 
-    private selectDateShortcut(newEndDate: any) {
+    private selectDateShortcut(newEndDate: any) {        
         this.aircal.selectedEndDate = newEndDate;
 
         //calculate number of days between start and end
@@ -454,12 +485,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public dateRangeCleared(): AircalFormResponse {
         const freshModel = new AircalModel(),
             model = new AircalFormResponse(
-            this.aircal.selectedStartDate,
-            this.aircal.selectedEndDate,
-            moment(this.aircal.selectedStartDate).format(this.options.dateFormat),
-            moment(this.aircal.selectedEndDate).format(this.options.dateFormat),
-            true
-        );
+                this.aircal.selectedStartDate,
+                this.aircal.selectedEndDate,
+                moment(this.aircal.selectedStartDate).format(this.options.dateFormat),
+                moment(this.aircal.selectedEndDate).format(this.options.dateFormat),
+                true
+            );
 
         this.onDateRangeCleared.next(
             new AircalFormResponse(
@@ -475,6 +506,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.aircal.selectedEndDate = freshModel.selectedEndDate;
         this.aircal.numberOfDaysSelected.days = freshModel.numberOfDaysSelected.days;
         this.formSelectionText = "";
+        this.invalidDateRange = false;
 
         return model;
     }

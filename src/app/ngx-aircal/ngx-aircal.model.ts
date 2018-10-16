@@ -54,14 +54,16 @@ export class AircalOptions {
     public clearText?: string = "Clear";
     public highlightToday?: boolean = true;
     public showClearBtn?: boolean = true;
+    public showDaysSelected?: boolean = true;
     public minYear?: number = 1000;
     public maxYear?: number = 9999;
     public disablePreviousSelection?: boolean = false;
     public disableForwardSelection?: boolean = false;
-    public disableFromHereBackwards?: AircalDateModel = new AircalDateModel(); //@todo
-    public disableFromHereForwards?: AircalDateModel = new AircalDateModel(); //@todo
-    public monthSelector?: boolean = false; //@todo
-    public yearSelector?: boolean = false; //@todo
+    public disableFromHereBackwards?: AircalDateModel = new AircalDateModel();
+    public disableFromHereForwards?: AircalDateModel = new AircalDateModel();
+    public indicateInvalidDateRange?: boolean = true;
+    // public monthSelector?: boolean = false; //@todo
+    // public yearSelector?: boolean = false; //@todo
 
     constructor(init?: Partial<AircalOptions>) {
         Object.assign(this, init);

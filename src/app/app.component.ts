@@ -15,11 +15,22 @@ export class AppComponent {
     private _FormBuilder: FormBuilder
   ) {
     this.calendarOptions = new AircalOptions({
+      inlineMode: false
       // defaultStart: new AircalDateModel({
       //   year: "2018", month: "06"
       // }),      
-      minYear: 2017,
-      maxYear: 2019,
+      // minYear: 2017,
+      // maxYear: 2019,
+      // disableFromHereBackwards: new AircalDateModel({
+      //   year: "2018",
+      //   month: "10",
+      //   day: "14"
+      // }),
+      // disableFromHereForwards: new AircalDateModel({
+      //   year: "2018",
+      //   month: "10",
+      //   day: "15"
+      // }),
       // startDate: new AircalDateModel({
       //   year: "2018",
       //   month: "06",
@@ -67,6 +78,33 @@ export class AppComponent {
     });
 
     console.log(this.form);
+  }
+
+  public updateOptions() {
+    this.calendarOptions = new AircalOptions({   
+      minYear: 2017,
+      maxYear: 2019,
+      disableFromHereBackwards: new AircalDateModel({
+        year: "2018",
+        month: "10",
+        day: "01"
+      }),
+      disableFromHereForwards: new AircalDateModel({
+        year: "2018",
+        month: "10",
+        day: "30"
+      }),
+      startDate: new AircalDateModel({
+        year: "2018",
+        month: "06",
+        day: "27"
+      }),
+      endDate: new AircalDateModel({
+        year: "2018",
+        month: "10",
+        day: "27"
+      }),
+    });
   }
 
   public clearDateRange(): void {

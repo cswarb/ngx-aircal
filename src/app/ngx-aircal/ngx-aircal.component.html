@@ -1,19 +1,16 @@
-<div class="aircal" [ngStyle]="{'width': options?.width, 'height': options?.height}">
+<div *ngIf="!options?.inlineMode">
+    <input type="text" class="aircal__meta__input" placeholder="Select Date" [ngModel]="formSelectionText" (ngModelChange)="onUserDateRangeInput($event)"
+        [value]="formSelectionText" [disabled]="false" [readonly]="false" [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && invalidDateRange}"
+        autocomplete="off" spellcheck="false" autocorrect="off" />
+    <button (click)="openCalendar()">Open/Close</button>
+</div>
+
+<div class="aircal" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">
     <section *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta aircal__meta__rows">
         <div class="aircal__meta__row">
-            <div data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
-            <input type="text" class="selection"
-                placeholder="Select Date"
-                [ngModel]="formSelectionText"
-                (ngModelChange)="onUserDateRangeInput($event)"
-                [value]="formSelectionText" 
-                [disabled]="false"
-                [readonly]="false" 
-                autocomplete="off" 
-                spellcheck="false" 
-                autocorrect="off"/>
+            <div *ngIf="options?.showDaysSelected" data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
         </div>
-        <div class="aircal__meta__row aircal__meta__row__shortcuts">
+        <div class="aircal__meta__column aircal__meta__row__shortcuts">
             <div data-aircal-select
                 [selectedStartDate]="aircal?.selectedStartDate"
                 [selectionShortcuts]="options?.selectionShortcuts" 
@@ -24,7 +21,7 @@
     <div class="aircal__cal__container">
         <div class="aircal__cal aircal__cal--double">
             <section class="aircal__meta">
-                <button [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
+                <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection" role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
                 <p class="aircal__text aircal__text__month">{{date.format("MMMM")}} {{date.format("YYYY")}}</p>
             </section>
             <div class="aircal__meta">
@@ -38,7 +35,7 @@
                     (mouseenter)="isHovering(day)"
                     (mouseleave)="isLeaving(day)" 
                     (click)="selectDate(day)" 
-                    [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth),
+                    [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
                         'aircal--highlighted': day?.highlight,
                         'aircal--istoday': isToday(day),
                         'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}"
@@ -49,7 +46,7 @@
         <div class="aircal__cal aircal__cal--double">
             <div class="aircal__meta">
                 <p class="aircal__text aircal__text__month">{{nextMonthDate.format("MMMM")}} {{nextMonthDate.format("YYYY")}}</p>
-                <button [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
+                <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
             </div>
             <div class="aircal__meta">
                 <div aircal-aircal-daysofweek class="flex-container aircal__daysofweek" 
@@ -64,7 +61,7 @@
                     (mouseenter)="isHovering(day)"
                     (mouseleave)="isLeaving(day)"
                     (click)="selectDate(day)"
-                    [ngClass]="{'aircal--inactive': (!day || day?.isLastMonth || day?.isNextMonth),
+                    [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
                         'aircal--highlighted': day?.highlight,
                         'aircal--istoday': isToday(day),
                         'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}"
@@ -74,9 +71,9 @@
     </div>
 
     <div class="aircal__actions">
-        <button *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate"
+        <button type="button" *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate"
             (click)="dateRangeCleared()">{{options?.clearText}}</button>
-        <button class="aircal__button aircal__button--apply" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate" (click)="dateRangeCommitted()">{{options?.applyText}}</button>
+        <button type="button" class="aircal__button aircal__button--apply" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate" (click)="dateRangeCommitted()">{{options?.applyText}}</button>
     </div>
 </div>
 
