@@ -1,5 +1,8 @@
+import moment = require("moment");
+
 export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
+export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = "-";
 
 export class AircalModel {
     public selectedStartDate: any = null; //Display obj
@@ -70,6 +73,52 @@ export class AircalOptions {
     }
 }
 
+export class AircalUtils {
+    constructor() {
+
+    }
+
+    public static isDateValid(date) {
+        return true;
+    }
+    
+    public static getShortcutStrucutre(shortcut: string): { time: string, unit: any } {
+        const shortcutData = shortcut.split(AIRCAL_CALENDAR_SHORTCUT_SEPARATOR);
+        return {
+            time: shortcutData[0] || "1",
+            unit: shortcutData[1] || "days"
+        };
+    }
+
+    public static isWithinRange(date, cell, selectedStartDate): boolean {
+        return date > selectedStartDate && date <= cell;
+    }
+
+    public static getSelectionText(begin: string, end: string): string {
+        return `${begin} ${AIRCAL_CALENDAR_FORMAT_SEPARATOR} ${end}`;
+    }
+    
+    public static stringToStartAndEnd(startAndEnd: string): { start: AircalDateModel, end: AircalDateModel } {
+        //DDMMYYYY
+        let d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
+            startDate = d[0].trim().split("/"),
+            endDate = d[1].trim().split("/");
+        
+        return {
+            start: new AircalDateModel({
+                year: startDate[2],
+                month: startDate[1],
+                day: startDate[0]
+            }),
+            end: new AircalDateModel({
+                year: endDate[2],
+                month: endDate[1],
+                day: endDate[0]
+            })
+        };
+    }
+}
+
 export class AircalDateModel {
     public year: string | null = null;
     public month: string | null = null;
@@ -81,14 +130,26 @@ export class AircalDateModel {
         Object.assign(this, init);
     }
 
-    public isValid(): boolean {
-        //Must have at least a year and month to be valid
-        return (!!this.year && !!this.month);
+    public isViable(): boolean {
+        //Must have a properly formatted y m d
+        return (this.year && this.year.length === 4 && this.month && this.month.length === 2 && this.day && this.day.length === 2);
     }
 
-    public toDateStr(): string {
+    public toMomentFriendlyDateString(): string {
         //YYYYMMDD
         return `${this.year}${this.month}${this.day ? this.day : "01"}`;
+    }
+
+    public static parseSelectedDate(selectedDate: any): any {
+        //Take into account date format
+        let date;
+        if (typeof selectedDate === "string") {
+            date = moment(selectedDate);
+        } else if (typeof selectedDate === "object") {
+            date = selectedDate;
+        };
+
+        return date;
     }
 }
 
@@ -96,22 +157,10 @@ export class AircalDateModel {
 //Reponses for Observables
 export class AircalResponse {
     constructor(
-        public startDate: string,
-        public endDate: string,
+        public startDate: AircalDateModel,
+        public endDate: AircalDateModel,
         public formattedStartDate: string,
         public formattedEndDate: string
-    ) {
-
-    }
-}
-
-export class AircalFormResponse {
-    constructor(
-        public startDate: string,
-        public endDate: string,
-        public formattedStartDate: string,
-        public formattedEndDate: string,
-        public isValid: boolean
     ) {
 
     }

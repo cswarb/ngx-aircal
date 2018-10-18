@@ -1,7 +1,6 @@
 import { NgModule, forwardRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { NgxAircalComponent } from "./ngx-aircal.component";
-import { NgxAircalUtilsService } from "./services/ngx-aircal-utils.service";
 import { AircalSelectComponent } from "./aircal-select/aircal-select.component";
 import { AircalDaysselectedComponent } from "./aircal-daysselected/aircal-daysselected.component";
 import { AircalDaysofweekComponent } from "./aircal-daysofweek/aircal-daysofweek.component";
@@ -24,7 +23,7 @@ import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
     NgxAircalComponent
   ],
   providers: [
-    NgxAircalUtilsService
+    
   ],
   entryComponents: [
     NgxAircalComponent

@@ -53,12 +53,9 @@ export class AppComponent {
           year: "2018",
           month: "08",
           day: "27"
-        }) || ""
+        })
       }, Validators.required]
-    });
-
-    console.log(this.form);
-    
+    });    
   }
 
   public setDateRange(): void {
@@ -76,8 +73,6 @@ export class AppComponent {
         })
       }
     });
-
-    console.log(this.form);
   }
 
   public updateOptions() {
@@ -110,8 +105,6 @@ export class AppComponent {
   public clearDateRange(): void {
     // Clear the date range using the patchValue function
     this.form.patchValue({ dateRange: "" });
-
-    console.log(this.form);
   }
 
   public onSubmitReactiveForms() {
