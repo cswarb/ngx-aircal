@@ -40,6 +40,9 @@ export class AircalDayLabels {
     }
 }
 
+export type arrowBias = "left" | "middle" | "right";
+export type calendarBias = "left" | "top" | "right" | "bottom";
+
 export class AircalOptions {
     public defaultStart?: AircalDateModel = new AircalDateModel();
     public inlineMode: boolean = false; //Display the calendar without a form input @todo
@@ -55,6 +58,8 @@ export class AircalOptions {
     public height?: string;
     public applyText?: string = "Apply";
     public clearText?: string = "Clear";
+    public selectDateText?: string = "Select date";
+    public selectDateCloseText?: string = "Close";
     public highlightToday?: boolean = true;
     public showClearBtn?: boolean = true;
     public showDaysSelected?: boolean = true;
@@ -65,6 +70,9 @@ export class AircalOptions {
     public disableFromHereBackwards?: AircalDateModel = new AircalDateModel();
     public disableFromHereForwards?: AircalDateModel = new AircalDateModel();
     public indicateInvalidDateRange?: boolean = true;
+    public hasArrow?: boolean = true;
+    public arrowBias?: arrowBias = "left";
+    public calendarPosition?: calendarBias = "bottom";
     // public monthSelector?: boolean = false; //@todo
     // public yearSelector?: boolean = false; //@todo
 

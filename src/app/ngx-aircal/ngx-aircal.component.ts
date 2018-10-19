@@ -74,6 +74,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.intialiseCalendar();
     }
 
+    public getArrowBiasClass(): string {
+        return this.options.hasArrow && this.options.arrowBias;
+    }
+
     public intialiseCalendar(): void {
         //Initialise start and end date from options is valid
         if (this.options.startDate.isViable()) {
@@ -504,9 +508,15 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             let begin = AircalDateModel.parseSelectedDate(model.start.toMomentFriendlyDateString()),
                 end = AircalDateModel.parseSelectedDate(model.end.toMomentFriendlyDateString());
 
+            
             //parse to model and validate input
             this.aircal.selectedStartDate = begin;
             this.aircal.selectedEndDate = end;
+
+            //Indicate the invalid range if invalid
+            if (this.options.indicateInvalidDateRange) {
+                this.invalidDateRange = true;
+            };
         }
 
         this.inputFieldChanged();
