@@ -2,8 +2,8 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 1rem;
+:host {
+  display: inline-block;
 }
 
 .aircal {
@@ -16,7 +16,6 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  margin-top: 2.5rem;
   z-index: 999;
   overflow: visible;
   background-color: #ffffff;
@@ -26,6 +25,24 @@ body {
   flex-flow: column;
   box-shadow: 0px 0px 7px #eef0f3;
   border-radius: 3px;
+  &__orient {
+    &--bottom {
+      top: 125%;
+      left: 0;
+    }
+    &--top {
+      top: -1290%;
+      left: 0;
+    }
+    &--left {
+      top: 10%;
+      left: -244%;
+    }
+    &--right {
+      top: -10%;
+      left: 105%;
+    }
+  }
   &--has-arrow {
     &:after, &:before {
       content: "";
@@ -64,6 +81,8 @@ body {
   }
   &__container {
     position: relative;
+    width: auto;
+    height: auto;
     display: inline-block;
   }
   &__cal {

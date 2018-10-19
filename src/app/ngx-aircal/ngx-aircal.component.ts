@@ -167,6 +167,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     /**
      * Helpers
      */
+    public getCalendarOrientation(): string {
+        return this.options.calendarPosition;
+    }
+
     public openCalendar(): void {
         this.showCalendar = !this.showCalendar;
     }
