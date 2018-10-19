@@ -62,6 +62,7 @@ export class AircalOptions {
     public selectDateCloseText?: string = "Close";
     public highlightToday?: boolean = true;
     public showClearBtn?: boolean = true;
+    public showApplyBtn?: boolean = true;
     public showDaysSelected?: boolean = true;
     public minYear?: number = 1000;
     public maxYear?: number = 9999;

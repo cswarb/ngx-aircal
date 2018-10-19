@@ -6,6 +6,25 @@
   display: inline-block;
 }
 
+@keyframes slideInLeft {
+  0% {
+    right: -30%;
+  }
+  100% {
+    right: 0%;
+  }
+}
+
+@keyframes slideOutRight {
+  0% {
+    right: 0%;
+  }
+  100% {
+    right: -30%;
+  }
+}
+
+
 .aircal {
   max-width: 650px;
   font-family: sans-serif;
@@ -94,6 +113,9 @@
       align-items: center;
       text-align: center;
       align-items: flex-start;
+      @media screen and (max-width: 700px) {
+        flex-flow: column nowrap;
+      }
     }
     &--double {
       &:first-child {
@@ -101,6 +123,16 @@
       }
       &:last-child {
         margin-left: 0.75rem;
+      }
+      @media screen and (max-width: 700px) {
+        flex-flow: column nowrap;
+        &:first-child {
+          margin-right: 0;
+          margin-bottom: 2rem;
+        }
+        &:last-child {
+          margin-left: 0;
+        }
       }
     }
   }
@@ -121,14 +153,14 @@
       min-width: 17rem;
       &__icon {
         position: absolute;
-        right: 0;
+        right: -30%;
         top: 50%;
-        transform: translateY(-50%);
+        transform: translateY(-50%) translateZ(0);
         margin-right: 0.5rem;
         background-color: rgb(0, 166, 153);
         outline: none;
         border: none;
-        color: #ffffff;
+        color: #06332f;
         padding: 0.25rem;
         font-size: 11px;
         border-radius: 2px;
@@ -137,9 +169,23 @@
           cursor: pointer;
           background-color: darken(rgb(0, 166, 153), 5%);
         }
+        &--alt {
+          background-color: #ffdda6;
+          color: #736247;
+          &:hover {
+            background-color: darken(#ffdda6, 5%);
+          }
+        }
+        &--opening {
+          animation: slideInLeft 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+        }
+        &--closing {
+          animation: slideOutRight 0.3s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+        }
       }
       &__container {
         position: relative;
+        overflow: hidden;
       }
       &--invalid {
         background-color: red;
@@ -201,6 +247,7 @@
     &__button {
       border: 0;
       outline: none;
+      background-color: transparent;
       &:disabled {
         opacity: 0.2;
         &:hover {

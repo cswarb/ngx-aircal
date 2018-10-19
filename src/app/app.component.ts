@@ -114,6 +114,10 @@ export class AppComponent {
   public onDateRangeCommitted(event: any) {
     console.log("date range committed: ", event);
   }
+  
+  public onDateRangeInitialised(event: any) {
+    console.log("date range initialised: ", event);
+  }
 
   public onDateRangeChanged(event: any) {
     console.log("date range changed: ", event);
@@ -124,7 +128,7 @@ export class AppComponent {
   }
 
   public onDateRangeCleared(event: any) {
-    console.log("date rangecleared: ", event);
+    console.log("date range cleared: ", event);
   }
 
   public onCalendarViewChanged(event: any) {
