@@ -189,6 +189,10 @@ export class AircalDateModel {
         //Take into account date format
         return parse(selectedDate);
     }
+
+    public isPopulated(): boolean {
+        return !!(this.year && this.month && this.year);
+    }
 }
 
 

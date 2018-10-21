@@ -77,31 +77,25 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     private intialiseCalendar(): void {
         //Initialise start and end date from options is valid
-        if (this.options.startDate.isViable()) {
+        if (this.options.startDate.isPopulated() && this.options.startDate.isViable()) {
             this.aircal.selectedStartDate = parse(
                 this.options.startDate.toDateFriendlyDateString()
             );
             this.selectDate(this.aircal.selectedStartDate);
-        } else {
-            throw new Error("Start date not viable");
         };
 
-        if (this.options.endDate.isViable()) {
+        if (this.options.endDate.isPopulated() && this.options.endDate.isViable()) {
             this.aircal.selectedEndDate = parse(
                 this.options.endDate.toDateFriendlyDateString()
             );
             this.selectDate(this.aircal.selectedEndDate);
-        } else {
-            throw new Error("End date not viable");
         };
 
-        if (this.options.defaultStart.isViable()) {
+        if (this.options.defaultStart.isPopulated() && this.options.defaultStart.isViable()) {
             this.date = parse(
                 this.options.defaultStart.toDateFriendlyDateString()
             );
             this.nextMonthDate = addMonths(parse(this.date), 1);
-        } else {
-            throw new Error("Default start not viable");
         };
 
         this.createCalendars();
@@ -487,8 +481,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
      * Reactive form / ngModel / Options updates change detection
      */
     public writeValue(value: { startDate?: AircalDateModel, endDate?: AircalDateModel }): void {
+        //Called after onInit
         //The initial form value passed from the parent must be written in here...
-
         if (value && value.startDate && value.endDate) {
             let begin: Date = AircalDateModel.parseModelToDate(value.startDate),
                 end: Date = AircalDateModel.parseModelToDate(value.endDate);
@@ -505,12 +499,13 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                     let selectedDays = differenceInDays(this.aircal.selectedEndDate, this.aircal.selectedStartDate);
                     this.aircal.numberOfDaysSelected.days = Math.round(selectedDays);
                 };
+
+                this._dateRangeInitialised();
+                this._dateRangeCommitted();
             } else {
                 this.invalidDateRange = true;
                 return;
             };
-
-            this._dateRangeInitialised();
         } else if (value === null || value === "") {
             //Ensure range is clear
             this._dateRangeCleared();
@@ -546,12 +541,19 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 end = AircalDateModel.parseStringToDate(model.end.toDateFriendlyDateString());
             
             //parse to model and validate input
-            this.aircal.selectedStartDate = begin;
-            this.aircal.selectedEndDate = end;
-
+            if(end > begin) {
+                if(isValid(begin)) {
+                    this.aircal.selectedStartDate = begin;
+                };
+    
+                if (isValid(end)) {
+                    this.aircal.selectedEndDate = end;
+                };
+            };
+            
             //Indicate the invalid range if invalid
             if (this.options.indicateInvalidDateRange) {
-                this.invalidDateRange = true;
+                this.invalidDateRange = !isValid(begin) && !isValid(end) || end < begin;
             };
         }
 

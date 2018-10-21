@@ -188,7 +188,10 @@
         overflow: hidden;
       }
       &--invalid {
-        background-color: red;
+        border-color: #f1a5a5;
+        &:focus {
+          outline-color: #f1a5a5;
+        }
       }
     }
     &--column {
