@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import moment = require("moment");
+import { format } from "date-fns";
 
 @Component({
     selector: "[data-aircal-day]",
@@ -7,7 +8,7 @@ import moment = require("moment");
     styleUrls: ["./aircal-day.component.css"]
 })
 export class AircalDayComponent implements OnInit {
-    @Input() day: any = moment();
+    @Input() day: string = format(new Date(), "D");
     
     constructor() {
 
@@ -15,6 +16,10 @@ export class AircalDayComponent implements OnInit {
 
     ngOnInit() {
 
+    }
+
+    public getDate(date: Date): string {
+        return format(date, "D");
     }
 
 }

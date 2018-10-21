@@ -1,4 +1,4 @@
-import moment = require("moment");
+import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse } from "date-fns";
 
 export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
@@ -87,6 +87,37 @@ export class AircalUtils {
 
     }
 
+    public static isSameOrBefore(leftDate, rightDate): boolean {
+        return this.isSame(leftDate, rightDate) || isBefore(leftDate, rightDate);
+    }
+    
+    public static isSameOrAfter(leftDate, rightDate): boolean {
+        return this.isSame(leftDate, rightDate) || isAfter(leftDate, rightDate);
+    }
+    
+    public static isSame(leftDate, rightDate): boolean {
+        return isEqual(leftDate, rightDate);
+    }
+
+    public static getAddType(unit: string): any {
+        let addType;
+        switch (unit) {
+            case "days":
+                addType = addDays;
+                break;
+            case "months":
+                addType = addMonths;
+                break;
+            case "years":
+                addType = addYears;
+                break;
+            default:
+                addType = addDays;
+                break;
+        };
+        return addType;
+    };
+
     public static isDateValid(date) {
         return true;
     }
@@ -99,7 +130,7 @@ export class AircalUtils {
         };
     }
 
-    public static isWithinRange(date, cell, selectedStartDate): boolean {
+    public static isWithinRange(date: Date, cell: Date, selectedStartDate: Date): boolean {
         return date > selectedStartDate && date <= cell;
     }
 
@@ -144,21 +175,19 @@ export class AircalDateModel {
         return (this.year && this.year.length === 4 && this.month && this.month.length === 2 && this.day && this.day.length === 2);
     }
 
-    public toMomentFriendlyDateString(): string {
+    public toDateFriendlyDateString(): string {
         //YYYYMMDD
         return `${this.year}${this.month}${this.day ? this.day : "01"}`;
     }
 
-    public static parseSelectedDate(selectedDate: any): any {
-        //Take into account date format
-        let date;
-        if (typeof selectedDate === "string") {
-            date = moment(selectedDate);
-        } else if (typeof selectedDate === "object") {
-            date = selectedDate;
-        };
-
+    public static parseModelToDate(selectedDate: AircalDateModel): Date {
+        const date = parse(`${selectedDate.year}${selectedDate.month}${selectedDate.day}`);
         return date;
+    }
+    
+    public static parseStringToDate(selectedDate: string): Date {
+        //Take into account date format
+        return parse(selectedDate);
     }
 }
 
