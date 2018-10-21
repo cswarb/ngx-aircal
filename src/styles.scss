@@ -281,9 +281,11 @@
     }
     &--apply {
       color: rgb(0, 166, 153);
+      margin-bottom: 0;
     }
     &--cancel {
       // color: red;
+      margin-bottom: 0;
     }
   }
   &__actions {

@@ -9,12 +9,12 @@
     </div>
     
     <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '']" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">
-        <section *ngIf="options?.daysSelectedCounterVisible" class="aircal__meta aircal__meta__rows--first aircal__meta__rows">
+        <section class="aircal__meta aircal__meta__rows--first aircal__meta__rows">
             <div class="aircal__meta__row">
-                <div *ngIf="options?.showDaysSelected" data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
+                <div *ngIf="options?.daysSelectedCounterVisible" data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
             </div>
             <div class="aircal__meta__column aircal__meta__row__shortcuts">
-                <div data-aircal-select [selectedStartDate]="aircal?.selectedStartDate" [selectionShortcuts]="options?.selectionShortcuts"
+                <div *ngIf="options?.selectionShortcutVisible" data-aircal-select [selectedStartDate]="aircal?.selectedStartDate" [selectionShortcuts]="options?.selectionShortcuts"
                     (selectionShortcutChanged)="selectionShortcutChanged($event)"></div>
             </div>
         </section>
@@ -63,10 +63,14 @@
         </div>
     
         <div class="aircal__actions aircal__meta__rows--last">
-            <button type="button" *ngIf="options?.showClearBtn" class="aircal__button aircal__button--cancel" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate"
-                (click)="_dateRangeCleared()">{{options?.clearText}}</button>
-            <button type="button" [disabled]="!selectedStartDate && !selectedEndDate" *ngIf="options?.showApplyBtn" class="aircal__button aircal__button--apply" [disabled]="!aircal?.selectedStartDate || !aircal?.selectedEndDate"
-                (click)="_dateRangeCommitted()">{{options?.applyText}}</button>
+            <div>
+                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="!(this.aircal.selectedStartDate && this.aircal.selectedEndDate)"
+                    (click)="_dateRangeCleared()">{{options?.clearText}}</button>
+            </div>
+            <div>
+                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate && this.aircal.selectedEndDate) || !needsApplying" class="aircal__button aircal__button--apply"
+                    (click)="_dateRangeCommitted()">{{options?.applyText}}</button>
+            </div>
         </div>
     </div>
 </div>

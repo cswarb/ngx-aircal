@@ -18,8 +18,8 @@ export class AircalDayComponent implements OnInit {
 
     }
 
-    public getDate(date: Date): string {
-        return format(date, "D");
+    public getDate(date: Date | null): string {
+        return date ? format(date, "D") : "";
     }
 
 }

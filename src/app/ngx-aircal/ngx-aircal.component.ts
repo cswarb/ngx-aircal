@@ -27,6 +27,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
     public invalidDateRange: boolean = false;
     public showCalendar: boolean = false;
+    public needsApplying: boolean = false;
 
     //Form
     private onChangeCb: (_: any) => void = () => { };
@@ -72,26 +73,29 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     ngOnChanges(value: SimpleChanges) {
         //When options values change from outside the component, this fires...
-        this.intialiseCalendar();
-    }    
+        //Check for first change as this will fire the initialise cal function both here and onInit
+        if(value.options && !value.options.firstChange) {
+            this.intialiseCalendar();
+        };
+    }
 
     private intialiseCalendar(): void {
         //Initialise start and end date from options is valid
         if (this.options.startDate.isPopulated() && this.options.startDate.isViable()) {
-            this.aircal.selectedStartDate = parse(
+            let date = parse(
                 this.options.startDate.toDateFriendlyDateString()
             );
-            this.selectDate(this.aircal.selectedStartDate);
+            this.selectDate(date);
         };
 
         if (this.options.endDate.isPopulated() && this.options.endDate.isViable()) {
-            this.aircal.selectedEndDate = parse(
+            let date = parse(
                 this.options.endDate.toDateFriendlyDateString()
             );
-            this.selectDate(this.aircal.selectedEndDate);
+            this.selectDate(date, true);
         };
 
-        if (this.options.defaultStart.isPopulated() && this.options.defaultStart.isViable()) {
+        if (this.options.defaultStart.isViable(true)) {
             this.date = parse(
                 this.options.defaultStart.toDateFriendlyDateString()
             );
@@ -230,7 +234,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public canSelectNextMonth(): boolean {
         //See what year the user will be navigating to
-        const goingToYear = getYear(addMonths(this.date, 1));
+        const goingToYear = getYear(addMonths(this.nextMonthDate, 1));
 
         //Compare to the minYear option
         return !!(goingToYear < this.options.maxYear);
@@ -239,13 +243,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     /**
      * User Events
      */
-    public selectDate(date: Date): void {
+    public selectDate(date: Date, forceCommit: boolean = false): void {
         if (!date || date["isLastMonth"] || date["isNextMonth"]) return;
 
         if (!this.aircal.selectedStartDate) {
             this.aircal.selectedStartDate = date;
         } else if (this.aircal.selectedStartDate && !this.aircal.selectedEndDate) {
             this.aircal.selectedEndDate = date;
+            this.needsApplying = true;
         } else {
             //both are selected - is the date selected closer to the start or the end?          
             var diffFromStart = Math.abs(Math.round(
@@ -260,6 +265,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             } else {
                 this.aircal.selectedStartDate = date;
             };
+
+            this.needsApplying = true;
         };
 
         //calculate number of days between start and end
@@ -276,7 +283,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this._dateRangeChanged();
 
         if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
-            if(!this.options.showApplyBtn) {
+            if(forceCommit || !this.options.showApplyBtn) {
                 this._dateRangeCommitted();
             };
         };
@@ -285,7 +292,6 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public selectionShortcutChanged(shortcut: string): void {
         if (!this.aircal.selectedStartDate) return;
 
-        
         //Get the amount of time to be selected
         const timeMeasurement = AircalUtils.getShortcutStrucutre(shortcut),
             addUnits = AircalUtils.getAddType(timeMeasurement.unit),
@@ -347,6 +353,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.aircal.numberOfDaysSelected.days = Math.round(selectedDays);
         };
 
+        this.needsApplying = true;
+
         //Fire event
         this._dateRangeChanged();
     }
@@ -390,6 +398,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.onChangeCb(
             model
         );
+
+        this.needsApplying = false;
 
         return model;
     }
@@ -484,10 +494,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         //Called after onInit
         //The initial form value passed from the parent must be written in here...
         if (value && value.startDate && value.endDate) {
-            let begin: Date = AircalDateModel.parseModelToDate(value.startDate),
+            let start: Date = AircalDateModel.parseModelToDate(value.startDate),
                 end: Date = AircalDateModel.parseModelToDate(value.endDate);
 
-            if (isValid(begin) && isValid(end)) {
+            if (isValid(start) && isValid(end)) {
                 this.invalidDateRange = false;
                 this.aircal.selectedStartDate = AircalDateModel.parseModelToDate(value.startDate);
                 this.aircal.selectedEndDate = AircalDateModel.parseModelToDate(value.endDate);
@@ -514,16 +524,11 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public onUserDateRangeInput(value: string) {
         //When the form has a date manually entered, this fires...
-        //What if the calendar changes it itself though? It needs to update the form.
         console.log("onUserDateRangeInput: ", value);
 
         if (value.length === 0) {
-            // if (this.drus.isInitializedDate(this.beginDate) && this.drus.isInitializedDate(this.endDate)) {
+            this._inputFieldChanged();
             this._dateRangeCleared();
-            // }
-            // else {
-            //     this.inputFieldChanged.emit({ value: value, dateRangeFormat: this.dateRangeFormat, valid: false });
-            // }
         } else {
             // let daterange: IMyDateRange = this.drus.isDateRangeValid(value, this.opts.dateFormat, this.opts.minYear, this.opts.maxYear, this.opts.disableUntil, this.opts.disableSince, this.opts.disableDates, this.opts.disableDateRanges, this.opts.enableDates, this.opts.monthLabels);
             // if (this.drus.isInitializedDate(daterange.beginDate) && this.drus.isInitializedDate(daterange.endDate)) {
@@ -535,29 +540,49 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             //     this.onChangeCb(null);
             //     this.onTouchedCb();
 
-            const model = AircalUtils.stringToStartAndEnd(value);
+            //Parse the string to a proper format, validate and assign if needed...
+            console.log(format(value, this.options.dateFormat));
+            console.log(
+                AircalUtils.isInputDateRangeValid(
+                    value,
+                    this.options.minYear,
+                    this.options.maxYear,
+                    this.options.disableFromHereBackwards,
+                    this.options.disableFromHereForwards
+                )
+            );
 
-            let begin = AircalDateModel.parseStringToDate(model.start.toDateFriendlyDateString()),
+            const model: { start: AircalDateModel, end: AircalDateModel } = AircalUtils.stringToStartAndEnd(value);
+
+            let start = AircalDateModel.parseStringToDate(model.start.toDateFriendlyDateString()),
                 end = AircalDateModel.parseStringToDate(model.end.toDateFriendlyDateString());
             
             //parse to model and validate input
-            if(end > begin) {
-                if(isValid(begin)) {
-                    this.aircal.selectedStartDate = begin;
+            if(end > start) {
+                if(isValid(start)) {
+                    this.aircal.selectedStartDate = start;
                 };
     
                 if (isValid(end)) {
                     this.aircal.selectedEndDate = end;
                 };
+            } else {
+                return;
+            };
+
+            this._inputFieldChanged();
+
+            if(model.start.isViable() && model.end.isViable()) {
+                if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
+                    this._dateRangeCommitted();
+                };
             };
             
             //Indicate the invalid range if invalid
             if (this.options.indicateInvalidDateRange) {
-                this.invalidDateRange = !isValid(begin) && !isValid(end) || end < begin;
+                this.invalidDateRange = !isValid(start) && !isValid(end) || end < start;
             };
         }
-
-        this._inputFieldChanged();
     }
 
     public registerOnChange(fn: any): void {

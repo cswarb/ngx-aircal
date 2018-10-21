@@ -54,6 +54,7 @@ export class AircalOptions {
     public previousMonthWrapAround?: boolean = true;
     public nextMonthWrapAround?: boolean = true;
     public daysSelectedCounterVisible?: boolean = true;
+    public selectionShortcutVisible?: boolean = true;
     public width?: string;
     public height?: string;
     public applyText?: string = "Apply";
@@ -63,7 +64,6 @@ export class AircalOptions {
     public highlightToday?: boolean = true;
     public showClearBtn?: boolean = true;
     public showApplyBtn?: boolean = true;
-    public showDaysSelected?: boolean = true;
     public minYear?: number = 1000;
     public maxYear?: number = 9999;
     public disablePreviousSelection?: boolean = false;
@@ -87,15 +87,15 @@ export class AircalUtils {
 
     }
 
-    public static isSameOrBefore(leftDate, rightDate): boolean {
+    public static isSameOrBefore(leftDate: Date, rightDate: Date): boolean {
         return this.isSame(leftDate, rightDate) || isBefore(leftDate, rightDate);
     }
     
-    public static isSameOrAfter(leftDate, rightDate): boolean {
+    public static isSameOrAfter(leftDate: Date, rightDate: Date): boolean {
         return this.isSame(leftDate, rightDate) || isAfter(leftDate, rightDate);
     }
     
-    public static isSame(leftDate, rightDate): boolean {
+    public static isSame(leftDate: Date, rightDate: Date): boolean {
         return isEqual(leftDate, rightDate);
     }
 
@@ -118,8 +118,12 @@ export class AircalUtils {
         return addType;
     };
 
-    public static isDateValid(date) {
-        return true;
+    public static isInputDateRangeValid(dateRangeStr: string, minYear: number, maxYear: number, disableFromHereBackwards: AircalDateModel, disableFromHereForwards: AircalDateModel): boolean {
+        //Make sure it is within valid and selectable range
+    
+        let dates = dateRangeStr.split("-");
+        console.log(dates);
+        return false;
     }
     
     public static getShortcutStrucutre(shortcut: string): { time: string, unit: any } {
@@ -170,9 +174,9 @@ export class AircalDateModel {
         Object.assign(this, init);
     }
 
-    public isViable(): boolean {
+    public isViable(hasNoDay: boolean = false): boolean {
         //Must have a properly formatted y m d
-        return (this.year && this.year.length === 4 && this.month && this.month.length === 2 && this.day && this.day.length === 2);
+        return (this.year && this.year.length === 4 && this.month && this.month.length === 2 && (hasNoDay ? true : (this.day && this.day.length === 2)));
     }
 
     public toDateFriendlyDateString(): string {

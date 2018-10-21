@@ -17,7 +17,7 @@ export class AppComponent {
     this.calendarOptions = new AircalOptions({
       inlineMode: false,
       // defaultStart: new AircalDateModel({
-      //   year: "2018", month: "06"
+      //   year: "2018", month: "11"
       // }),      
       // minYear: 2017,
       // maxYear: 2019,
@@ -45,15 +45,15 @@ export class AppComponent {
 
     this.form = this._FormBuilder.group({
       dateRange: [{
-        // startDate: new AircalDateModel({
-        //   year: "2018",
-        //   month: "06",
-        //   day: "27"
-        // }), endDate: new AircalDateModel({
-        //   year: "2018",
-        //   month: "08",
-        //   day: "27"
-        // })
+        startDate: new AircalDateModel({
+          year: "2018",
+          month: "06",
+          day: "27"
+        }), endDate: new AircalDateModel({
+          year: "2018",
+          month: "08",
+          day: "27"
+        })
       }, Validators.required]
     });    
   }
@@ -89,16 +89,16 @@ export class AppComponent {
         month: "10",
         day: "30"
       }),
-      startDate: new AircalDateModel({
-        year: "2018",
-        month: "06",
-        day: "27"
-      }),
-      endDate: new AircalDateModel({
-        year: "2018",
-        month: "10",
-        day: "27"
-      }),
+      // startDate: new AircalDateModel({
+      //   year: "2018",
+      //   month: "06",
+      //   day: "27"
+      // }),
+      // endDate: new AircalDateModel({
+      //   year: "2018",
+      //   month: "10",
+      //   day: "27"
+      // }),
     });
   }
 
