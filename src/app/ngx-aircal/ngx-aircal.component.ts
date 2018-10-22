@@ -524,63 +524,65 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public onUserDateRangeInput(value: string) {
         //When the form has a date manually entered, this fires...
-        console.log("onUserDateRangeInput: ", value);
-
         if (value.length === 0) {
             this._inputFieldChanged();
             this._dateRangeCleared();
         } else {
-            // let daterange: IMyDateRange = this.drus.isDateRangeValid(value, this.opts.dateFormat, this.opts.minYear, this.opts.maxYear, this.opts.disableUntil, this.opts.disableSince, this.opts.disableDates, this.opts.disableDateRanges, this.opts.enableDates, this.opts.monthLabels);
-            // if (this.drus.isInitializedDate(daterange.beginDate) && this.drus.isInitializedDate(daterange.endDate)) {
-            //     // this.beginDate = daterange.beginDate;
-            //     // this.endDate = daterange.endDate;
-            //     // this.rangeSelected();
-            // }
-            // else {
-            //     this.onChangeCb(null);
-            //     this.onTouchedCb();
-
             //Parse the string to a proper format, validate and assign if needed...
-            console.log(format(value, this.options.dateFormat));
-            console.log(
-                AircalUtils.isInputDateRangeValid(
-                    value,
-                    this.options.minYear,
-                    this.options.maxYear,
-                    this.options.disableFromHereBackwards,
-                    this.options.disableFromHereForwards
-                )
+            //Return a model if valid, otherwise false
+            const isDateValid = AircalUtils.getAndValidateModel(
+                value
             );
-
-            const model: { start: AircalDateModel, end: AircalDateModel } = AircalUtils.stringToStartAndEnd(value);
-
-            let start = AircalDateModel.parseStringToDate(model.start.toDateFriendlyDateString()),
-                end = AircalDateModel.parseStringToDate(model.end.toDateFriendlyDateString());
             
-            //parse to model and validate input
-            if(end > start) {
-                if(isValid(start)) {
-                    this.aircal.selectedStartDate = start;
+            if (!isDateValid) {
+                if (this.options.indicateInvalidDateRange) {
+                    this.invalidDateRange = true;
                 };
-    
-                if (isValid(end)) {
-                    this.aircal.selectedEndDate = end;
-                };
-            } else {
+                this.onChangeCb(null);
                 return;
             };
 
+            const model: { start: AircalDateModel, end: AircalDateModel } = AircalUtils.stringToStartAndEnd(value);
+
+            if(!model) {
+                return;
+            };
+
+            let start = AircalDateModel.parseStringToDate(model.start.toDateFriendlyDateString()),
+                end = AircalDateModel.parseStringToDate(model.end.toDateFriendlyDateString()),
+                disableFromDate = AircalDateModel.parseStringToDate(this.options.disableFromHereBackwards.toDateFriendlyDateString()),
+                disableToDate = AircalDateModel.parseStringToDate(this.options.disableFromHereForwards.toDateFriendlyDateString());
+
+            const datesViableGivenOpts = AircalUtils.isViableGivenOptions(
+                start,
+                end,
+                this.options.minYear,
+                this.options.maxYear,
+                disableFromDate,
+                disableToDate
+            );
+
+            if (!datesViableGivenOpts) {
+                //Indicate the invalid range if invalid
+                if (this.options.indicateInvalidDateRange) {
+                    this.invalidDateRange = true;
+                };
+                this.onChangeCb(null);
+                return;
+            };
+
+            this.invalidDateRange = false;
+
+            //parse to model and validate input
+            this.aircal.selectedStartDate = start;
+            this.aircal.selectedEndDate = end;
+         
             this._inputFieldChanged();
 
             if(model.start.isViable() && model.end.isViable()) {
                 if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
                     this._dateRangeCommitted();
                 };
-            };
-            
-            //Indicate the invalid range if invalid
-            if (this.options.indicateInvalidDateRange) {
-                this.invalidDateRange = !isValid(start) && !isValid(end) || end < start;
             };
         }
     }

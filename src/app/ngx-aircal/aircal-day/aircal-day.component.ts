@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from "@angular/core";
-import moment = require("moment");
 import { format } from "date-fns";
 
 @Component({
@@ -8,7 +7,7 @@ import { format } from "date-fns";
     styleUrls: ["./aircal-day.component.css"]
 })
 export class AircalDayComponent implements OnInit {
-    @Input() day: string = format(new Date(), "D");
+    @Input() day: Date = new Date();
     
     constructor() {
 

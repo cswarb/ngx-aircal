@@ -1,4 +1,4 @@
-import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse } from "date-fns";
+import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse, isValid, getYear } from "date-fns";
 
 export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
@@ -118,12 +118,52 @@ export class AircalUtils {
         return addType;
     };
 
-    public static isInputDateRangeValid(dateRangeStr: string, minYear: number, maxYear: number, disableFromHereBackwards: AircalDateModel, disableFromHereForwards: AircalDateModel): boolean {
+    public static getAndValidateModel(dateRangeStr: string): boolean {
         //Make sure it is within valid and selectable range
-    
-        let dates = dateRangeStr.split("-");
-        console.log(dates);
-        return false;
+        let isDateValid = false;
+
+        try {
+            let dates: Array<string> = dateRangeStr.split("-");
+
+            if (dates.length !== 2) {
+                isDateValid = false;
+            };
+
+            //we may have something to parse, continue
+            dates.forEach((date: string) => {
+                let d = date.trim().split("/");
+                
+                if(d.length !== 3) {
+                    isDateValid = false;
+                };
+
+                isDateValid = isValid(new Date(parseInt(d[2]), parseInt(d[1]), parseInt(d[0])));
+            });
+        } catch(e) {
+            isDateValid = false;
+        };
+        
+        return isDateValid;
+    }
+
+    public static isViableGivenOptions(startDate: Date, endDate: Date, minYear: number, maxYear: number, disableFromHereBackwards: Date, disableFromHereForwards: Date): boolean {
+        if (isAfter(startDate, endDate) || endDate < startDate) {
+            return false;
+        };
+
+        if (getYear(endDate) > maxYear || getYear(startDate) > maxYear) {
+            return false;
+        };
+        
+        if (getYear(endDate) < minYear || getYear(startDate) < minYear) {
+            return false;
+        };
+        
+        if (isAfter(endDate, disableFromHereForwards) || isBefore(startDate, disableFromHereBackwards)) {
+            return false;
+        };
+
+        return true;
     }
     
     public static getShortcutStrucutre(shortcut: string): { time: string, unit: any } {
@@ -143,22 +183,25 @@ export class AircalUtils {
     }
     
     public static stringToStartAndEnd(startAndEnd: string): { start: AircalDateModel, end: AircalDateModel } {
-        //DDMMYYYY
-        let d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
-            startDate = d[0].trim().split("/"),
-            endDate = d[1].trim().split("/");
-        
-        return {
-            start: new AircalDateModel({
-                year: startDate[2],
-                month: startDate[1],
-                day: startDate[0]
-            }),
-            end: new AircalDateModel({
-                year: endDate[2],
-                month: endDate[1],
-                day: endDate[0]
-            })
+        try {
+            let d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
+                startDate = d[0].trim().split("/"),
+                endDate = d[1].trim().split("/");
+
+            return {
+                start: new AircalDateModel({
+                    year: startDate[2],
+                    month: startDate[1],
+                    day: startDate[0]
+                }),
+                end: new AircalDateModel({
+                    year: endDate[2],
+                    month: endDate[1],
+                    day: endDate[0]
+                })
+            };
+        } catch(e) {
+            return;
         };
     }
 }
