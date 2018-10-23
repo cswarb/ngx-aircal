@@ -9,7 +9,7 @@ import { Subject } from "rxjs";
 })
 export class AircalSelectComponent implements OnInit, OnDestroy {
     @Input() selectionShortcuts = new AircalOptions().selectionShortcuts;
-    @Input() selectedStartDate: any = null;
+    @Input() selectedStartDate: Date | null = null;
     @Output() selectionShortcutChanged: Subject<string> = new Subject();
 
     //Helpers

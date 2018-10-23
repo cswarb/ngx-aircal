@@ -14,7 +14,7 @@
                 <div *ngIf="options?.daysSelectedCounterVisible" data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
             </div>
             <div class="aircal__meta__column aircal__meta__row__shortcuts">
-                <div *ngIf="options?.selectionShortcutVisible" data-aircal-select [selectedStartDate]="aircal?.selectedStartDate" [selectionShortcuts]="options?.selectionShortcuts"
+                <div *ngIf="options?.selectionShortcutVisible" data-aircal-select [selectedStartDate]="aircal?.selectedStartDate.day" [selectionShortcuts]="options?.selectionShortcuts"
                     (selectionShortcutChanged)="selectionShortcutChanged($event)"></div>
             </div>
         </section>
@@ -64,11 +64,11 @@
     
         <div class="aircal__actions aircal__meta__rows--last">
             <div>
-                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="!(this.aircal.selectedStartDate && this.aircal.selectedEndDate)"
+                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day)"
                     (click)="_dateRangeCleared()">{{options?.clearText}}</button>
             </div>
             <div>
-                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate && this.aircal.selectedEndDate) || !needsApplying" class="aircal__button aircal__button--apply"
+                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying" class="aircal__button aircal__button--apply"
                     (click)="_dateRangeCommitted()">{{options?.applyText}}</button>
             </div>
         </div>

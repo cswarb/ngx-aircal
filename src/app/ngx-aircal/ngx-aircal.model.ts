@@ -5,8 +5,8 @@ export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
 export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = "-";
 
 export class AircalModel {
-    public selectedStartDate: any = null; //Display obj
-    public selectedEndDate: any = null; //Display obj
+    public selectedStartDate: DateDisplayModel = new DateDisplayModel();
+    public selectedEndDate: DateDisplayModel = new DateDisplayModel();
     public numberOfDaysSelected: AircalSelectedTime = new AircalSelectedTime();
     public disableForwardSelection: boolean = false;
     public disablePreviousSelection: boolean = false;
@@ -43,6 +43,17 @@ export class AircalDayLabels {
 export type arrowBias = "left" | "middle" | "right";
 export type calendarBias = "left" | "top" | "right" | "bottom";
 
+export class DateDisplayModel {
+    public day: Date | null = null;
+    public disabled: boolean = false;
+    public isLastMonth: boolean = false;
+    public isNextMonth: boolean = false;
+    public highlight: boolean = false;
+
+    constructor(init?: Partial<DateDisplayModel>) {
+        Object.assign(this, init);
+    }
+}
 export class AircalOptions {
     public defaultStart?: AircalDateModel = new AircalDateModel();
     public inlineMode: boolean = false; //Display the calendar without a form input @todo
@@ -178,6 +189,15 @@ export class AircalUtils {
         return date > selectedStartDate && date <= cell;
     }
 
+    public static parseStringToDate(selectedDate: string): Date {
+        return parse(selectedDate);
+    }
+
+    public static parseModelToDate(selectedDate: AircalDateModel): Date {
+        const date = parse(`${selectedDate.year}${selectedDate.month}${selectedDate.day}`);
+        return date;
+    }
+
     public static getSelectionText(begin: string, end: string): string {
         return `${begin} ${AIRCAL_CALENDAR_FORMAT_SEPARATOR} ${end}`;
     }
@@ -223,18 +243,7 @@ export class AircalDateModel {
     }
 
     public toDateFriendlyDateString(): string {
-        //YYYYMMDD
         return `${this.year}${this.month}${this.day ? this.day : "01"}`;
-    }
-
-    public static parseModelToDate(selectedDate: AircalDateModel): Date {
-        const date = parse(`${selectedDate.year}${selectedDate.month}${selectedDate.day}`);
-        return date;
-    }
-    
-    public static parseStringToDate(selectedDate: string): Date {
-        //Take into account date format
-        return parse(selectedDate);
     }
 
     public isPopulated(): boolean {
@@ -246,8 +255,8 @@ export class AircalDateModel {
 //Reponses for Observables
 export class AircalResponse {
     constructor(
-        public startDate: AircalDateModel,
-        public endDate: AircalDateModel,
+        public startDate: Date,
+        public endDate: Date,
         public formattedStartDate: string,
         public formattedEndDate: string
     ) {

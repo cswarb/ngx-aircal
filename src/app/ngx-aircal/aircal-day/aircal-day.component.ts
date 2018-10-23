@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { format } from "date-fns";
+import { DateDisplayModel } from "../ngx-aircal.model";
 
 @Component({
     selector: "[data-aircal-day]",
@@ -7,7 +8,7 @@ import { format } from "date-fns";
     styleUrls: ["./aircal-day.component.css"]
 })
 export class AircalDayComponent implements OnInit {
-    @Input() day: Date = new Date();
+    @Input() day: DateDisplayModel = new DateDisplayModel();
     
     constructor() {
 
@@ -17,8 +18,8 @@ export class AircalDayComponent implements OnInit {
 
     }
 
-    public getDate(date: Date | null): string {
-        return date ? format(date, "D") : "";
+    public getDate(date: DateDisplayModel | null): string {
+        return date ? format(date.day, "D") : "";
     }
 
 }
