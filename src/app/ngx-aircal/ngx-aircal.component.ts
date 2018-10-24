@@ -23,6 +23,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public nextMonthDate: Date = addMonths(parse(new Date()), 1);
     public daysArray: Array<DateDisplayModel> = [];
     public nextMonthDaysArray: Array<DateDisplayModel> = [];
+    public nextMonthPlusDaysArray: Array<DateDisplayModel> = [];
     public allDaysArray: Array<DateDisplayModel> = [];
     public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
     public invalidDateRange: boolean = false;
@@ -118,6 +119,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         //Ensure this.date and this.nextMonthDate are calculated and set beforehand
         this.daysArray = this.createAircal(this.date);
         this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
+        this.nextMonthPlusDaysArray = this.createAircal(addMonths(this.nextMonthDate, 1));
         this.allDaysArray = this.daysArray.concat(this.nextMonthDaysArray);
     }
 

@@ -24,9 +24,16 @@
   }
 }
 
+.aircal__wrapper__animater {
+  position: relative;
+  align-items: center;
+  width: 100%;
+      height: 300px;
+    overflow: hidden;
+}
 
 .aircal {
-  max-width: 650px;
+  width: 675px;
   font-family: sans-serif;
   position: relative;
   overflow: auto;
@@ -36,7 +43,7 @@
   top: 0;
   left: 0;
   z-index: 999;
-  overflow: visible;
+  overflow: hidden;
   background-color: #ffffff;
   justify-content: center;
   align-items: center;
@@ -44,6 +51,25 @@
   flex-flow: column;
   box-shadow: 0px 0px 7px #eef0f3;
   border-radius: 3px;
+  &__main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  &__dow {
+    position: absolute;
+    top: 3.5rem;
+    display: flex;
+        flex-flow: row nowrap;
+    width: 100%;
+    &__wrap {
+      margin-right: 1.7rem;
+          display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    }
+  }
   &__orient {
     &--bottom {
       top: 125%;
@@ -99,7 +125,7 @@
     }
   }
   &__container {
-    position: relative;
+    position: absolute;
     width: auto;
     height: auto;
     display: inline-block;
@@ -107,23 +133,29 @@
   &__cal {
     display: flex;
     flex-flow: column;
+    display: inline-block;
+    width: 300px;
+    align-items: initial;
+    justify-content: flex-start;
     &__container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      align-items: flex-start;
+      display: inline-flex;
+      transform: translateX(0px);
+      width: 940px;
+      top: 0;
+      left: 1px;
+      position: absolute;
       @media screen and (max-width: 700px) {
         flex-flow: column nowrap;
       }
     }
     &--double {
-      &:first-child {
-        margin-right: 0.75rem;
-      }
-      &:last-child {
-        margin-left: 0.75rem;
-      }
+      margin-right: 0.65rem;
+      // &:first-child {
+      //   margin-right: 0.75rem;
+      // }
+      // &:last-child {
+      //   margin-left: 0.75rem;
+      // }
       @media screen and (max-width: 700px) {
         flex-flow: column nowrap;
         &:first-child {
@@ -143,6 +175,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    &__spacer {
+      height: 3rem;
+      width: 100%;
+      display: block;
+    }
     &__input {
       font-size: 0.8rem;
       letter-spacing: 0.3px;
