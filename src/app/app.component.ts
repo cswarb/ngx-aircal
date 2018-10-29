@@ -10,6 +10,7 @@ import { AircalOptions, AircalDateModel, AircalDayLabels } from "./ngx-aircal/ng
 export class AppComponent {
   public calendarOptions: AircalOptions = new AircalOptions();
   public form: FormGroup;
+  public dateRange: any;
 
   constructor(
     private _FormBuilder: FormBuilder
@@ -43,19 +44,32 @@ export class AppComponent {
       // }),
     });
 
-    this.form = this._FormBuilder.group({
-      dateRange: [{
-        // startDate: new AircalDateModel({
-        //   year: "2018",
-        //   month: "06",
-        //   day: "27"
-        // }), endDate: new AircalDateModel({
-        //   year: "2018",
-        //   month: "08",
-        //   day: "27"
-        // })
-      }, Validators.required]
-    });    
+    this.dateRange = {
+      startDate: new AircalDateModel({
+        year: "2018",
+        month: "06",
+        day: "27"
+      }), 
+      endDate: new AircalDateModel({
+        year: "2018",
+        month: "08",
+        day: "27"
+      })
+    };
+
+    // this.form = this._FormBuilder.group({
+    //   dateRange: [{
+    //     // startDate: new AircalDateModel({
+    //     //   year: "2018",
+    //     //   month: "06",
+    //     //   day: "27"
+    //     // }), endDate: new AircalDateModel({
+    //     //   year: "2018",
+    //     //   month: "08",
+    //     //   day: "27"
+    //     // })
+    //   }, Validators.required]
+    // });    
   }
 
   public setDateRange(): void {
@@ -76,30 +90,32 @@ export class AppComponent {
   }
 
   public updateOptions() {
-    this.calendarOptions = new AircalOptions({   
-      minYear: 2017,
-      maxYear: 2019,
-      disableFromHereBackwards: new AircalDateModel({
-        year: "2018",
-        month: "10",
-        day: "01"
-      }),
-      disableFromHereForwards: new AircalDateModel({
-        year: "2018",
-        month: "10",
-        day: "30"
-      }),
-      // startDate: new AircalDateModel({
-      //   year: "2018",
-      //   month: "06",
-      //   day: "27"
-      // }),
-      // endDate: new AircalDateModel({
-      //   year: "2018",
-      //   month: "10",
-      //   day: "27"
-      // }),
-    });
+    console.log(this.dateRange);
+    
+    // this.calendarOptions = new AircalOptions({   
+    //   minYear: 2017,
+    //   maxYear: 2019,
+    //   disableFromHereBackwards: new AircalDateModel({
+    //     year: "2018",
+    //     month: "10",
+    //     day: "01"
+    //   }),
+    //   disableFromHereForwards: new AircalDateModel({
+    //     year: "2018",
+    //     month: "10",
+    //     day: "30"
+    //   }),
+    //   // startDate: new AircalDateModel({
+    //   //   year: "2018",
+    //   //   month: "06",
+    //   //   day: "27"
+    //   // }),
+    //   // endDate: new AircalDateModel({
+    //   //   year: "2018",
+    //   //   month: "10",
+    //   //   day: "27"
+    //   // }),
+    // });
   }
 
   public clearDateRange(): void {

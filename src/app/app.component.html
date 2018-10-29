@@ -1,8 +1,20 @@
-<form [formGroup]="form" (ngSubmit)="onSubmitReactiveForms()" novalidate>
+<!-- <form [formGroup]="form" (ngSubmit)="onSubmitReactiveForms()" novalidate> -->
+<form (ngSubmit)="onSubmitReactiveForms()" novalidate>
   
-  <div data-ngx-aircal [options]="calendarOptions" 
+  <!-- <div data-ngx-aircal [options]="calendarOptions" 
     name="dateRange" 
     formControlName="dateRange"
+    (onDateRangeCommitted)="onDateRangeCommitted($event)" 
+    (onDateRangeChanged)="onDateRangeChanged($event)"
+    (onCalendarViewChanged)="onCalendarViewChanged($event)" 
+    (onInputFieldChanged)="onInputFieldChanged($event)"
+    (onDateRangeInitialised)="onDateRangeInitialised($event)"
+    (onDateRangeCleared)="onDateRangeCleared($event)">
+  </div> -->
+
+  <div data-ngx-aircal [options]="calendarOptions" 
+    name="dateRange" 
+    [(ngModel)]="dateRange"
     (onDateRangeCommitted)="onDateRangeCommitted($event)" 
     (onDateRangeChanged)="onDateRangeChanged($event)"
     (onCalendarViewChanged)="onCalendarViewChanged($event)" 
@@ -18,5 +30,5 @@
 
   <br>
 
-  <button type="submit" [disabled]="!form?.valid">Submit form</button>
+  <!-- <button type="submit" [disabled]="!form?.valid">Submit form</button> -->
 </form>
