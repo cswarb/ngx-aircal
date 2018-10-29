@@ -1,0 +1,7 @@
+<select class="aircal__shortcut" 
+    #selectedShortcutRange 
+    [disabled]="!selectedStartDate" 
+    (change)="onChange(selectedShortcutRange.value)">
+    <option selected="selected" value="" disabled="disabled">Selection shortcuts</option>
+    <option *ngFor="let item of ObjectKeys(selectionShortcuts)" [value]="item">{{selectionShortcuts[item]}}</option>
+</select>
