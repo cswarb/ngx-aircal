@@ -139,6 +139,11 @@
       "sourceRoot": "projects/aircal/src",
       "projectType": "library",
       "prefix": "lib",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -170,5 +175,10 @@
       }
     }
   },
-  "defaultProject": "ngx-aircal"
+  "defaultProject": "ngx-aircal",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }

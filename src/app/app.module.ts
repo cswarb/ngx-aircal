@@ -2,8 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { NgxAircalModule } from './ngx-aircal/ngx-aircal.module';
+// import { NgxAircalModule } from './ngx-aircal/ngx-aircal.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
+import { NgxAircalModule } from 'aircal';
 
 @NgModule({
   declarations: [

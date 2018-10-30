@@ -14,6 +14,7 @@ export const AIRCAL_VALUE_ACCESSOR: any = {
 @Component({
     selector: "[data-ngx-aircal]",
     templateUrl: "./ngx-aircal.component.html",
+    styleUrls: ["./style/_style.scss"],
     providers: [AIRCAL_VALUE_ACCESSOR],
     encapsulation: ViewEncapsulation.None
 })

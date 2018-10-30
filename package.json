@@ -7,7 +7,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-lib": "ng build aircal && npm run build-mylib-styles && npm run cp-mylib-assets",
+    "build-mylib-styles": "cpx \"./projects/aircal/src/lib/style/**/*\" \"./dist/aircal/style\" && scss-bundle -e ./projects/aircal/src/lib/style/_style.scss -d ./dist/aircal/style/_styles.scss",
+    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/mylib/assets\""
   },
   "private": true,
   "dependencies": {
@@ -31,10 +34,11 @@
     "@angular/cli": "~7.0.3",
     "@angular/compiler-cli": "~7.0.0",
     "@angular/language-service": "~7.0.0",
-    "@types/node": "~8.9.4",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
+    "cpx": "^1.5.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
@@ -44,6 +48,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng-packagr": "^4.2.0",
     "protractor": "~5.4.0",
+    "scss-bundle": "^2.4.0",
     "ts-node": "~7.0.0",
     "tsickle": ">=0.29.0",
     "tslib": "^1.9.0",
