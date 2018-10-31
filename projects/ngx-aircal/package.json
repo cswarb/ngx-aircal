@@ -1,0 +1,11 @@
+{
+  "name": "ngx-aircal",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^7.0.0",
+    "@angular/core": "^7.0.0"
+  },
+  "dependencies": {
+    "date-fns": "^1.29.0"
+  }
+}

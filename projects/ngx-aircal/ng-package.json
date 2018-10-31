@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/ngx-aircal",
+  "whitelistedNonPeerDependencies": [
+    "date-fns"
+  ],
+  "lib": {
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "date-fns": "DateFns"
+    }
+  }
+}
