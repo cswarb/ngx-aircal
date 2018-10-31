@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 // import { NgxAircalModule } from './ngx-aircal/ngx-aircal.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { NgxAircalModule } from 'aircal';
+import { NgxAircalModule } from 'ngx-aircal';
 
 @NgModule({
   declarations: [

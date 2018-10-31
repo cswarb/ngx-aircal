@@ -18,11 +18,11 @@
       "dom"
     ],
     "paths": {
-      "aircal": [
-        "dist/aircal"
+      "ngx-aircal": [
+        "dist/ngx-aircal"
       ],
-      "aircal/*": [
-        "dist/aircal/*"
+      "ngx-aircal/*": [
+        "dist/ngx-aircal/*"
       ]
     }
   }

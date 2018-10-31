@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-aircal": {
+    "aircal": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-aircal",
+            "outputPath": "dist/aircal",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-aircal:build"
+            "browserTarget": "aircal:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-aircal:build:production"
+              "browserTarget": "aircal:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-aircal:build"
+            "browserTarget": "aircal:build"
           }
         },
         "test": {
@@ -134,9 +134,9 @@
         }
       }
     },
-    "aircal": {
-      "root": "projects/aircal",
-      "sourceRoot": "projects/aircal/src",
+    "ngx-aircal": {
+      "root": "projects/ngx-aircal",
+      "sourceRoot": "projects/ngx-aircal/src",
       "projectType": "library",
       "prefix": "lib",
       "schematics": {
@@ -148,24 +148,24 @@
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/aircal/tsconfig.lib.json",
-            "project": "projects/aircal/ng-package.json"
+            "tsConfig": "projects/ngx-aircal/tsconfig.lib.json",
+            "project": "projects/ngx-aircal/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/aircal/src/test.ts",
-            "tsConfig": "projects/aircal/tsconfig.spec.json",
-            "karmaConfig": "projects/aircal/karma.conf.js"
+            "main": "projects/ngx-aircal/src/test.ts",
+            "tsConfig": "projects/ngx-aircal/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-aircal/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/aircal/tsconfig.lib.json",
-              "projects/aircal/tsconfig.spec.json"
+              "projects/ngx-aircal/tsconfig.lib.json",
+              "projects/ngx-aircal/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -175,7 +175,7 @@
       }
     }
   },
-  "defaultProject": "ngx-aircal",
+  "defaultProject": "aircal",
   "schematics": {
     "@schematics/angular:component": {
       "styleext": "scss"

@@ -8,9 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build-lib": "ng build aircal && npm run build-mylib-styles && npm run cp-mylib-assets",
-    "build-mylib-styles": "cpx \"./projects/aircal/src/lib/style/**/*\" \"./dist/aircal/style\" && scss-bundle -e ./projects/aircal/src/lib/style/_style.scss -d ./dist/aircal/style/_styles.scss",
-    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/mylib/assets\""
+    "build-lib": "ng build ngx-aircal && npm run build-mylib-styles && npm run cp-mylib-assets",
+    "build-mylib-styles": "cpx \"./projects/ngx-aircal/src/lib/style/**/*\" \"./dist/ngx-aircal/style\" && scss-bundle -e ./projects/ngx-aircal/src/lib/style/_style.scss -d ./dist/ngx-aircal/style/_styles.scss",
+    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/ngx-aircal/assets\""
   },
   "private": true,
   "dependencies": {
