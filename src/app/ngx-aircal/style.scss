@@ -1,8 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-* {
-  box-sizing: border-box;
-}
-
 :host {
   display: inline-block;
 }
@@ -33,7 +28,8 @@
   overflow: auto;
   padding: 2rem;
   display: flex;
-  position: absolute;
+  // position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   z-index: 999;
@@ -45,6 +41,9 @@
   flex-flow: column;
   box-shadow: 0px 0px 7px #eef0f3;
   border-radius: 3px;
+  > * {
+    box-sizing: border-box;
+  }
   &__orient {
     &--bottom {
       top: 125%;

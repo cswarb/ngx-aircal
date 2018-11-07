@@ -1,27 +1,56 @@
-# NgxAircal
+# ngx-aircal
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3.
+A configurable Angular 4+ calendar.
 
-## Development server
+## How do I install the calendar?
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Install through npm:
 
-## Code scaffolding
+```npm install ngx-aircal --save```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+##### This plugin internally depends on
 
-## Build
+```date-fns```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+## How do I prepare to use the calendar?
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Import the plugin in to your Angular module:
 
-## Running end-to-end tests
+```import { NgxAircalModule } from 'ngx-aircal';````
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Now, include it in the imports array:
 
-## Further help
+```imports: [
+    ...,
+    BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NgxAircalModule
+  ],```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+##### Notes
+
+You will need to include the forms modules to use either ngModel or the FormGroup to setup your calendar instance.
+
+
+##How do I setup the calendar?
+
+In your component html, reference the ngx-aircal component by adding the attribute 'data-ngx-aircal' onto an element. Make sure to wrap the calendar in a 'form' element.
+
+ You can pass in an options object and subscribe to the events the calendar emits. A full list of options and exposed events are listed below.
+
+```<form (ngSubmit)="submitForm()" novalidate>
+  <div data-ngx-aircal [options]="calendarOptions" name="dateRange" [(ngModel)]="dateRange" (onDateRangeCommitted)="onDateRangeCommitted($event)"
+    (onDateRangeChanged)="onDateRangeChanged($event)" (onCalendarViewChanged)="onCalendarViewChanged($event)"
+    (onInputFieldChanged)="onInputFieldChanged($event)" (onDateRangeInitialised)="onDateRangeInitialised($event)"
+    (onDateRangeCleared)="onDateRangeCleared($event)">
+  </div>
+</form>
+```
+
+##What calendar options can i use?
+
+
+
+##What calendar events can i subscribe to?
