@@ -61,6 +61,11 @@
       left: 105%;
     }
   }
+  &--transparent {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
   &--has-arrow {
     &:after, &:before {
       content: "";

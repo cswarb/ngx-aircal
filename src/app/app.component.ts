@@ -17,6 +17,7 @@ export class AppComponent {
   ) {
     this.calendarOptions = new AircalOptions({
       inlineMode: true,
+      backgroundVisible: false,
       // defaultStart: new AircalDateModel({
       //   year: "2018", month: "11"
       // }),      

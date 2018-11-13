@@ -66,6 +66,7 @@ export class AircalOptions {
     public nextMonthWrapAround?: boolean = true;
     public daysSelectedCounterVisible?: boolean = true;
     public selectionShortcutVisible?: boolean = true;
+    public backgroundVisible?: boolean = true;
     public width?: string;
     public height?: string;
     public applyText?: string = "Apply";
