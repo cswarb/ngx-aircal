@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, Vie
 import { Subject } from "rxjs";
 import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid } from "date-fns";
 
-import { AircalOptions, AircalResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalDateModel, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 
 export const AIRCAL_VALUE_ACCESSOR: any = {
@@ -82,9 +82,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     private intialiseCalendar(): void {
         //Initialise start and end date from options is valid
-        if (this.options.startDate.isPopulated() && this.options.startDate.isViable()) {
+        if ( (this.options.startDate && isValid(this.options.startDate)) && (this.options.startDate && isValid(this.options.startDate)) ) {
             let date = parse(
-                this.options.startDate.toDateFriendlyDateString()
+                this.options.startDate
             );
             let dispModel = new DateDisplayModel({
                 day: date
@@ -92,9 +92,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.selectDate(dispModel);
         };
 
-        if (this.options.endDate.isPopulated() && this.options.endDate.isViable()) {
+        if ((this.options.endDate && isValid(this.options.endDate)) && (this.options.endDate && isValid(this.options.endDate)) ) {
             let date = parse(
-                this.options.endDate.toDateFriendlyDateString()
+                this.options.endDate
             );
             let dispModel = new DateDisplayModel({
                 day: date
@@ -102,9 +102,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.selectDate(dispModel, true);
         };
 
-        if (this.options.defaultStart.isViable(true)) {
+        if (this.options.defaultStart && isValid(this.options.defaultStart)) {
             this.date = parse(
-                this.options.defaultStart.toDateFriendlyDateString()
+                this.options.defaultStart
             );
             this.nextMonthDate = addMonths(parse(this.date), 1);
         };
@@ -137,11 +137,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             });
 
             //Check for disabled dates
-            if (this.options.disableFromHereBackwards || this.options.disableFromHereForwards) {
-                const fromHereBackwards = parse(this.options.disableFromHereBackwards.toDateFriendlyDateString()),
-                    fromHereForwards = parse(this.options.disableFromHereForwards.toDateFriendlyDateString());
-                    
-                if (newDayModel.day < fromHereBackwards || newDayModel.day > fromHereForwards) {
+            if (!!this.options.disableFromHereBackwards && isValid(this.options.disableFromHereBackwards)) {
+                if (newDayModel.day < this.options.disableFromHereBackwards) {
+                    newDayModel.disabled = true;
+                };
+            };
+            
+            if (!!this.options.disableFromHereForwards && isValid(this.options.disableFromHereForwards)) {
+                if (newDayModel.day > this.options.disableFromHereForwards) {
                     newDayModel.disabled = true;
                 };
             };
@@ -511,17 +514,17 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     /**
      * Reactive form / ngModel / Options updates change detection
      */
-    public writeValue(value: { startDate?: AircalDateModel, endDate?: AircalDateModel }): void {
+    public writeValue(value: { startDate?: Date, endDate?: Date }): void {
         //Called after onInit
         //The initial form value passed from the parent must be written in here...
         if (value && value.startDate && value.endDate) {
-            let start: Date = AircalUtils.parseModelToDate(value.startDate),
-                end: Date = AircalUtils.parseModelToDate(value.endDate);
+            let start: Date = parse(value.startDate),
+                end: Date = parse(value.endDate);
 
             if (isValid(start) && isValid(end)) {
                 this.invalidDateRange = false;
-                this.aircal.selectedStartDate.day = AircalUtils.parseModelToDate(value.startDate);
-                this.aircal.selectedEndDate.day = AircalUtils.parseModelToDate(value.endDate);
+                this.aircal.selectedStartDate.day = value.startDate;
+                this.aircal.selectedEndDate.day = value.endDate;
 
                 this.updateFormSelectionText();
 
@@ -563,16 +566,16 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 return;
             };
 
-            const model: { start: AircalDateModel, end: AircalDateModel } = AircalUtils.stringToStartAndEnd(value);
+            const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value);
 
             if(!model) {
                 return;
             };
 
-            let start = AircalUtils.parseStringToDate(model.start.toDateFriendlyDateString()),
-                end = AircalUtils.parseStringToDate(model.end.toDateFriendlyDateString()),
-                disableFromDate = AircalUtils.parseStringToDate(this.options.disableFromHereBackwards.toDateFriendlyDateString()),
-                disableToDate = AircalUtils.parseStringToDate(this.options.disableFromHereForwards.toDateFriendlyDateString());
+            let start = model.start,
+                end = model.end,
+                disableFromDate = parse(this.options.disableFromHereBackwards),
+                disableToDate = parse(this.options.disableFromHereForwards)
 
             const datesViableGivenOpts = AircalUtils.isViableGivenOptions(
                 start,
@@ -600,7 +603,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
          
             this._inputFieldChanged();
 
-            if(model.start.isViable() && model.end.isViable()) {
+            if (isValid(model.start) && isValid(model.end)) {
                 if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
                     this._dateRangeCommitted();
                 };

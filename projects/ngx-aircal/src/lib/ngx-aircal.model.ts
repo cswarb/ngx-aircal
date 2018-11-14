@@ -55,10 +55,10 @@ export class DateDisplayModel {
     }
 }
 export class AircalOptions {
-    public defaultStart?: AircalDateModel = new AircalDateModel();
+    public defaultStart?: Date = new Date();
     public inlineMode: boolean = false; //Display the calendar without a form input @todo
-    public startDate?: AircalDateModel = new AircalDateModel();
-    public endDate?: AircalDateModel = new AircalDateModel();
+    public startDate?: Date = null;
+    public endDate?: Date = null;
     public dayLabels: AircalDayLabels = new AircalDayLabels();
     public selectionShortcuts?: any = {"7.days": "7 Days", "14.days": "14 Days", "1.months": "1 Month", "6.months": "6 Months", "1.years": "1 Year"};
     public dateFormat?: string = "DD/MM/YYYY";
@@ -66,6 +66,7 @@ export class AircalOptions {
     public nextMonthWrapAround?: boolean = true;
     public daysSelectedCounterVisible?: boolean = true;
     public selectionShortcutVisible?: boolean = true;
+    public backgroundVisible?: boolean = true;
     public width?: string;
     public height?: string;
     public applyText?: string = "Apply";
@@ -79,8 +80,8 @@ export class AircalOptions {
     public maxYear?: number = 9999;
     public disablePreviousSelection?: boolean = false;
     public disableForwardSelection?: boolean = false;
-    public disableFromHereBackwards?: AircalDateModel = new AircalDateModel();
-    public disableFromHereForwards?: AircalDateModel = new AircalDateModel();
+    public disableFromHereBackwards?: Date = null;
+    public disableFromHereForwards?: Date = null;
     public indicateInvalidDateRange?: boolean = true;
     public hasArrow?: boolean = true;
     public arrowBias?: arrowBias = "left";
@@ -193,64 +194,33 @@ export class AircalUtils {
         return parse(selectedDate);
     }
 
-    public static parseModelToDate(selectedDate: AircalDateModel): Date {
-        const date = parse(`${selectedDate.year}${selectedDate.month}${selectedDate.day}`);
-        return date;
-    }
-
     public static getSelectionText(begin: string, end: string): string {
         return `${begin} ${AIRCAL_CALENDAR_FORMAT_SEPARATOR} ${end}`;
     }
     
-    public static stringToStartAndEnd(startAndEnd: string): { start: AircalDateModel, end: AircalDateModel } {
+    public static stringToStartAndEnd(startAndEnd: string): { start: Date, end: Date } {
         try {
             let d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
                 startDate = d[0].trim().split("/"),
                 endDate = d[1].trim().split("/");
 
             return {
-                start: new AircalDateModel({
-                    year: startDate[2],
-                    month: startDate[1],
-                    day: startDate[0]
-                }),
-                end: new AircalDateModel({
-                    year: endDate[2],
-                    month: endDate[1],
-                    day: endDate[0]
-                })
+                start: new Date(
+                    parseInt(startDate[2]),
+                    parseInt(startDate[1]),
+                    parseInt(startDate[0])
+                ),
+                end: new Date(
+                    parseInt(endDate[2]),
+                    parseInt(endDate[1]),
+                    parseInt(endDate[0])
+                )
             };
         } catch(e) {
             return;
         };
     }
 }
-
-export class AircalDateModel {
-    public year: string | null = null;
-    public month: string | null = null;
-    public day?: string | null = null;
-
-    constructor(
-        init?: Partial<AircalDateModel>
-    ) {
-        Object.assign(this, init);
-    }
-
-    public isViable(hasNoDay: boolean = false): boolean {
-        //Must have a properly formatted y m d
-        return (this.year && this.year.length === 4 && this.month && this.month.length === 2 && (hasNoDay ? true : (this.day && this.day.length === 2)));
-    }
-
-    public toDateFriendlyDateString(): string {
-        return `${this.year}${this.month}${this.day ? this.day : "01"}`;
-    }
-
-    public isPopulated(): boolean {
-        return !!(this.year && this.month && this.year);
-    }
-}
-
 
 //Reponses for Observables
 export class AircalResponse {

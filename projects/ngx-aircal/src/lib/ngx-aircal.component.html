@@ -8,7 +8,7 @@
         <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()">{{options?.selectDateCloseText}}</button>
     </div>
     
-    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '']" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">
+    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">
         <section class="aircal__meta aircal__meta__rows--first aircal__meta__rows">
             <div class="aircal__meta__row">
                 <div *ngIf="options?.daysSelectedCounterVisible" data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>

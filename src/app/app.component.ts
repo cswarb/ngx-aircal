@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, Validators } from "@angular/forms";
-import { AircalOptions, AircalDateModel, AircalDayLabels } from "./ngx-aircal/ngx-aircal.model";
+import { AircalOptions, AircalDayLabels } from "ngx-aircal";
 
 @Component({
   selector: "app-root",
@@ -16,7 +16,8 @@ export class AppComponent {
     private _FormBuilder: FormBuilder
   ) {
     this.calendarOptions = new AircalOptions({
-      inlineMode: false,
+      inlineMode: true,
+      backgroundVisible: false,
       // defaultStart: new AircalDateModel({
       //   year: "2018", month: "11"
       // }),      
@@ -27,11 +28,8 @@ export class AppComponent {
       //   month: "10",
       //   day: "14"
       // }),
-      // disableFromHereForwards: new AircalDateModel({
-      //   year: "2018",
-      //   month: "10",
-      //   day: "15"
-      // }),
+      disableFromHereBackwards: new Date(),
+      disableFromHereForwards: new Date(2018, 11, 30)
       // startDate: new AircalDateModel({
       //   year: "2018",
       //   month: "06",
@@ -44,18 +42,18 @@ export class AppComponent {
       // }),
     });
 
-    this.dateRange = {
-      startDate: new AircalDateModel({
-        year: "2018",
-        month: "06",
-        day: "27"
-      }), 
-      endDate: new AircalDateModel({
-        year: "2018",
-        month: "08",
-        day: "27"
-      })
-    };
+    // this.dateRange = {
+    //   startDate: new Date(
+    //     2018,
+    //     6,
+    //     27
+    //   ), 
+    //   endDate: new Date(
+    //     2018,
+    //     8,
+    //     27
+    //   )
+    // };
 
     // this.form = this._FormBuilder.group({
     //   dateRange: [{
@@ -75,16 +73,16 @@ export class AppComponent {
   public setDateRange(): void {
     this.form.patchValue({
       dateRange: {
-        startDate: new AircalDateModel({
-          year: "2018",
-          month: "06",
-          day: "27"
-        }),
-        endDate: new AircalDateModel({
-          year: "2018",
-          month: "10",
-          day: "27"
-        })
+        startDate: new Date(
+          2018,
+          6,
+          27
+        ),
+        endDate: new Date(
+          2018,
+          10,
+          27
+        )
       }
     });
   }
