@@ -137,11 +137,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             });
 
             //Check for disabled dates
-            if (this.options.disableFromHereBackwards || this.options.disableFromHereForwards) {
-                const fromHereBackwards = parse(this.options.disableFromHereBackwards),
-                    fromHereForwards = parse(this.options.disableFromHereForwards);
-                    
-                if (newDayModel.day < fromHereBackwards || newDayModel.day > fromHereForwards) {
+            if (!!this.options.disableFromHereBackwards && isValid(this.options.disableFromHereBackwards)) {
+                if (newDayModel.day < this.options.disableFromHereBackwards) {
+                    newDayModel.disabled = true;
+                };
+            };
+            
+            if (!!this.options.disableFromHereForwards && isValid(this.options.disableFromHereForwards)) {
+                if (newDayModel.day > this.options.disableFromHereForwards) {
                     newDayModel.disabled = true;
                 };
             };
