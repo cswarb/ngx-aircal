@@ -301,22 +301,26 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 this.aircal.selectedEndDate = date;
             } else {
                 //both are selected - is the date selected closer to the start or the end?          
-                var diffFromStart = Math.round(
+                var diffFromStart = Math.abs(Math.round(
                     differenceInDays(date.day, this.aircal.selectedStartDate.day)
-                    ),
-                    diffFromEnd = Math.round(
+                    )),
+                    diffFromEnd = Math.abs(Math.round(
                         differenceInDays(date.day, this.aircal.selectedEndDate.day)
-                    );
-    
-                // if ((diffFromEnd - diffFromStart) * -1 <= 1) {
-                //     this.aircal.selectedStartDate = date;
-                // } else if ((diffFromStart - diffFromEnd) * -1 <= 1) {
-                //     this.aircal.selectedEndDate = date;
-                // } else {
-                if (date.day > this.aircal.selectedStartDate.day && diffFromStart >= diffFromEnd) { 
-                    this.aircal.selectedEndDate = date
+                    ));
+
+                //If we select one that is already selected and it's within one of eachother - we must select a 1 day range
+                if ((diffFromStart <= 1 && diffFromEnd <= 0) || (diffFromStart <= 0 && diffFromEnd <= 1)) {
+                    if (diffFromEnd === 0) {
+                        this.aircal.selectedStartDate = date;
+                    } else {
+                        this.aircal.selectedEndDate = date;
+                    };
                 } else {
-                    this.aircal.selectedStartDate = date;
+                    if (date.day > this.aircal.selectedStartDate.day && diffFromStart >= diffFromEnd) {
+                        this.aircal.selectedEndDate = date
+                    } else {
+                        this.aircal.selectedStartDate = date;
+                    };
                 };
             };
 
@@ -344,15 +348,15 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public changeMonth(): void {
-        // this.date = addMonths(parse(this.date), 1);
-        // this.nextMonthDate = addMonths(parse(this.date), 1);
-        // this.createCalendars();
+        this.date = addMonths(parse(this.date), 1);
+        this.nextMonthDate = addMonths(parse(this.date), 1);
+        this.createCalendars();
     }
     
     public changeYear(): void {
-        // this.date = addYears(parse(this.date), 1);
-        // this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
-        // this.createCalendars();
+        this.date = addYears(parse(this.date), 1);
+        this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
+        this.createCalendars();
     }
     
 
