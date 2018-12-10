@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges } from "@angular/core";
 import { Subject } from "rxjs";
-import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid } from "date-fns";
+import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid, addYears } from "date-fns";
 
-import { AircalOptions, AircalResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_DAYS_IN_WEEK, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 
 export const AIRCAL_VALUE_ACCESSOR: any = {
@@ -22,8 +22,13 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     //Props
     public date: Date | any = parse(new Date());
     public nextMonthDate: Date = addMonths(parse(new Date()), 1);
+
+    public daysWeeksArray: Array<Array<DateDisplayModel>> = [];
     public daysArray: Array<DateDisplayModel> = [];
+
+    public nextMonthDaysWeeksArray: Array<Array<DateDisplayModel>> = [];
     public nextMonthDaysArray: Array<DateDisplayModel> = [];
+
     public allDaysArray: Array<DateDisplayModel> = [];
     public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
     public invalidDateRange: boolean = false;
@@ -117,14 +122,18 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
      */
     private createCalendars(): void {
         //Ensure this.date and this.nextMonthDate are calculated and set beforehand
-        this.daysArray = this.createAircal(this.date);
-        this.nextMonthDaysArray = this.createAircal(this.nextMonthDate);
-        this.allDaysArray = this.daysArray.concat(this.nextMonthDaysArray);
+        var cur = this.createAircal(this.date);
+        var nxt = this.createAircal(this.nextMonthDate);
+
+        this.daysWeeksArray = cur.chunk;
+        this.nextMonthDaysWeeksArray = nxt.chunk;
+
+        //Spread so highlights can be calculated
+        this.allDaysArray = cur.spread.concat(nxt.spread);
     }
 
-    public createAircal(date: Date): Array<DateDisplayModel> {
+    public createAircal(date: Date): { spread: Array<DateDisplayModel>, chunk: Array<Array<DateDisplayModel>> } {
         const currentMonth = startOfMonth(date),
-            nextMonth = addMonths(currentMonth, 1),
             weekday = getDay(startOfMonth(currentMonth)),
             days = Array.from(new Array(getDaysInMonth(currentMonth)).keys());
         
@@ -148,7 +157,6 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                     newDayModel.disabled = true;
                 };
             };
-
             return newDayModel;
         });
 
@@ -162,33 +170,42 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                     isLastMonth: true
                 });
             };
-
             calendarDays.unshift(previousWrapArounddateObj);
-
             previousWraparoundIterator = previousWraparoundIterator + 1;
         };
 
         //See if there is any space left for next months wraparound
         while (calendarDays.length < this.calendarSpaces) {
             let nextWrapArounddateObj = null;
-            
             if (this.options.nextMonthWrapAround) {
                 nextWrapArounddateObj = new DateDisplayModel({
                     day: addDays(startOfMonth(addMonths(date, 1)), nextWraparoundIterator),
                     isNextMonth: true
                 });
             };
-
             nextWraparoundIterator = nextWraparoundIterator + 1;
             calendarDays.push(nextWrapArounddateObj);
         };
 
-        return calendarDays;
+        //Chunk the result into an array [7, 7, 7...] so it fits the table rows
+        return {
+            spread: calendarDays,
+            chunk: this.chunk(calendarDays, AIRCAL_DAYS_IN_WEEK)
+        };
     }
 
     /**
      * Helpers
      */
+    public chunk(arr: Array<any>, chunkSize: number): Array<Array<DateDisplayModel>> {
+        //Create a chunk array helper function so the display model can be output in table rows
+        var chunk = [];
+        for (var i = 0, len = arr.length; i < len; i += chunkSize) {
+            chunk.push(arr.slice(i, i + chunkSize));
+        };
+        return chunk;
+    }
+
     public getCalendarOrientation(): string {
         return this.options.calendarPosition;
     }
@@ -290,11 +307,20 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                     diffFromEnd = Math.abs(Math.round(
                         differenceInDays(date.day, this.aircal.selectedEndDate.day)
                     ));
-    
-                if (diffFromStart >= diffFromEnd) {
-                    this.aircal.selectedEndDate = date;
+
+                //If we select one that is already selected and it's within one of eachother - we must select a 1 day range
+                if ((diffFromStart <= 1 && diffFromEnd <= 0) || (diffFromStart <= 0 && diffFromEnd <= 1)) {
+                    if (diffFromEnd === 0) {
+                        this.aircal.selectedStartDate = date;
+                    } else {
+                        this.aircal.selectedEndDate = date;
+                    };
                 } else {
-                    this.aircal.selectedStartDate = date;
+                    if (date.day > this.aircal.selectedStartDate.day && diffFromStart >= diffFromEnd) {
+                        this.aircal.selectedEndDate = date
+                    } else {
+                        this.aircal.selectedStartDate = date;
+                    };
                 };
             };
 
@@ -305,7 +331,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         if (this.options.daysSelectedCounterVisible) {
             if (!this.aircal.selectedEndDate.day) return;
             let selectedDays = differenceInDays(this.aircal.selectedEndDate.day, this.aircal.selectedStartDate.day);
-            this.aircal.numberOfDaysSelected.days = Math.round(selectedDays);
+            this.aircal.numberOfDaysSelected.days = Math.ceil(selectedDays) + 1;
         };
 
         //Remove any highlighting
@@ -320,6 +346,19 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             };
         };
     }
+
+    public changeMonth(): void {
+        this.date = addMonths(parse(this.date), 1);
+        this.nextMonthDate = addMonths(parse(this.date), 1);
+        this.createCalendars();
+    }
+    
+    public changeYear(): void {
+        this.date = addYears(parse(this.date), 1);
+        this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
+        this.createCalendars();
+    }
+    
 
     public selectionShortcutChanged(shortcut: string): string {
         if (!this.aircal.selectedStartDate.day) return;
@@ -531,7 +570,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 //calculate number of days between start and end
                 if (this.options.daysSelectedCounterVisible) {
                     let selectedDays = differenceInDays(this.aircal.selectedEndDate.day, this.aircal.selectedStartDate.day);
-                    this.aircal.numberOfDaysSelected.days = Math.round(selectedDays);
+                    this.aircal.numberOfDaysSelected.days = Math.ceil(selectedDays) + 1;
                 };
 
                 this._dateRangeInitialised();

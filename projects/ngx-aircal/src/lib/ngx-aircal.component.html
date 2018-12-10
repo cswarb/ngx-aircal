@@ -20,46 +20,57 @@
         </section>
     
         <div class="aircal__cal__container">
-            <div class="aircal__cal aircal__cal--double">
-                <section class="aircal__meta">
-                    <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection"
-                        role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
-                    <p class="aircal__text aircal__text__month">{{formatDate(date, "MMMM")}} {{formatDate(date, "YYYY")}}</p>
-                </section>
-                <div class="aircal__meta">
-                    <div aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
-                        [dayName]="dayName" [dayLabels]="options?.dayLabels"></div>
-                </div>
-                <div class="aircal__day__container">
-                    <div data-aircal-day class="aircal__day" *ngFor="let day of daysArray" (mouseenter)="isHovering(day)"
-                        (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
-                            'aircal--highlighted': day?.highlight,
-                            'aircal--istoday': isToday(day),
-                            'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}"
-                        [day]="day"></div>
-                </div>
-            </div>
-    
-            <div class="aircal__cal aircal__cal--double">
-                <div class="aircal__meta">
-                    <p class="aircal__text aircal__text__month">{{formatDate(nextMonthDate, "MMMM")}}
-                        {{formatDate(nextMonthDate, "YYYY")}}</p>
-                    <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection"
-                        role="button" (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
-                </div>
-                <div class="aircal__meta">
-                    <div aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
-                        [dayName]="dayName" [dayLabels]="options?.dayLabels"></div>
-                </div>
-                <div class="aircal__day__container">
-                    <div data-aircal-day class="aircal__day" *ngFor="let day of nextMonthDaysArray" (mouseenter)="isHovering(day)"
-                        (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
-                            'aircal--highlighted': day?.highlight,
-                            'aircal--istoday': isToday(day),
-                            'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}"
-                        [day]="day"></div>
-                </div>
-            </div>
+            <table class="aircal__cal aircal__cal--double">
+                <thead>
+                    <tr class="aircal__meta">
+                        <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection"
+                            role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
+                        <p class="aircal__text aircal__text__month"><span (click)="changeMonth()">{{formatDate(date, "MMMM")}}</span>
+                        <span (click)="changeYear()"> {{formatDate(date, "YYYY")}}</span></p>
+                    </tr>
+                    <tr class="aircal__meta">
+                        <th aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
+                            [dayName]="dayName" [dayLabels]="options?.dayLabels"></th>
+                    </tr>
+                </thead>
+                <tbody class="aircal__cal-body">
+                    <tr *ngFor="let weeks of daysWeeksArray">
+                        <td class="aircal__day__container" *ngFor="let day of weeks" (mouseenter)="isHovering(day)"
+                                (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
+                                'aircal--highlighted': day?.highlight,
+                                'aircal--istoday': isToday(day),
+                                'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}">
+                            <div data-aircal-day class="aircal__day" [day]="day"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <table class="aircal__cal aircal__cal--double">
+                <thead>
+                    <tr class="aircal__meta">
+                        <p class="aircal__text aircal__text__month"><span (click)="changeMonth()">{{formatDate(nextMonthDate, "MMMM")}}</span>
+                        <span (click)="changeYear()"> {{formatDate(nextMonthDate, "YYYY")}}</span></p>
+                        <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button"
+                            (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
+                    </tr>
+                    <tr class="aircal__meta">
+                        <th aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
+                            [dayName]="dayName" [dayLabels]="options?.dayLabels"></th>
+                    </tr>
+                </thead>
+                <tbody class="aircal__cal-body">
+                    <tr *ngFor="let weeks of nextMonthDaysWeeksArray">
+                        <td class="aircal__day__container" *ngFor="let day of weeks" (mouseenter)="isHovering(day)"
+                                (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
+                                'aircal--highlighted': day?.highlight,
+                                'aircal--istoday': isToday(day),
+                                'aircal--selected': isSelected(day) && (!day?.isNextMonth || !day?.isLastMonth)}">
+                            <div data-aircal-day class="aircal__day" [day]="day"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     
         <div class="aircal__actions aircal__meta__rows--last">

@@ -111,6 +111,10 @@
   &__cal {
     display: flex;
     flex-flow: column;
+    &-body {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
     &__container {
       display: flex;
       justify-content: center;
@@ -304,47 +308,47 @@
   }
   &__day {
     &__container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-start;
+      // display: flex;
+      // flex-wrap: wrap;
+      // justify-content: flex-start;
+      border: 1px solid rgb(228, 231, 231);
+      color: rgb(72, 72, 72);
+      height: 2.5rem;
+      padding: 0.25rem;
+      width: 2.5rem;
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(228, 231, 231);
+        &.aircal--selected {
+          background-color: darken(rgb(0, 166, 153), 5%);
+        }
+      }
+      &.aircal--inactive {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+      &.aircal--selected {
+        background-color: rgb(0, 166, 153);
+        color: white;
+        border-color: rgb(0, 166, 153);
+      }
+      &.aircal--istoday:not(.aircal--selected) {
+        color: rgb(0, 122, 135);
+      }
+      &.aircal--highlighted {
+        background-color: rgb(178, 241, 236);
+        color: rgb(0, 122, 135);
+        border-color: rgb(128, 232, 224);
+      }
     }
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -1px;
-    margin-left: -1px;
-    border: 1px solid rgb(228, 231, 231);
+    // margin-top: -1px;
+    // margin-left: -1px;
     // outline: 1px solid rgb(228, 231, 231);
-    color: rgb(72, 72, 72);
-    padding: 0.25rem;
     font-size: 0.8rem;
-    width: 2.5rem;
-    height: 2.5rem;
     text-align: center;
-    &:hover {
-      cursor: pointer;
-      background-color: rgb(228, 231, 231);
-      &.aircal--selected {
-        background-color: darken(rgb(0, 166, 153), 5%);
-      }
-    }
-    &.aircal--inactive {
-      opacity: 0.3;
-      pointer-events: none;
-    }
-    &.aircal--selected {
-      background-color: rgb(0, 166, 153);
-      color: white;
-      border-color: rgb(0, 166, 153);
-    }
-    &.aircal--istoday:not(.aircal--selected) {
-      color: rgb(0, 122, 135);
-    }
-    &.aircal--highlighted {
-      background-color: rgb(178, 241, 236);
-      color: rgb(0, 122, 135);
-      border-color: rgb(128, 232, 224);
-    }
   }
   &__daysofweek {
     display: flex;
