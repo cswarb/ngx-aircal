@@ -34,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody class="aircal__cal-body">
-                    <tr *ngFor="let weeks of daysWeeksArray">
+                    <tr class="aircal__week" *ngFor="let weeks of daysWeeksArray">
                         <td class="aircal__day__container" *ngFor="let day of weeks" (mouseenter)="isHovering(day)"
                                 (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
                                 'aircal--highlighted': day?.highlight,
@@ -60,7 +60,7 @@
                     </tr>
                 </thead>
                 <tbody class="aircal__cal-body">
-                    <tr *ngFor="let weeks of nextMonthDaysWeeksArray">
+                    <tr class="aircal__week" *ngFor="let weeks of nextMonthDaysWeeksArray">
                         <td class="aircal__day__container" *ngFor="let day of weeks" (mouseenter)="isHovering(day)"
                                 (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
                                 'aircal--highlighted': day?.highlight,
