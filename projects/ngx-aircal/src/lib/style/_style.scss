@@ -147,12 +147,27 @@
   &__shortcut {
     font-size: 0.8rem;
   }
+  &__clickable {
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      &:focus, &:active {
+
+      }
+    }
   &__meta {
     align-items: center;
     background-color: #fff; 
     display: flex;
     justify-content: space-between;
     padding: 0;
+    &__clickable {
+      margin: 0 0.5rem 0 0;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
     &__input {
       font-size: 0.8rem;
       letter-spacing: 0.3px;
@@ -238,6 +253,22 @@
       font-weight: 700;
       margin: 0;
       flex: 1;
+    }
+    &--small {
+      font-size: 0.7rem;
+    }
+    &--light {
+      color: #717377;
+    }
+    &--reset {
+      margin: 0;
+      padding: 0;
+    }
+    &--left {
+      text-align: left;
+    }
+    &--right {
+      text-align: right;
     }
   }
   &__icon {

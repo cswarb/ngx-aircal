@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges } from "@angular/core";
 import { Subject } from "rxjs";
-import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid, addYears } from "date-fns";
+import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid, addYears, setMonth, getMonth } from "date-fns";
 
 import { AircalOptions, AircalResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_DAYS_IN_WEEK, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
@@ -34,6 +34,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public invalidDateRange: boolean = false;
     public showCalendar: boolean = false;
     public needsApplying: boolean = false;
+
+    public yearSelectionPanelOpen: boolean = false;
+    public yearChoices: Array<number> = [];
+
+    public monthSelectionPanelOpen: boolean = false;
+    public monthChoices: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
     //Form
     private onChangeCb: (_: any) => void = () => { };
@@ -122,8 +128,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
      */
     private createCalendars(): void {
         //Ensure this.date and this.nextMonthDate are calculated and set beforehand
-        var cur = this.createAircal(this.date);
-        var nxt = this.createAircal(this.nextMonthDate);
+        const cur = this.createAircal(this.date),
+            nxt = this.createAircal(this.nextMonthDate);
 
         this.daysWeeksArray = cur.chunk;
         this.nextMonthDaysWeeksArray = nxt.chunk;
@@ -212,6 +218,41 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public getArrowBiasClass(): string {
         return this.options.hasArrow && this.options.arrowBias;
+    }
+
+    public openYearSelection() {
+        this.yearSelectionPanelOpen = !this.yearSelectionPanelOpen;
+        if (this.yearSelectionPanelOpen) {
+            this.yearChoices = [];
+        };
+    }
+    
+    public openMonthSelection() {
+        this.monthSelectionPanelOpen = !this.monthSelectionPanelOpen;
+    }
+
+    public selectMonth(month: number) {
+        this.date = setMonth(this.date, month);
+        this.nextMonthDate = setMonth(this.date, month+1);
+        this.createCalendars();
+    }
+
+    public formatMonthToReadable(month: number): string {
+        return format(setMonth(new Date(), month), "MMMM");
+    }
+    
+    public selectYear(year: number) {
+        // this.yearChoices = this.loadYearChunk(year, year);
+    }
+
+    loadYearChunk(from, to): Array<number> {
+        return this.yearChoices;
+    }
+
+    public changeYear(): void {
+        this.date = addYears(parse(this.date), 1);
+        this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
+        this.createCalendars();
     }
 
     public openCalendar(): boolean {
@@ -345,20 +386,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 this._dateRangeCommitted();
             };
         };
-    }
-
-    public changeMonth(): void {
-        this.date = addMonths(parse(this.date), 1);
-        this.nextMonthDate = addMonths(parse(this.date), 1);
-        this.createCalendars();
-    }
-    
-    public changeYear(): void {
-        this.date = addYears(parse(this.date), 1);
-        this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
-        this.createCalendars();
-    }
-    
+    }    
 
     public selectionShortcutChanged(shortcut: string): string {
         if (!this.aircal.selectedStartDate.day) return;
