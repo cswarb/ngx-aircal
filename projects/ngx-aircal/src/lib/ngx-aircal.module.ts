@@ -6,6 +6,8 @@ import { AircalDaysselectedComponent } from "./aircal-daysselected/aircal-daysse
 import { AircalDaysofweekComponent } from "./aircal-daysofweek/aircal-daysofweek.component";
 import { AircalDayComponent } from "./aircal-day/aircal-day.component";
 import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { AircalMonthQuicksetComponent } from "./aircal-month-quickset/aircal-month-quickset.component";
+import { AircalYearQuicksetComponent } from "./aircal-year-quickset/aircal-year-quickset.component";
 
 @NgModule({
   imports: [
@@ -17,7 +19,9 @@ import { FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
     AircalSelectComponent,
     AircalDaysselectedComponent,
     AircalDaysofweekComponent,
-    AircalDayComponent
+    AircalDayComponent,
+    AircalMonthQuicksetComponent,
+    AircalYearQuicksetComponent
   ],
   exports: [
     NgxAircalComponent

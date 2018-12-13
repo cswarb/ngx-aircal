@@ -216,27 +216,15 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return this.options.calendarPosition;
     }
 
-    public isCurrentYear(year: number): boolean {
-        return AircalUtils.isCurrentYear(this.date, year);
-    }
-    
-    public isCurrentMonth(month: number): boolean {
-        return AircalUtils.isCurrentMonth(this.date, month);
-    }
-
-    public formatMonthToReadable(month: number): string {
-        return AircalUtils.formatMonthToReadable(month);
-    }
-
     public getArrowBiasClass(): string {
         return this.options.hasArrow && this.options.arrowBias;
     }
 
-    public prevYearChunks() {
+    public prevYearChunks(load?: boolean) {
         this.yearChoices = this.loadYearChunk(this.yearChoices.pop() - 20);
     }
    
-    public nextYearChunks() {
+    public nextYearChunks(load?: boolean) {
         this.yearChoices = this.loadYearChunk(this.yearChoices.pop());
     }
     

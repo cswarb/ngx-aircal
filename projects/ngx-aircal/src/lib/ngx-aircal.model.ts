@@ -88,8 +88,8 @@ export class AircalOptions {
     public hasArrow?: boolean = true;
     public arrowBias?: arrowBias = "left";
     public calendarPosition?: calendarBias = "bottom";
-    // public monthSelector?: boolean = false; //@todo
-    // public yearSelector?: boolean = false; //@todo
+    public allowQuicksetMonth?: boolean = false;
+    public allowQuicksetYear?: boolean = false;
 
     constructor(init?: Partial<AircalOptions>) {
         Object.assign(this, init);
