@@ -20,23 +20,31 @@
         </section>
 
         <div class="aircal__meta aircal__meta__rows">
-            <div *ngIf="yearSelectionPanelOpen && !monthSelectionPanelOpen">
-                <div>
-                    <h5>Select year:</h5>
-    
+            <ng-container *ngIf="yearSelectionPanelOpen && !monthSelectionPanelOpen">
+                <div class="aircal__meta__rows">
+                    <h5 class="aircal__text--reset">Select year</h5>
+                    <div class="aircal__meta">
+                        <button type="button" role="button" (click)="prevYearChunks()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
+                        <div class="aircal__meta aircal__meta__row">
+                            <p class="aircal__text--small aircal__text--light aircal__clickable aircal__meta__clickable" *ngFor="let year of yearChoices">
+                                <span (click)="selectYear(year)" [ngClass]="{'aircal__text--highlight': isCurrentYear(year)}">{{year}}</span>
+                            </p>
+                        </div>
+                        <button type="button" role="button" (click)="nextYearChunks()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
+                    </div>
                 </div>
-            </div>
+            </ng-container>
             
-            <div *ngIf="monthSelectionPanelOpen && !yearSelectionPanelOpen">
-                <div class="aircal__meta__column aircal__text--left">
+            <ng-container *ngIf="monthSelectionPanelOpen && !yearSelectionPanelOpen">
+                <div class="aircal__meta__rows">
                     <h5 class="aircal__text--reset">Select month</h5>
                     <div class="aircal__meta aircal__meta__row">
                         <p class="aircal__text--small aircal__text--light aircal__clickable aircal__meta__clickable" *ngFor="let month of monthChoices">
-                            <span (click)="selectMonth(month)">{{formatMonthToReadable(month)}}</span>
+                            <span (click)="selectMonth(month)" [ngClass]="{'aircal__text--highlight': isCurrentMonth(month)}">{{formatMonthToReadable(month)}}</span>
                         </p>
                     </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
     
         <div class="aircal__cal__container">
@@ -45,8 +53,8 @@
                     <tr class="aircal__meta">
                         <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection"
                             role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
-                        <p class="aircal__text aircal__text__month"><span class="aircal__clickable  aircal__meta__clickable" (click)="openMonthSelection()">{{formatDate(date, "MMMM")}}</span>
-                        <span class="aircal__clickable aircal__meta__clickable" (click)="openYearSelection()">{{formatDate(date, "YYYY")}}</span></p>
+                        <p class="aircal__text aircal__text__month"><span class="aircal__clickable  aircal__meta__clickable" (click)="toggleMonthSelection()">{{formatDate(date, "MMMM")}}</span>
+                        <span class="aircal__clickable aircal__meta__clickable" (click)="toggleYearSelection()">{{formatDate(date, "YYYY")}}</span></p>
                     </tr>
                     <tr class="aircal__meta">
                         <th aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
@@ -69,8 +77,8 @@
             <table class="aircal__cal aircal__cal--double">
                 <thead>
                     <tr class="aircal__meta">
-                        <p class="aircal__text aircal__text__month"><span class="aircal__clickable  aircal__meta__clickable" (click)="openMonthSelection()">{{formatDate(nextMonthDate, "MMMM")}}</span>
-                        <span class="aircal__clickable  aircal__meta__clickable" (click)="openYearSelection()">{{formatDate(nextMonthDate, "YYYY")}}</span></p>
+                        <p class="aircal__text aircal__text__month"><span class="aircal__clickable  aircal__meta__clickable" (click)="toggleMonthSelection()">{{formatDate(nextMonthDate, "MMMM")}}</span>
+                        <span class="aircal__clickable  aircal__meta__clickable" (click)="toggleYearSelection()">{{formatDate(nextMonthDate, "YYYY")}}</span></p>
                         <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button"
                             (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
                     </tr>

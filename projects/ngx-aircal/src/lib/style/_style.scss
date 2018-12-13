@@ -270,6 +270,9 @@
     &--right {
       text-align: right;
     }
+    &--highlight {
+      color: #00a699;
+    }
   }
   &__icon {
     background-size: 1rem;
@@ -279,10 +282,10 @@
     height: 1rem;
     opacity: 0.7;
     &__next {
-      background-image: url("https://image.flaticon.com/icons/svg/66/66831.svg");
+      background-image: url("../assets/right-arrow.svg");
     }
     &__prev {
-      background-image: url("https://image.flaticon.com/icons/svg/109/109618.svg");
+      background-image: url("../assets/left-arrow.svg");
     }
     &:hover {
       cursor: pointer;
@@ -346,7 +349,7 @@
   }
   &__day {
     align-items: center;
-    color: #484848;
+    color: inherit;
     display: flex;
     font-size: 0.8rem;
     height: 100%;
@@ -360,7 +363,7 @@
       // display: flex;
       // flex-wrap: wrap;
       // justify-content: flex-start;
-      background-color: #fff;
+      background-color: #ffffff;
       border: 1px solid rgb(228, 231, 231);
       color: rgb(72, 72, 72);
       height: 2.5rem;
@@ -379,7 +382,7 @@
       }
       &.aircal--selected {
         background-color: rgb(0, 166, 153);
-        color: white;
+        color: #ffffff;
         border-color: rgb(0, 166, 153);
       }
       &.aircal--istoday:not(.aircal--selected) {

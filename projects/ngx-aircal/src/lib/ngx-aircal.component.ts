@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges } from "@angular/core";
 import { Subject } from "rxjs";
-import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid, addYears, setMonth, getMonth } from "date-fns";
+import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear } from "date-fns";
 
-import { AircalOptions, AircalResponse, AIRCAL_CALENDAR_SPACES, AIRCAL_DAYS_IN_WEEK, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, VISIBLE_YEAR_CHUNKS_AT_A_TIME, AIRCAL_CALENDAR_SPACES, AIRCAL_DAYS_IN_WEEK, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 
 export const AIRCAL_VALUE_ACCESSOR: any = {
@@ -216,43 +216,71 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return this.options.calendarPosition;
     }
 
+    public isCurrentYear(year: number): boolean {
+        return AircalUtils.isCurrentYear(this.date, year);
+    }
+    
+    public isCurrentMonth(month: number): boolean {
+        return AircalUtils.isCurrentMonth(this.date, month);
+    }
+
+    public formatMonthToReadable(month: number): string {
+        return AircalUtils.formatMonthToReadable(month);
+    }
+
     public getArrowBiasClass(): string {
         return this.options.hasArrow && this.options.arrowBias;
     }
 
-    public openYearSelection() {
-        this.yearSelectionPanelOpen = !this.yearSelectionPanelOpen;
-        if (this.yearSelectionPanelOpen) {
-            this.yearChoices = [];
-        };
+    public prevYearChunks() {
+        this.yearChoices = this.loadYearChunk(this.yearChoices.pop() - 20);
+    }
+   
+    public nextYearChunks() {
+        this.yearChoices = this.loadYearChunk(this.yearChoices.pop());
     }
     
-    public openMonthSelection() {
+    public toggleYearSelection() {
+        this.monthSelectionPanelOpen = false;
+        this.yearSelectionPanelOpen = !this.yearSelectionPanelOpen;
+        if (this.yearSelectionPanelOpen) {
+            this.yearChoices.length = 0;
+            this.yearChoices = this.loadYearChunk(getYear(this.date));
+            return;
+        };
+        this.yearChoices.length = 0;
+    }
+    
+    public toggleMonthSelection() {
+        this.yearSelectionPanelOpen = false;
         this.monthSelectionPanelOpen = !this.monthSelectionPanelOpen;
     }
 
     public selectMonth(month: number) {
+        if (getMonth(this.date) === month) {
+            return;
+        };
         this.date = setMonth(this.date, month);
         this.nextMonthDate = setMonth(this.date, month+1);
         this.createCalendars();
     }
-
-    public formatMonthToReadable(month: number): string {
-        return format(setMonth(new Date(), month), "MMMM");
-    }
     
-    public selectYear(year: number) {
-        // this.yearChoices = this.loadYearChunk(year, year);
-    }
-
-    loadYearChunk(from, to): Array<number> {
-        return this.yearChoices;
-    }
-
-    public changeYear(): void {
-        this.date = addYears(parse(this.date), 1);
-        this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
+    public selectYear(year: number): void {
+        if(getYear(this.date) === year) {
+            return;
+        };
+        this.toggleYearSelection();
+        this.date = setYear(this.date, year);
+        this.nextMonthDate = addMonths(this.date, 1);
         this.createCalendars();
+    }
+
+    private loadYearChunk(from: number): Array<number> {
+        let arr = [];
+        for (let i = 0; i < VISIBLE_YEAR_CHUNKS_AT_A_TIME; i++) {
+            arr.push(from+i);
+        };
+        return arr;
     }
 
     public openCalendar(): boolean {
