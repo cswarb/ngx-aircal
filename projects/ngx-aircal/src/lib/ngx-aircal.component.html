@@ -8,7 +8,16 @@
         <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()">{{options?.selectDateCloseText}}</button>
     </div>
     
-    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">
+    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
+        <div class="aircal__meta aircal__meta__rows">
+            <div data-aircal-year-quickset class="aircal__meta__rows" *ngIf="options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)"
+                (yearSelected)="selectYear($event)" (nextYearChunks)="nextYearChunks($event)" (prevYearChunks)="prevYearChunks($event)"
+                [date]="date" [yearChoices]="yearChoices"></div>
+        
+            <div data-aircal-month-quickset class="aircal__meta__rows" *ngIf="options?.allowQuicksetMonth && (monthSelectionPanelOpen && !yearSelectionPanelOpen)"
+                (monthSelected)="selectMonth($event)" [date]="date" [monthChoices]="monthChoices"></div>
+        </div>
+        
         <section class="aircal__meta aircal__meta__rows--first aircal__meta__rows">
             <div class="aircal__meta__row">
                 <div *ngIf="options?.daysSelectedCounterVisible" data-aircal-daysselected [numberOfDaysSelected]="aircal?.numberOfDaysSelected"></div>
@@ -25,8 +34,8 @@
                     <tr class="aircal__meta">
                         <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection"
                             role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
-                        <p class="aircal__text aircal__text__month"><span (click)="changeMonth()">{{formatDate(date, "MMMM")}}</span>
-                        <span (click)="changeYear()"> {{formatDate(date, "YYYY")}}</span></p>
+                        <p class="aircal__text aircal__text__month"><span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(date, "MMMM")}}</span>
+                        <span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(date, "YYYY")}}</span></p>
                     </tr>
                     <tr class="aircal__meta">
                         <th aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
@@ -34,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody class="aircal__cal-body">
-                    <tr *ngFor="let weeks of daysWeeksArray">
+                    <tr class="aircal__week" *ngFor="let weeks of daysWeeksArray">
                         <td class="aircal__day__container" *ngFor="let day of weeks" (mouseenter)="isHovering(day)"
                                 (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
                                 'aircal--highlighted': day?.highlight,
@@ -49,8 +58,8 @@
             <table class="aircal__cal aircal__cal--double">
                 <thead>
                     <tr class="aircal__meta">
-                        <p class="aircal__text aircal__text__month"><span (click)="changeMonth()">{{formatDate(nextMonthDate, "MMMM")}}</span>
-                        <span (click)="changeYear()"> {{formatDate(nextMonthDate, "YYYY")}}</span></p>
+                        <p class="aircal__text aircal__text__month"><span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(nextMonthDate, "MMMM")}}</span>
+                        <span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(nextMonthDate, "YYYY")}}</span></p>
                         <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button"
                             (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
                     </tr>
@@ -60,7 +69,7 @@
                     </tr>
                 </thead>
                 <tbody class="aircal__cal-body">
-                    <tr *ngFor="let weeks of nextMonthDaysWeeksArray">
+                    <tr class="aircal__week" *ngFor="let weeks of nextMonthDaysWeeksArray">
                         <td class="aircal__day__container" *ngFor="let day of weeks" (mouseenter)="isHovering(day)"
                                 (mouseleave)="isLeaving(day)" (click)="selectDate(day)" [ngClass]="{'aircal--inactive': (!day || day?.disabled || day?.isLastMonth || day?.isNextMonth),
                                 'aircal--highlighted': day?.highlight,

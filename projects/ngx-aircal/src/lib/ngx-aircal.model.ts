@@ -1,7 +1,8 @@
-import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse, isValid, getYear } from "date-fns";
+import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse, isValid, getYear, format, setMonth, getMonth } from "date-fns";
 
 export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_DAYS_IN_WEEK = 7;
+export const VISIBLE_YEAR_CHUNKS_AT_A_TIME = 11;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
 export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = "-";
 
@@ -87,8 +88,8 @@ export class AircalOptions {
     public hasArrow?: boolean = true;
     public arrowBias?: arrowBias = "left";
     public calendarPosition?: calendarBias = "bottom";
-    // public monthSelector?: boolean = false; //@todo
-    // public yearSelector?: boolean = false; //@todo
+    public allowQuicksetMonth?: boolean = false;
+    public allowQuicksetYear?: boolean = false;
 
     constructor(init?: Partial<AircalOptions>) {
         Object.assign(this, init);
@@ -98,6 +99,14 @@ export class AircalOptions {
 export class AircalUtils {
     constructor() {
 
+    }
+
+    public static isCurrentYear(date: Date, year: number): boolean {
+        return getYear(date) === year;
+    }
+
+    public static isCurrentMonth(date: Date, month: number): boolean {
+        return getMonth(date) === month;
     }
 
     public static isSameOrBefore(leftDate: Date, rightDate: Date): boolean {
@@ -110,6 +119,10 @@ export class AircalUtils {
     
     public static isSame(leftDate: Date, rightDate: Date): boolean {
         return isEqual(leftDate, rightDate);
+    }
+
+    public static formatMonthToReadable(month: number): string {
+        return format(setMonth(new Date(), month), "MMMM");
     }
 
     public static getAddType(unit: string): any {

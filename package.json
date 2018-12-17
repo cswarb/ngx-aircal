@@ -1,6 +1,6 @@
 {
   "name": "ngx-aircal",
-  "version": "0.0.0",
+  "version": "0.0.11",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +10,8 @@
     "e2e": "ng e2e",
     "build-lib": "ng build ngx-aircal && npm run build-mylib-styles && npm run cp-mylib-assets",
     "build-mylib-styles": "cpx \"./projects/ngx-aircal/src/lib/style/**/*\" \"./dist/ngx-aircal/style\" && scss-bundle -e ./projects/ngx-aircal/src/lib/style/_style.scss -d ./dist/ngx-aircal/style/_styles.scss",
-    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/ngx-aircal/assets\""
+    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/ngx-aircal/assets\"",
+    "publish": "cd dist/ngx-aircal && npm version && npm publish"
   },
   "private": true,
   "dependencies": {

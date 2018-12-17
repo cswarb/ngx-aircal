@@ -147,10 +147,27 @@
   &__shortcut {
     font-size: 0.8rem;
   }
+  &__clickable {
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      &:focus, &:active {
+
+      }
+    }
   &__meta {
+    align-items: center;
+    background-color: #fff; 
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    padding: 0;
+    &__clickable {
+      margin: 0 0.5rem 0 0;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
     &__input {
       font-size: 0.8rem;
       letter-spacing: 0.3px;
@@ -237,6 +254,25 @@
       margin: 0;
       flex: 1;
     }
+    &--small {
+      font-size: 0.7rem;
+    }
+    &--light {
+      color: #717377;
+    }
+    &--reset {
+      margin: 0;
+      padding: 0;
+    }
+    &--left {
+      text-align: left;
+    }
+    &--right {
+      text-align: right;
+    }
+    &--highlight {
+      color: #00a699;
+    }
   }
   &__icon {
     background-size: 1rem;
@@ -246,10 +282,10 @@
     height: 1rem;
     opacity: 0.7;
     &__next {
-      background-image: url("https://image.flaticon.com/icons/svg/66/66831.svg");
+      background-image: url("../assets/right-arrow.svg");
     }
     &__prev {
-      background-image: url("https://image.flaticon.com/icons/svg/109/109618.svg");
+      background-image: url("../assets/left-arrow.svg");
     }
     &:hover {
       cursor: pointer;
@@ -306,11 +342,28 @@
       margin-right: 1rem;
     }
   }
+  &__week {
+    background-color: #fff; 
+    height: auto; 
+    padding: 0;
+  }
   &__day {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    font-size: 0.8rem;
+    height: 100%;
+    justify-content: center;
+    // margin-top: -1px;
+    // margin-left: -1px;
+    // outline: 1px solid rgb(228, 231, 231);
+    text-align: center;
+    width: 100%;
     &__container {
       // display: flex;
       // flex-wrap: wrap;
       // justify-content: flex-start;
+      background-color: #ffffff;
       border: 1px solid rgb(228, 231, 231);
       color: rgb(72, 72, 72);
       height: 2.5rem;
@@ -329,8 +382,8 @@
       }
       &.aircal--selected {
         background-color: rgb(0, 166, 153);
-        color: white;
-        border-color: rgb(0, 166, 153);
+        color: #ffffff;
+        border-color: #029486;
       }
       &.aircal--istoday:not(.aircal--selected) {
         color: rgb(0, 122, 135);
@@ -341,26 +394,18 @@
         border-color: rgb(128, 232, 224);
       }
     }
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    // margin-top: -1px;
-    // margin-left: -1px;
-    // outline: 1px solid rgb(228, 231, 231);
-    font-size: 0.8rem;
-    text-align: center;
   }
   &__daysofweek {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    margin: 0;
     color: rgb(72, 72, 72);
-    padding: 0.25rem;
+    display: flex;
     font-size: 0.75rem;
-    width: 2.5rem;
     height: 2.5rem;
+    justify-content: center;
+    margin: 0;
+    padding: 0.25rem;
     text-align: center;
+    width: 2.5rem;
   }
   &__helper {
     &--bold {
