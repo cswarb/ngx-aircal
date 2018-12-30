@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AircalDaysselectedComponent } from './aircal-daysselected.component';
+import { AircalDaysselectedComponent } from "./aircal-daysselected.component";
+import { AircalSelectedTime } from "../ngx-aircal.model";
 
-describe('AircalDaysselectedComponent', () => {
+describe("AircalDaysselectedComponent", () => {
   let component: AircalDaysselectedComponent;
   let fixture: ComponentFixture<AircalDaysselectedComponent>;
 
@@ -19,7 +20,19 @@ describe('AircalDaysselectedComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  
+  it("should default numberOfDaysSelected prop to be an instance of AircalSelectedTime", () => {
+    expect(component.numberOfDaysSelected).toBeTruthy();
+    expect(component.numberOfDaysSelected instanceof AircalSelectedTime).toEqual(true);
+    expect(component.numberOfDaysSelected).toEqual(new AircalSelectedTime());
+  });
+  
+  it("should default numberOfDaysSelected prop to be 0 values", () => {
+    expect(component.numberOfDaysSelected.days).toEqual(0);
+    expect(component.numberOfDaysSelected.months).toEqual(0);
+    expect(component.numberOfDaysSelected.years).toEqual(0);
   });
 });
