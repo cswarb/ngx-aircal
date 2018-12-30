@@ -8,7 +8,7 @@ import { AircalDayLabels } from "../ngx-aircal.model";
 })
 export class AircalDaysofweekComponent implements OnInit {
     @Input() dayLabels: AircalDayLabels = new AircalDayLabels();
-    @Input() dayName: string;
+    @Input() dayName: string = "";
 
     //Helpers
     public ObjectKeys: Function = Object.keys;

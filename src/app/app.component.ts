@@ -30,8 +30,8 @@ export class AppComponent {
       //   month: "10",
       //   day: "14"
       // }),
-      disableFromHereBackwards: new Date(),
-      disableFromHereForwards: new Date(2018, 11, 30)
+      // disableFromHereBackwards: new Date(),
+      // disableFromHereForwards: new Date(2018, 11, 30)
       // startDate: new AircalDateModel({
       //   year: "2018",
       //   month: "06",

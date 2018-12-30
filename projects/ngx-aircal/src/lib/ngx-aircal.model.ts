@@ -1,6 +1,6 @@
 import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse, isValid, getYear, format, setMonth, getMonth } from "date-fns";
 
-export const AIRCAL_CALENDAR_SPACES = 35;
+export const AIRCAL_CALENDAR_SPACES = 36;
 export const AIRCAL_DAYS_IN_WEEK = 7;
 export const VISIBLE_YEAR_CHUNKS_AT_A_TIME = 11;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
@@ -90,6 +90,10 @@ export class AircalOptions {
     public calendarPosition?: calendarBias = "bottom";
     public allowQuicksetMonth?: boolean = false;
     public allowQuicksetYear?: boolean = false;
+    public icons?: { leftArrow?: null | string, rightArrow?: null | string } = {
+        leftArrow: null,
+        rightArrow: null
+    };
 
     constructor(init?: Partial<AircalOptions>) {
         Object.assign(this, init);

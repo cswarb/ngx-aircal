@@ -1,8 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AircalDaysofweekComponent } from './aircal-daysofweek.component';
+import { AircalDaysofweekComponent } from "./aircal-daysofweek.component";
+import { AircalDayLabels } from "../ngx-aircal.model";
 
-describe('AircalDaysofweekComponent', () => {
+describe("AircalDaysofweekComponent", () => {
   let component: AircalDaysofweekComponent;
   let fixture: ComponentFixture<AircalDaysofweekComponent>;
 
@@ -19,7 +20,16 @@ describe('AircalDaysofweekComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  
+  it("should default dayLabels prop to an AircalDayLabels instance", () => {
+    expect(component.dayLabels).toEqual(new AircalDayLabels());
+  });
+  
+  it("should default dayName prop to an empty string", () => {
+    expect(component.dayName).toBeFalsy();
+    expect(component.dayName).toEqual("");
   });
 });

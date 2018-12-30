@@ -33,7 +33,7 @@
                 <thead>
                     <tr class="aircal__meta">
                         <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection"
-                            role="button" (click)="prevMonth()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
+                            role="button" (click)="prevMonth()" [ngStyle]="{'background-image': options?.icons?.leftArrow && 'url(' + options?.icons?.leftArrow + ')'}" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
                         <p class="aircal__text aircal__text__month"><span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(date, "MMMM")}}</span>
                         <span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(date, "YYYY")}}</span></p>
                     </tr>
@@ -61,7 +61,7 @@
                         <p class="aircal__text aircal__text__month"><span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(nextMonthDate, "MMMM")}}</span>
                         <span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(nextMonthDate, "YYYY")}}</span></p>
                         <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button"
-                            (click)="nextMonth()" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
+                            (click)="nextMonth()" [ngStyle]="{'background-image': options?.icons?.rightArrow && 'url(' + options?.icons?.rightArrow + ')'}" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
                     </tr>
                     <tr class="aircal__meta">
                         <th aircal-aircal-daysofweek class="flex-container aircal__daysofweek" *ngFor="let dayName of ObjectKeys(options.dayLabels)"
