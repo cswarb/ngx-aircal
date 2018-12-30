@@ -90,6 +90,10 @@ export class AircalOptions {
     public calendarPosition?: calendarBias = "bottom";
     public allowQuicksetMonth?: boolean = false;
     public allowQuicksetYear?: boolean = false;
+    public icons?: { leftArrow?: null | string, rightArrow?: null | string } = {
+        leftArrow: null,
+        rightArrow: null
+    };
 
     constructor(init?: Partial<AircalOptions>) {
         Object.assign(this, init);
