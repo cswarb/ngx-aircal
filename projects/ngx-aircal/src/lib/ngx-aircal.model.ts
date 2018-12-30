@@ -1,6 +1,6 @@
 import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse, isValid, getYear, format, setMonth, getMonth } from "date-fns";
 
-export const AIRCAL_CALENDAR_SPACES = 35;
+export const AIRCAL_CALENDAR_SPACES = 36;
 export const AIRCAL_DAYS_IN_WEEK = 7;
 export const VISIBLE_YEAR_CHUNKS_AT_A_TIME = 11;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
