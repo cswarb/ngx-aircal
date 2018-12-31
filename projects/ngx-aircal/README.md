@@ -1,5 +1,10 @@
 # ngx-aircal
 
+![version](https://img.shields.io/npm/v/ngx-aircal.svg?colorB=00a699)
+![license](https://img.shields.io/github/license/cswarb/ngx-aircal.svg?colorB=00a699)
+![weight](https://img.shields.io/bundlephobia/minzip/ngx-aircal.svg?colorB=00a699)
+![dependencies](https://img.shields.io/david/cswarb/ngx-aircal.svg?colorB=00a699)
+
 This plugin is still in development
 
 ## Description

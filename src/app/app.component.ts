@@ -16,8 +16,8 @@ export class AppComponent {
     private _FormBuilder: FormBuilder
   ) {
     this.calendarOptions = new AircalOptions({
-      inlineMode: true,
-      backgroundVisible: false,
+      // inlineMode: true,
+      // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
       // defaultStart: new AircalDateModel({
