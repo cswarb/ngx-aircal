@@ -58,7 +58,8 @@ export class DateDisplayModel {
 }
 export class AircalOptions {
     public defaultStart?: Date = new Date();
-    public inlineMode: boolean = false; //Display the calendar without a form input @todo
+    public inlineMode: boolean = false;
+    public singlePicker: boolean = false;
     public startDate?: Date = null;
     public endDate?: Date = null;
     public dayLabels: AircalDayLabels = new AircalDayLabels();

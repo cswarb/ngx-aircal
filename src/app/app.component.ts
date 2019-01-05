@@ -20,6 +20,7 @@ export class AppComponent {
       // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
+      singlePicker: true,
       // defaultStart: new AircalDateModel({
       //   year: "2018", month: "11"
       // }),      

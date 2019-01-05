@@ -132,10 +132,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             nxt = this.createAircal(this.nextMonthDate);
 
         this.daysWeeksArray = cur.chunk;
-        this.nextMonthDaysWeeksArray = nxt.chunk;
+        if(!this.options.singlePicker) {
+            this.nextMonthDaysWeeksArray = nxt.chunk;
+        };
 
         //Spread so highlights can be calculated
-        this.allDaysArray = cur.spread.concat(nxt.spread);
+        this.allDaysArray = !this.options.singlePicker ? cur.spread.concat(nxt.spread) : cur.spread;
     }
 
     public createAircal(date: Date): { spread: Array<DateDisplayModel>, chunk: Array<Array<DateDisplayModel>> } {
