@@ -47,25 +47,28 @@ describe("NgxAircalComponent", () => {
     expect(component.date).toEqual(d);
   });
   
-  //@todo
-  // fit("should allow inline mode to be set correctly", () => {
-  //   component.options.inlineMode = false;
-  //   component.ngOnInit();
-  //   let cal = fixture.debugElement.query(By.css(".aircal__meta__input__container"));
-  //   expect(cal.nativeElement.classList.contains("aircal__meta__input__container")).toEqual(true);
-  //   expect(component.options.inlineMode).toEqual(false);
-
-  //   component.options.inlineMode = true;
-  //   component.ngOnInit();
-
-  //   cal = fixture.debugElement.query(By.css(".aircal__meta__input__container"));
-  //   //aircal__meta__input__container should nto exist when true
-  //   expect(cal.nativeElement.classList.contains("aircal__meta__input__container")).toEqual(false);
-  //   expect(component.options.inlineMode).toEqual(true);
-  // });
+  it("should allow inline mode to be set correctly", () => {
+    component.options.inlineMode = false;
+    component.ngOnInit();
+    fixture.detectChanges();
+    let cal = fixture.debugElement.query(By.css(".aircal__meta__input__container"));
+    expect(cal).toBeTruthy();
+    expect(component.options.inlineMode).toEqual(false);
+  });
   
-  it("should honor single picker option", () => {
+  it("should allow inline mode to be set correctly", () => {
+    component.options.inlineMode = true;
+    component.ngOnInit();
+    fixture.detectChanges();
+    let cal = fixture.debugElement.query(By.css(".aircal__meta__input__container"));
+    //aircal__meta__input__container should nto exist when true
+    expect(cal).toEqual(null);
+    expect(component.options.inlineMode).toEqual(true);
+  });
+  
+  it("should honor single picker option 2", () => {
     component.options.singlePicker = false;
+    component.ngOnInit();
     let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
     
     btn.triggerEventHandler("click", () => { });
@@ -75,8 +78,14 @@ describe("NgxAircalComponent", () => {
       let cal = fixture.debugElement.query(By.css(".aircal__cal--double"));
       expect(fixture.nativeElement.querySelectorAll(".aircal__cal--double").length).toEqual(2);
     });
-
+  });
+  
+  it("should honor single picker option 1", () => {
     component.options.singlePicker = true;
+    component.ngOnInit();
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       let cal = fixture.debugElement.query(By.css(".aircal__cal--double"));
@@ -122,23 +131,28 @@ describe("NgxAircalComponent", () => {
     });
   });
   
-  //@todo
-  // fit("should honor selectionShortcuts", () => {
-  //   component.options.dayLabels = new AircalDayLabels({
-  //     mo: "Monday"
-  //   });
+  it("should honor selectionShortcuts", () => {
+    component.options.selectionShortcuts = {"10.days": "10 Days"}
+    component.ngOnInit();
 
-  //   component.ngOnInit();
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
 
-  //   expect(component.options.dayLabels.mo).toEqual("Monday");
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__shortcut > option:last-of-type")).nativeElement.innerText).toEqual("10 Days");
+    });
 
-  //   let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
-  //   btn.triggerEventHandler("click", () => { });
-  //   fixture.detectChanges();
-  //   fixture.whenStable().then(() => {
-  //     expect(fixture.debugElement.query(By.css(".aircal__daysofweek:first-of-type > span")).nativeElement.innerText).toEqual("Monday");
-  //   });
-  // });
+    let d = new DateDisplayModel({
+      day: new Date(2018, 11, 1)
+    });
+    component.selectDate(d);
+
+    component.selectionShortcutChanged("10.days");
+    expect(component.aircal.selectedEndDate.day).toEqual(
+      new Date(2018, 11, 11)
+    );
+  });
   
   it("should honor dateFormat", () => {
     component.options.dateFormat = "MM/YYYY/DD";
@@ -187,51 +201,40 @@ describe("NgxAircalComponent", () => {
     });
   });
   
-  //@todo
-  // fit("should honor daysSelectedCounterVisible", () => {
-  //   component.options.daysSelectedCounterVisible = false;
-  //   component.ngOnInit();
+  it("should honor daysSelectedCounterVisible", () => {
+    component.options.daysSelectedCounterVisible = false;
+    component.ngOnInit();
 
-  //   let d = new DateDisplayModel({
-  //     day: new Date(2018, 11, 7)
-  //   });
-  //   let endD = new DateDisplayModel({
-  //     day: new Date(2018, 11, 15)
-  //   });
-  //   component.selectDate(d);
-  //   component.selectDate(endD);
+    let d = new DateDisplayModel({
+      day: new Date(2018, 11, 7)
+    });
+    let endD = new DateDisplayModel({
+      day: new Date(2018, 11, 15)
+    });
+    component.selectDate(d);
+    component.selectDate(endD);
     
-  //   let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
-  //   btn.triggerEventHandler("click", () => { });
-  //   fixture.detectChanges();
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
     
-  //   fixture.whenStable().then(() => {
-  //     expect(fixture.debugElement.query(By.css(".aircal__meta__rows--first")).nativeElement.innerText).toEqual("p");
-  //   });
-  // });
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css("[data-aircal-daysselected]"))).toEqual(null);
+    });
+  });
   
-  //@todo
-  // fit("should honor selectionShortcutVisible", () => {
-  //   component.options.daysSelectedCounterVisible = false;
-  //   component.ngOnInit();
-
-  //   let d = new DateDisplayModel({
-  //     day: new Date(2018, 11, 7)
-  //   });
-  //   let endD = new DateDisplayModel({
-  //     day: new Date(2018, 11, 15)
-  //   });
-  //   component.selectDate(d);
-  //   component.selectDate(endD);
+  it("should honor selectionShortcutVisible", () => {
+    component.options.selectionShortcutVisible = false;
+    component.ngOnInit();
     
-  //   let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
-  //   btn.triggerEventHandler("click", () => { });
-  //   fixture.detectChanges();
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
 
-  //   fixture.whenStable().then(() => {
-  //     expect(fixture.debugElement.query(By.css(".aircal__meta__rows--first")).nativeElement.innerText).toEqual("p");
-  //   });
-  // });
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__shortcut"))).toEqual(null);
+    });
+  });
   
   it("should honor backgroundVisible", () => {
     component.options.backgroundVisible = false;
@@ -246,70 +249,300 @@ describe("NgxAircalComponent", () => {
     });
   });
   
-  fit("should honor width", () => {
+  it("should honor width", () => {
+    component.options.width = "500px";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal")).nativeElement.style.width).toEqual("500px");
+    });
   });
   
-  fit("should honor height", () => {
+  it("should honor height", () => {
+    component.options.height = "500px";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal")).nativeElement.style.height).toEqual("500px");
+    });
   });
 
-  fit("should honor applyText", () => {
+  it("should honor applyText", () => {
+    component.options.applyText = "Apply me";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__button--apply")).nativeElement.innerText).toEqual("Apply me");
+    });
   });
 
-  fit("should honor clearText", () => {
+  it("should honor clearText", () => {
+    component.options.clearText = "Close me";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__button--cancel")).nativeElement.innerText).toEqual("Close me");
+    });
   });
 
-  fit("should honor selectDateText", () => {
+  it("should honor selectDateText", () => {
+    component.options.selectDateCloseText = "Select me";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon--opening")).nativeElement.innerText).toEqual("Select me");
+    });
   });
 
-  fit("should honor selectDateCloseText", () => {
+  it("should honor selectDateCloseText", () => {
+    component.options.selectDateCloseText = "Close me";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon--opening")).nativeElement.innerText).toEqual("Close me");
+    });
   });
 
-  fit("should honor highlightToday", () => {
+  it("should honor highlightToday", () => {
+    component.options.highlightToday = true;
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal--istoday")).nativeElement).toBeTruthy();
+    });
+    
+    component.options.highlightToday = false;
+    component.ngOnInit();
+
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal--istoday")).nativeElement).toBeFalsy();
+    });
   });
 
-  fit("should honor showClearBtn", () => {
+  it("should honor showClearBtn", () => {
+    component.options.showClearBtn = false;
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__button--cancel"))).toEqual(null);
+    });
   });
 
-  fit("should honor showApplyBtn", () => {
+  it("should honor showApplyBtn", () => {
+    component.options.showApplyBtn = false;
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__button--apply"))).toEqual(null);
+    });
   });
 
-  fit("should honor minYear", () => {
+  it("should honor minYear", () => {
+    component.options.minYear = 2016;
+    component.options.defaultStart = new Date(2017, 0, 1);
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__icon__prev")).nativeElement.disabled).toEqual(true);
+    });
   });
 
-  fit("should honor maxYear", () => {
+  it("should honor maxYear", () => {
+    component.options.maxYear = 2018;
+    component.options.defaultStart = new Date(2017, 11, 1);
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__icon__next")).nativeElement.disabled).toEqual(true);
+    });
   });
 
-  fit("should honor disablePreviousSelection", () => {
+  it("should honor disablePreviousSelection", () => {
+    component.options.disablePreviousSelection = true;
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__icon__prev")).nativeElement.disabled).toEqual(true);
+    });
   });
 
-  fit("should honor disableForwardSelection", () => {
+  it("should honor disableForwardSelection", () => {
+    component.options.disableForwardSelection = true;
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__icon__next")).nativeElement.disabled).toEqual(true);
+    });
   });
 
-  fit("should honor disableFromHereBackwards", () => {
+  it("should honor disableFromHereBackwards", () => {
+    component.options.disableFromHereBackwards = new Date(2018, 10, 15);
+    component.options.defaultStart = new Date(2018, 10, 1);
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__day__container:first-of-type")).nativeElement.classList.contains("aircal--inactive")).toEqual(true);
+    });
   });
 
-  fit("should honor disableFromHereForwards", () => {
+  it("should honor disableFromHereForwards", () => {
+    component.options.disableFromHereForwards = new Date(2018, 10, 15);
+    component.options.defaultStart = new Date(2018, 10, 1);
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__week:last-of-type .aircal__day__container:last-of-type")).nativeElement.classList.contains("aircal--inactive")).toEqual(true);
+    });
   });
 
-  fit("should honor indicateInvalidDateRange", () => {
+  it("should honor indicateInvalidDateRange", () => {
+    //todo
   });
 
-  fit("should honor hasArrow", () => {
+  it("should honor hasArrow", () => {
+    component.options.hasArrow = false;
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal")).nativeElement.classList.contains("aircal--has-arrow")).toEqual(false);
+    });
   });
 
-  fit("should honor arrowBias", () => {
+  it("should honor arrowBias", () => {
+    component.options.arrowBias = "right";
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal")).nativeElement.classList.contains("aircal--right-bias")).toEqual(true);
+    });
   });
 
-  fit("should honor calendarPosition", () => {
+  it("should honor calendarPosition", () => {
+    component.options.calendarPosition = "right";
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal")).nativeElement.classList.contains("aircal__orient--right")).toEqual(true);
+    });
   });
 
-  fit("should honor allowQuicksetMonth", () => {
+  it("should honor allowQuicksetMonth", () => {
+    component.options.allowQuicksetMonth = false
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__text__month > span")).nativeElement.classList.contains("aircal__clickable")).toEqual(false);
+    });
   });
 
-  fit("should honor allowQuicksetYear", () => {
+  it("should honor allowQuicksetYear", () => {
+    component.options.allowQuicksetYear = false
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__text__month > span:last-child")).nativeElement.classList.contains("aircal__clickable")).toEqual(false);
+    });
   });
 
-  fit("should honor icons", () => {
+  it("should honor icons", () => {
+    component.options.icons.leftArrow = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMzEuNDk0IDMxLjQ5NCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzEuNDk0IDMxLjQ5NDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggc3R5bGU9ImZpbGw6IzFFMjAxRDsiIGQ9Ik0xMC4yNzMsNS4wMDljMC40NDQtMC40NDQsMS4xNDMtMC40NDQsMS41ODcsMGMwLjQyOSwwLjQyOSwwLjQyOSwxLjE0MywwLDEuNTcxbC04LjA0Nyw4LjA0N2gyNi41NTQNCgljMC42MTksMCwxLjEyNywwLjQ5MiwxLjEyNywxLjExMWMwLDAuNjE5LTAuNTA4LDEuMTI3LTEuMTI3LDEuMTI3SDMuODEzbDguMDQ3LDguMDMyYzAuNDI5LDAuNDQ0LDAuNDI5LDEuMTU5LDAsMS41ODcNCgljLTAuNDQ0LDAuNDQ0LTEuMTQzLDAuNDQ0LTEuNTg3LDBsLTkuOTUyLTkuOTUyYy0wLjQyOS0wLjQyOS0wLjQyOS0xLjE0MywwLTEuNTcxTDEwLjI3Myw1LjAwOXoiLz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K";
+    component.ngOnInit();
+
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(window.getComputedStyle(fixture.debugElement.query(By.css(".aircal__icon__prev")).nativeElement).getPropertyValue("background-image")).toContain("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMzEuNDk0IDMxLjQ5NCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzEuNDk0IDMxLjQ5NDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggc3R5bGU9ImZpbGw6IzFFMjAxRDsiIGQ9Ik0xMC4yNzMsNS4wMDljMC40NDQtMC40NDQsMS4xNDMtMC40NDQsMS41ODcsMGMwLjQyOSwwLjQyOSwwLjQyOSwxLjE0MywwLDEuNTcxbC04LjA0Nyw4LjA0N2gyNi41NTQNCgljMC42MTksMCwxLjEyNywwLjQ5MiwxLjEyNywxLjExMWMwLDAuNjE5LTAuNTA4LDEuMTI3LTEuMTI3LDEuMTI3SDMuODEzbDguMDQ3LDguMDMyYzAuNDI5LDAuNDQ0LDAuNDI5LDEuMTU5LDAsMS41ODcNCgljLTAuNDQ0LDAuNDQ0LTEuMTQzLDAuNDQ0LTEuNTg3LDBsLTkuOTUyLTkuOTUyYy0wLjQyOS0wLjQyOS0wLjQyOS0xLjE0MywwLTEuNTcxTDEwLjI3Myw1LjAwOXoiLz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K");
+    });
   });
   
 });

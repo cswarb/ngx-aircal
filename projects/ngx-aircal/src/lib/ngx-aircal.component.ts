@@ -120,6 +120,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.nextMonthDate = addMonths(parse(this.date), 1);
         };
 
+        if (!this.canSelectPreviousMonth()) {
+            this.aircal.disablePreviousSelection = true;
+        };
+
+        if (!this.canSelectNextMonth()) {
+            this.aircal.disableForwardSelection = true;
+        };
+
         this.createCalendars();
     }
 
@@ -290,21 +298,23 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     private removeRangeHighlighting(): Array<DateDisplayModel> {
         for (let date of this.allDaysArray) {
-            date.highlight = false;
-            date = date;
+            if(date) {
+                date.highlight = false;
+                date = date;
+            };
         };
         return this.allDaysArray;
     }
 
     public isHovering(cell: DateDisplayModel): Array<DateDisplayModel> {
         if (
-            (this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) ||
+            (!cell || this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) ||
             (!this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) ||
             (!this.aircal.selectedStartDate.day && !this.aircal.selectedEndDate.day)
         ) return;
 
         for (let date of this.allDaysArray) {
-            if (
+            if (date &&
                 AircalUtils.isWithinRange(date.day, cell.day, this.aircal.selectedStartDate.day)
             ) {
                 date.highlight = true;
@@ -316,8 +326,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public isLeaving(cell: DateDisplayModel): Array<DateDisplayModel> {
+        if (!cell) return;
+
         for (let date of this.allDaysArray) {
-            if (
+            if (date &&
                 AircalUtils.isWithinRange(date.day, cell.day, this.aircal.selectedStartDate.day)
             ) {
                 date.highlight = false;
@@ -626,8 +638,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 return;
             };
         } else if (value === null || value === "") {
-            //Ensure range is clear
-            this._dateRangeCleared();
+            //Ensure range is clear if we had at least a day selected
+            if(this.aircal.selectedStartDate.day) {
+                this._dateRangeCleared();
+            };
         };
     }
 
