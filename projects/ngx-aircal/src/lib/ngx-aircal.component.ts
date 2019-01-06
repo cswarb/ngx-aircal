@@ -93,7 +93,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     private intialiseCalendar(): void {
         //Initialise start and end date from options is valid
-        if ( (this.options.startDate && isValid(this.options.startDate)) && (this.options.startDate && isValid(this.options.startDate)) ) {
+        if ( (this.options.startDate && isValid(this.options.startDate))) {
             let date = parse(
                 this.options.startDate
             );
@@ -103,7 +103,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.selectDate(dispModel);
         };
 
-        if ((this.options.endDate && isValid(this.options.endDate)) && (this.options.endDate && isValid(this.options.endDate)) ) {
+        if ((this.options.endDate && isValid(this.options.endDate))) {
             let date = parse(
                 this.options.endDate
             );
@@ -284,7 +284,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public isToday(date: DateDisplayModel): boolean {
-        if (!date.day || !this.options.highlightToday) return false;
+        if (!date || !date.day || !this.options.highlightToday) return false;
         return isToday(date.day);
     }
 
@@ -467,7 +467,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public isSelected(date: DateDisplayModel): boolean {
-        if (!date.day) return false;
+        if (!date || !date.day) return false;
 
         if (!!this.aircal.selectedStartDate.day && !!this.aircal.selectedEndDate.day) {
             return AircalUtils.isSameOrBefore(this.aircal.selectedStartDate.day, date.day) && AircalUtils.isSameOrAfter(this.aircal.selectedEndDate.day, date.day);
