@@ -176,3 +176,6 @@ public onDateRangeChanged(event: AircalResponse) {
 
 ## Author
 * Author: Chris Swarbrick (chrisswarb)
+
+## Credit
+* Icons by Dave Gandy and Lyolya from www.flaticon.com

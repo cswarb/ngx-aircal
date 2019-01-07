@@ -1,15 +1,15 @@
 <div class="aircal__container">
     <div class="aircal__meta__input__container" *ngIf="!options?.inlineMode">
-        <input type="text" class="aircal__meta__input" placeholder="Select Date" [ngModel]="formSelectionText"
+        <input type="text" class="aircal__meta__input" [placeholder]="this.getDynamicPlaceholderText()" [ngModel]="formSelectionText"
             (ngModelChange)="onUserDateRangeInput($event)" [value]="formSelectionText" [disabled]="false" [readonly]="false"
             [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && invalidDateRange}"
             autocomplete="off" spellcheck="false" autocorrect="off" />
-        <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--opening" [ngClass]="{'aircal__meta__input__icon--opening': !showCalendar, 'aircal__meta__input__icon--closing': showCalendar}" (click)="openCalendar()">{{options?.selectDateText}}</button>
-        <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()">{{options?.selectDateCloseText}}</button>
+        <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--opening" [ngClass]="{'aircal__meta__input__icon--opening': !showCalendar, 'aircal__meta__input__icon--closing': showCalendar, 'aircal__meta__input__icon--disabled': options?.disable}" (click)="openCalendar()"></button>
+        <button *ngIf="!options?.disable" type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()"></button>
     </div>
     
-    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="showCalendar || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
-        <div class="aircal__meta aircal__meta__rows">
+    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="(showCalendar && !options?.disable) || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
+        <div *ngIf="(options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)) || (options?.allowQuicksetMonth && (monthSelectionPanelOpen && !yearSelectionPanelOpen))" class="aircal__meta aircal__meta__rows aircal__meta__quickset">
             <div data-aircal-year-quickset class="aircal__meta__rows" *ngIf="options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)"
                 (yearSelected)="selectYear($event)" (nextYearChunks)="nextYearChunks($event)" (prevYearChunks)="prevYearChunks($event)"
                 [date]="date" [yearChoices]="yearChoices"></div>

@@ -222,6 +222,11 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return chunk;
     }
 
+    public getDynamicPlaceholderText(): string {
+        const exampleDateRange = `e.g. ${this.formatDate(new Date())} - ${this.formatDate(addDays(new Date(), 5))}`;
+        return this.options.includeExamplePlaceholder ? exampleDateRange : "Select Date";
+    }
+
     public getCalendarOrientation(): string {
         return this.options.calendarPosition;
     }
@@ -665,25 +670,22 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 return;
             };
 
+            //Date is valid so is safe to parse
             const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value);
 
             if(!model) {
                 return;
             };
 
-            let start = model.start,
-                end = model.end,
-                disableFromDate = parse(this.options.disableFromHereBackwards),
-                disableToDate = parse(this.options.disableFromHereForwards)
-
-            const datesViableGivenOpts = AircalUtils.isViableGivenOptions(
-                start,
-                end,
-                this.options.minYear,
-                this.options.maxYear,
-                disableFromDate,
-                disableToDate
-            );
+            const {start, end} = model,
+                datesViableGivenOpts = AircalUtils.isViableGivenOptions(
+                    start,
+                    end,
+                    this.options.minYear,
+                    this.options.maxYear,
+                    this.options.disableFromHereBackwards,
+                    this.options.disableFromHereForwards
+                );
 
             if (!datesViableGivenOpts) {
                 //Indicate the invalid range if invalid

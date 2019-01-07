@@ -59,6 +59,7 @@ export class DateDisplayModel {
 export class AircalOptions {
     public defaultStart?: Date = new Date();
     public inlineMode: boolean = false;
+    public disable: boolean = false;
     public singlePicker: boolean = false;
     public startDate?: Date = null;
     public endDate?: Date = null;
@@ -68,14 +69,15 @@ export class AircalOptions {
     public previousMonthWrapAround?: boolean = true;
     public nextMonthWrapAround?: boolean = true;
     public daysSelectedCounterVisible?: boolean = true;
-    public selectionShortcutVisible?: boolean = true;
+    public selectionShortcutVisible?: boolean = false;
     public backgroundVisible?: boolean = true;
     public width?: string;
     public height?: string;
     public applyText?: string = "Apply";
+    public includeExamplePlaceholder?: boolean = true;
     public clearText?: string = "Clear";
-    public selectDateText?: string = "Select date";
-    public selectDateCloseText?: string = "Close";
+    // public selectDateText?: string = "Select date";
+    // public selectDateCloseText?: string = "Close";
     public highlightToday?: boolean = true;
     public showClearBtn?: boolean = true;
     public showApplyBtn?: boolean = true;
@@ -154,7 +156,7 @@ export class AircalUtils {
         let isDateValid = false;
 
         try {
-            let dates: Array<string> = dateRangeStr.split("-");
+            let dates: Array<string> = dateRangeStr.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR);
 
             if (dates.length !== 2) {
                 isDateValid = false;
@@ -190,7 +192,7 @@ export class AircalUtils {
             return false;
         };
         
-        if (isAfter(endDate, disableFromHereForwards) || isBefore(startDate, disableFromHereBackwards)) {
+        if ((disableFromHereBackwards && isAfter(endDate, disableFromHereForwards)) || disableFromHereForwards && (isBefore(startDate, disableFromHereBackwards))) {
             return false;
         };
 
@@ -226,17 +228,17 @@ export class AircalUtils {
             return {
                 start: new Date(
                     parseInt(startDate[2]),
-                    parseInt(startDate[1]),
+                    parseInt(startDate[1])-1,
                     parseInt(startDate[0])
                 ),
                 end: new Date(
                     parseInt(endDate[2]),
-                    parseInt(endDate[1]),
+                    parseInt(endDate[1])-1,
                     parseInt(endDate[0])
                 )
             };
         } catch(e) {
-            return;
+            return null;
         };
     }
 }
