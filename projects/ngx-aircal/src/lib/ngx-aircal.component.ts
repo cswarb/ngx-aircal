@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges } from "@angular/core";
 import { Subject } from "rxjs";
-import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isToday, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear } from "date-fns";
+import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isSameDay, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear } from "date-fns";
 
 import { AircalOptions, AircalResponse, VISIBLE_YEAR_CHUNKS_AT_A_TIME, AIRCAL_CALENDAR_SPACES, AIRCAL_DAYS_IN_WEEK, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
@@ -20,8 +20,8 @@ export const AIRCAL_VALUE_ACCESSOR: any = {
 })
 export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
     //Props
-    public date: Date | any = parse(new Date());
-    public nextMonthDate: Date = addMonths(parse(new Date()), 1);
+    public date: Date | any = new Date();
+    public nextMonthDate: Date = addMonths(new Date(), 1);
 
     public daysWeeksArray: Array<Array<DateDisplayModel>> = [];
     public daysArray: Array<DateDisplayModel> = [];
@@ -94,9 +94,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     private intialiseCalendar(): void {
         //Initialise start and end date from options is valid
         if ( (this.options.startDate && isValid(this.options.startDate))) {
-            let date = parse(
-                this.options.startDate
-            );
+            let date = this.options.startDate
             let dispModel = new DateDisplayModel({
                 day: date
             });
@@ -104,9 +102,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         };
 
         if ((this.options.endDate && isValid(this.options.endDate))) {
-            let date = parse(
-                this.options.endDate
-            );
+            let date = this.options.endDate;
             let dispModel = new DateDisplayModel({
                 day: date
             });
@@ -114,10 +110,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         };
 
         if (this.options.defaultStart && isValid(this.options.defaultStart)) {
-            this.date = parse(
-                this.options.defaultStart
-            );
-            this.nextMonthDate = addMonths(parse(this.date), 1);
+            this.date = this.options.defaultStart;
+            this.nextMonthDate = addMonths(this.date, 1);
         };
 
         if (!this.canSelectPreviousMonth()) {
@@ -293,12 +287,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public formatDate(date: DateDisplayModel | Date, formatStr?: string): string {
         date instanceof DateDisplayModel ? date = date.day : date;
-        return format(date, formatStr || this.options.dateFormat);
+        return format(date, formatStr || this.options.dateFormat, { awareOfUnicodeTokens: true });
     }
 
     public isToday(date: DateDisplayModel): boolean {
         if (!date || !date.day || !this.options.highlightToday) return false;
-        return isToday(date.day);
+        return isSameDay(new Date(), date.day);
     }
 
     private removeRangeHighlighting(): Array<DateDisplayModel> {
@@ -509,8 +503,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat),
+            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
         );
 
         this.onDateRangeCommitted.next(
@@ -534,8 +528,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat),
+            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
         );
 
         this.onDateRangeInitialised.next(
@@ -554,8 +548,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat),
+            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
         );
 
         this.onDateRangeChanged.next(
@@ -569,8 +563,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat)
+            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true })
         );
 
         this.onInputFieldChanged.next(
@@ -589,16 +583,16 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             model = new AircalResponse(
                 this.aircal.selectedStartDate.day,
                 this.aircal.selectedEndDate.day,
-                format(this.aircal.selectedStartDate.day, this.options.dateFormat),
-                format(this.aircal.selectedEndDate.day, this.options.dateFormat)
+                format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+                format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true })
             );
 
         this.onDateRangeCleared.next(
             new AircalResponse(
                 this.aircal.selectedStartDate.day,
                 this.aircal.selectedEndDate.day,
-                format(this.aircal.selectedStartDate.day, this.options.dateFormat),
-                format(this.aircal.selectedEndDate.day, this.options.dateFormat)
+                format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+                format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true })
             )
         );
 
@@ -620,8 +614,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         //Called after onInit
         //The initial form value passed from the parent must be written in here...
         if (value && value.startDate && value.endDate) {
-            let start: Date = parse(value.startDate),
-                end: Date = parse(value.endDate);
+            let start: Date = value.startDate,
+                end: Date = value.endDate;
 
             if (isValid(start) && isValid(end)) {
                 this.invalidDateRange = false;
@@ -671,7 +665,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             };
 
             //Date is valid so is safe to parse
-            const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value);
+            const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value, this.options.dateFormat);
 
             if(!model) {
                 return;

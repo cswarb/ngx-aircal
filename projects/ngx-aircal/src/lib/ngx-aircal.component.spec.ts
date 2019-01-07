@@ -203,17 +203,17 @@ describe("NgxAircalComponent", () => {
   
   it("should format the date", () => {
     let d = new Date(2019, 7, 10);
-    expect(component.formatDate(d)).toEqual("10/08/2019");
+    expect(component.formatDate(d, "dd/MM/yyyy")).toEqual("10/08/2019");
 
     let nd = new DateDisplayModel({
       day: new Date(2020, 6, 8)
     });
-    expect(component.formatDate(nd)).toEqual("08/07/2020");
+    expect(component.formatDate(nd, "dd/MM/yyyy")).toEqual("08/07/2020");
     
     let nd2 = new DateDisplayModel({
       day: new Date(2020, 6, 8)
     });
-    expect(component.formatDate(nd2, "DD-MM-YY")).toEqual("08-07-20");
+    expect(component.formatDate(nd2, "dd-MM-yy")).toEqual("08-07-20");
   });
   
   it("should detect if the current date is today", () => {

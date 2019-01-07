@@ -129,7 +129,7 @@ export class AircalUtils {
     }
 
     public static formatMonthToReadable(month: number): string {
-        return format(setMonth(new Date(), month), "MMMM");
+        return format(setMonth(new Date(), month), "MMMM", { awareOfUnicodeTokens: true });
     }
 
     public static getAddType(unit: string): any {
@@ -211,31 +211,28 @@ export class AircalUtils {
         return date > selectedStartDate && date <= cell;
     }
 
-    public static parseStringToDate(selectedDate: string): Date {
-        return parse(selectedDate);
+    public static parseStringToDate(selectedDate: string, format: string = new AircalOptions().dateFormat): Date {
+        return parse(
+            selectedDate,
+            format,
+            new Date(),
+            { awareOfUnicodeTokens: true }
+        )
     }
 
     public static getSelectionText(begin: string, end: string): string {
         return `${begin} ${AIRCAL_CALENDAR_FORMAT_SEPARATOR} ${end}`;
     }
     
-    public static stringToStartAndEnd(startAndEnd: string): { start: Date, end: Date } {
+    public static stringToStartAndEnd(startAndEnd: string, format: string): { start: Date, end: Date } {
         try {
             let d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
-                startDate = d[0].trim().split("/"),
-                endDate = d[1].trim().split("/");
+                startDate = d[0].trim(),
+                endDate = d[1].trim();
 
             return {
-                start: new Date(
-                    parseInt(startDate[2]),
-                    parseInt(startDate[1])-1,
-                    parseInt(startDate[0])
-                ),
-                end: new Date(
-                    parseInt(endDate[2]),
-                    parseInt(endDate[1])-1,
-                    parseInt(endDate[0])
-                )
+                start: AircalUtils.parseStringToDate(startDate, format),
+                end: AircalUtils.parseStringToDate(endDate, format)
             };
         } catch(e) {
             return null;

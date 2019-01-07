@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import { DateDisplayModel } from "../ngx-aircal.model";
 
 @Component({
@@ -19,7 +19,10 @@ export class AircalDayComponent implements OnInit {
     }
 
     public getDate(date: DateDisplayModel | null): string {
-        return date ? format(date.day, "D") : "";
+        if (date && date.day) {
+            return isValid(date.day) ? format(date.day, "D", { awareOfUnicodeTokens: true }) : "";             
+        };
+        return "";
     }
 
 }

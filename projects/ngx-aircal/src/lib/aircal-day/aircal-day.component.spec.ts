@@ -25,7 +25,7 @@ describe("AircalDayComponent", () => {
   });
   
   it("should return a valid default date string for null", () => {
-    expect(component.getDate(new DateDisplayModel())).toEqual("1");
+    expect(component.getDate(new DateDisplayModel())).toEqual("");
   });
   
   it("should return a valid date day string given a valid date", () => {
