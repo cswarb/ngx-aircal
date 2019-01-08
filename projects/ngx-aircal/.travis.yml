@@ -2,9 +2,12 @@ sudo: required
 branches:
     only:
     - master
+    - development
 addons:
   chrome: stable
 language: node_js
+before_script:
+  - npm install -g @angular/cli
 node_js:
 - node
 script:
