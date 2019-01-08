@@ -93,6 +93,51 @@ describe("NgxAircalComponent", () => {
     });
   });
   
+  it("should honor includeExamplePlaceholder", () => {
+    const d = component.options.includeExamplePlaceholder = true;
+    component.ngOnInit();
+    var day = new Date().getDate();
+    var dayPlusFive = new Date().setDate(day+5);
+    const exampleDateRange = `e.g. ${component.formatDate(new Date())} - ${component.formatDate(new Date(dayPlusFive))}`;
+
+    expect(component.getDynamicPlaceholderText()).toEqual(exampleDateRange);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input")).nativeElement.placeholder).toEqual(exampleDateRange);
+    });
+  });
+  
+  it("should honor includeExamplePlaceholder", () => {
+    const d = component.options.includeExamplePlaceholder = false;
+    component.ngOnInit();
+
+    expect(component.getDynamicPlaceholderText()).toEqual("Select Date");
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input")).nativeElement.placeholder).toEqual("Select Date");
+    });
+  });
+  
+  it("should honor disable", () => {
+    const d = component.options.disable = true;
+    component.ngOnInit();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon")).nativeElement.classList.contains("aircal__meta__input__icon--disabled")).toEqual(true);
+    });
+  });
+  
+  it("should honor disable", () => {
+    const d = component.options.disable = false;
+    component.ngOnInit();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon")).nativeElement.classList.contains("aircal__meta__input__icon--disabled")).toEqual(false);
+    });
+  });
+  
   it("should honor startDate", () => {
     const d = component.options.startDate = new Date(2019, 5, 5);
     component.ngOnInit();
