@@ -1,24 +1,23 @@
-dist: trusty
-sudo: false
- 
+sudo: required
+branches:
+    only:
+    - master
+addons:
+  chrome: stable
 language: node_js
 node_js:
-  - "8"
-  
-addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
- 
-cache:
-  directories:
-     - ./node_modules
- 
-install:
-  - npm install
- 
+- node
 script:
-  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-  - npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+- npm run test-ci
+- npm run build-ci
+before_deploy:
+  - cd dist/ngx-aircal
+deploy:
+  provider: npm
+  email: chris.swarb@gmail.com
+  skip_cleanup: true
+  api_key:
+    secure: XXX
+  on:
+    tags: true
+    repo: cswarb/ngx-aircal

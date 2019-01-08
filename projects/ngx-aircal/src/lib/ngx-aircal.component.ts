@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges } from "@angular/core";
 import { Subject } from "rxjs";
-import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isSameDay, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear } from "date-fns";
+import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isSameDay, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear, toDate } from "date-fns";
 
 import { AircalOptions, AircalResponse, VISIBLE_YEAR_CHUNKS_AT_A_TIME, AIRCAL_CALENDAR_SPACES, AIRCAL_DAYS_IN_WEEK, AIRCAL_CALENDAR_SHORTCUT_SEPARATOR, AircalModel, AircalSelectedTime, AircalUtils, AIRCAL_CALENDAR_FORMAT_SEPARATOR, DateDisplayModel } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
@@ -693,14 +693,18 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.invalidDateRange = false;
 
             //parse to model and validate input
-            this.aircal.selectedStartDate.day = start;
-            this.aircal.selectedEndDate.day = end;
+            this.aircal.selectedStartDate = new DateDisplayModel({
+                day: start
+            });
+            this.aircal.selectedEndDate = new DateDisplayModel({
+                day: end
+            });
          
             this._inputFieldChanged();
 
             if (isValid(model.start) && isValid(model.end)) {
                 if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
-                    this._dateRangeCommitted();
+                    // this._dateRangeCommitted();
                 };
             };
         }

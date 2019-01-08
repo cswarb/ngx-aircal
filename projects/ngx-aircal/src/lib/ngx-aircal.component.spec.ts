@@ -95,18 +95,16 @@ describe("NgxAircalComponent", () => {
   });
   
   it("should create a calendar given a date", () => {
-    let data = component.createAircal(new Date());
-
-    // console.log(data);
+    const d = new Date(2019, 8, 8);
+    let data = component.createAircal(d);
 
     //December has an additional date to create so it exceeds the calendar spaces logic. T@odo - Refactor it
-    expect(data.spread.length).toBeLessThanOrEqual(AIRCAL_CALENDAR_SPACES + 1);
+    expect(data.spread.length).toBeLessThanOrEqual(AIRCAL_CALENDAR_SPACES);
+    expect(data.chunk.length).toBeLessThanOrEqual(5);
     function isInstanceOfDateModel(dateModel) {
       return expect(dateModel instanceof DateDisplayModel).toEqual(true);
     }
-    data.spread.map(isInstanceOfDateModel)
-
-    //Todo - Calculate and check the start and end dates of the array to ensure they are correct
+    data.spread.map(isInstanceOfDateModel);
   });
 
   it("should return a chunk array given a large array of results", () => {
@@ -119,6 +117,13 @@ describe("NgxAircalComponent", () => {
     let chunked = component.chunk(d, 3);
 
     expect(chunked.length).toEqual(12);
+  });
+  
+  it("should return a chunk array given a large array of results", () => {
+    var day = new Date().getDate();
+    var dayPlusFive = new Date().setDate(day + 5);
+    const exampleDateRange = `e.g. ${component.formatDate(new Date())} - ${component.formatDate(new Date(dayPlusFive))}`;
+    expect(component.getDynamicPlaceholderText()).toEqual(exampleDateRange);
   });
   
   it("should select a month", () => {
