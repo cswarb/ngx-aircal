@@ -19,5 +19,26 @@
     "date range plugin",
     "angular date range",
     "angular calendar"
-  ]
+  ],
+  "description": "![version](https://img.shields.io/npm/v/ngx-aircal.svg?colorB=00a699) ![license](https://img.shields.io/github/license/cswarb/ngx-aircal.svg?colorB=00a699) ![weight](https://img.shields.io/bundlephobia/minzip/ngx-aircal.svg?colorB=00a699) ![dependencies](https://img.shields.io/david/cswarb/ngx-aircal.svg?colorB=00a699)",
+  "main": "",
+  "devDependencies": {},
+  "scripts": {
+    "build-ci": "npm run build-lib",
+    "test-ci": "ng test ngx-aircal --watch=false --browsers=ChromeHeadless",
+    "build-lib": "ng build ngx-aircal && npm run build-mylib-styles && npm run cp-mylib-assets",
+    "build-mylib-styles": "cpx \"./projects/ngx-aircal/src/lib/style/**/*\" \"./dist/ngx-aircal/style\" && scss-bundle -e ./projects/ngx-aircal/src/lib/style/_style.scss -d ./dist/ngx-aircal/style/_styles.scss",
+    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/ngx-aircal/assets\"",
+    "publish": "cd dist/ngx-aircal && npm version && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cswarb/ngx-aircal.git"
+  },
+  "author": "Chris Swarbrick <chris.swarb@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/cswarb/ngx-aircal#readme",
+  "bugs": {
+    "url": "https://github.com/cswarb/ngx-aircal/issues"
+  }
 }

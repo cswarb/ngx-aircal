@@ -301,31 +301,31 @@ describe("NgxAircalComponent", () => {
     });
   });
 
-  it("should honor selectDateText", () => {
-    component.options.selectDateCloseText = "Select me";
-    component.ngOnInit();
+  // it("should honor selectDateText", () => {
+  //   component.options.selectDateCloseText = "Select me";
+  //   component.ngOnInit();
 
-    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
-    btn.triggerEventHandler("click", () => { });
-    fixture.detectChanges();
+  //   let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+  //   btn.triggerEventHandler("click", () => { });
+  //   fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon--opening")).nativeElement.innerText).toEqual("Select me");
-    });
-  });
+  //   fixture.whenStable().then(() => {
+  //     expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon--opening")).nativeElement.innerText).toEqual("Select me");
+  //   });
+  // });
 
-  it("should honor selectDateCloseText", () => {
-    component.options.selectDateCloseText = "Close me";
-    component.ngOnInit();
+  // it("should honor selectDateCloseText", () => {
+  //   component.options.selectDateCloseText = "Close me";
+  //   component.ngOnInit();
 
-    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
-    btn.triggerEventHandler("click", () => { });
-    fixture.detectChanges();
+  //   let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+  //   btn.triggerEventHandler("click", () => { });
+  //   fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon--opening")).nativeElement.innerText).toEqual("Close me");
-    });
-  });
+  //   fixture.whenStable().then(() => {
+  //     expect(fixture.debugElement.query(By.css(".aircal__meta__input__icon--opening")).nativeElement.innerText).toEqual("Close me");
+  //   });
+  // });
 
   it("should honor highlightToday", () => {
     component.options.highlightToday = true;
