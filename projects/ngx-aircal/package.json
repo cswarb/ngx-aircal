@@ -22,14 +22,17 @@
   ],
   "description": "![version](https://img.shields.io/npm/v/ngx-aircal.svg?colorB=00a699) ![license](https://img.shields.io/github/license/cswarb/ngx-aircal.svg?colorB=00a699) ![weight](https://img.shields.io/bundlephobia/minzip/ngx-aircal.svg?colorB=00a699) ![dependencies](https://img.shields.io/david/cswarb/ngx-aircal.svg?colorB=00a699)",
   "main": "",
-  "devDependencies": {},
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "scss-bundle": "^2.4.0"
+  },
   "scripts": {
     "build-ci": "npm run build-lib",
     "test-ci": "ng test ngx-aircal --watch=false --browsers=ChromeHeadless",
     "build-lib": "ng build ngx-aircal && npm run build-mylib-styles && npm run cp-mylib-assets",
-    "build-mylib-styles": "cpx \"./projects/ngx-aircal/src/lib/style/**/*\" \"./dist/ngx-aircal/style\" && scss-bundle -e ./projects/ngx-aircal/src/lib/style/_style.scss -d ./dist/ngx-aircal/style/_styles.scss",
-    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"./dist/ngx-aircal/assets\"",
-    "publish": "cd dist/ngx-aircal && npm version && npm publish"
+    "build-mylib-styles": "cpx \"./src/lib/style/**/*\" \"../../dist/ngx-aircal/style\" && scss-bundle -e \"./src/lib/style/_style.scss\" -d \"../../dist/ngx-aircal/style/_styles.scss\" ",
+    "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"../../dist/ngx-aircal/assets\"",
+    "publish": "cd ../../dist/ngx-aircal && npm version && npm publish"
   },
   "repository": {
     "type": "git",
