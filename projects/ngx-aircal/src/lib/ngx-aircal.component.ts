@@ -93,7 +93,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     private intialiseCalendar(): void {
         //Initialise start and end date from options is valid
-        if ( (this.options.startDate && isValid(this.options.startDate)) && (this.options.startDate && isValid(this.options.startDate)) ) {
+        if ( (this.options.startDate && isValid(this.options.startDate))) {
             let date = parse(
                 this.options.startDate
             );
@@ -103,7 +103,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.selectDate(dispModel);
         };
 
-        if ((this.options.endDate && isValid(this.options.endDate)) && (this.options.endDate && isValid(this.options.endDate)) ) {
+        if ((this.options.endDate && isValid(this.options.endDate))) {
             let date = parse(
                 this.options.endDate
             );
@@ -120,6 +120,14 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.nextMonthDate = addMonths(parse(this.date), 1);
         };
 
+        if (!this.canSelectPreviousMonth()) {
+            this.aircal.disablePreviousSelection = true;
+        };
+
+        if (!this.canSelectNextMonth()) {
+            this.aircal.disableForwardSelection = true;
+        };
+
         this.createCalendars();
     }
 
@@ -132,10 +140,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             nxt = this.createAircal(this.nextMonthDate);
 
         this.daysWeeksArray = cur.chunk;
-        this.nextMonthDaysWeeksArray = nxt.chunk;
+        if(!this.options.singlePicker) {
+            this.nextMonthDaysWeeksArray = nxt.chunk;
+        };
 
         //Spread so highlights can be calculated
-        this.allDaysArray = cur.spread.concat(nxt.spread);
+        this.allDaysArray = !this.options.singlePicker ? cur.spread.concat(nxt.spread) : cur.spread;
     }
 
     public createAircal(date: Date): { spread: Array<DateDisplayModel>, chunk: Array<Array<DateDisplayModel>> } {
@@ -212,6 +222,11 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return chunk;
     }
 
+    public getDynamicPlaceholderText(): string {
+        const exampleDateRange = `e.g. ${this.formatDate(new Date())} - ${this.formatDate(addDays(new Date(), 5))}`;
+        return this.options.includeExamplePlaceholder ? exampleDateRange : "Select Date";
+    }
+
     public getCalendarOrientation(): string {
         return this.options.calendarPosition;
     }
@@ -282,27 +297,29 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public isToday(date: DateDisplayModel): boolean {
-        if (!date.day || !this.options.highlightToday) return false;
+        if (!date || !date.day || !this.options.highlightToday) return false;
         return isToday(date.day);
     }
 
     private removeRangeHighlighting(): Array<DateDisplayModel> {
         for (let date of this.allDaysArray) {
-            date.highlight = false;
-            date = date;
+            if(date) {
+                date.highlight = false;
+                date = date;
+            };
         };
         return this.allDaysArray;
     }
 
     public isHovering(cell: DateDisplayModel): Array<DateDisplayModel> {
         if (
-            (this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) ||
+            (!cell || this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) ||
             (!this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) ||
             (!this.aircal.selectedStartDate.day && !this.aircal.selectedEndDate.day)
         ) return;
 
         for (let date of this.allDaysArray) {
-            if (
+            if (date &&
                 AircalUtils.isWithinRange(date.day, cell.day, this.aircal.selectedStartDate.day)
             ) {
                 date.highlight = true;
@@ -314,8 +331,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public isLeaving(cell: DateDisplayModel): Array<DateDisplayModel> {
+        if (!cell) return;
+
         for (let date of this.allDaysArray) {
-            if (
+            if (date &&
                 AircalUtils.isWithinRange(date.day, cell.day, this.aircal.selectedStartDate.day)
             ) {
                 date.highlight = false;
@@ -478,7 +497,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public isSelected(date: DateDisplayModel): boolean {
-        if (!date.day) return false;
+        if (!date || !date.day) return false;
 
         if (!!this.aircal.selectedStartDate.day && !!this.aircal.selectedEndDate.day) {
             return AircalUtils.isSameOrBefore(this.aircal.selectedStartDate.day, date.day) && AircalUtils.isSameOrAfter(this.aircal.selectedEndDate.day, date.day);
@@ -637,8 +656,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 return;
             };
         } else if (value === null || value === "") {
-            //Ensure range is clear
-            this._dateRangeCleared();
+            //Ensure range is clear if we had at least a day selected
+            if(this.aircal.selectedStartDate.day) {
+                this._dateRangeCleared();
+            };
         };
     }
 
@@ -662,25 +683,22 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 return;
             };
 
+            //Date is valid so is safe to parse
             const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value);
 
             if(!model) {
                 return;
             };
 
-            let start = model.start,
-                end = model.end,
-                disableFromDate = parse(this.options.disableFromHereBackwards),
-                disableToDate = parse(this.options.disableFromHereForwards)
-
-            const datesViableGivenOpts = AircalUtils.isViableGivenOptions(
-                start,
-                end,
-                this.options.minYear,
-                this.options.maxYear,
-                disableFromDate,
-                disableToDate
-            );
+            const {start, end} = model,
+                datesViableGivenOpts = AircalUtils.isViableGivenOptions(
+                    start,
+                    end,
+                    this.options.minYear,
+                    this.options.maxYear,
+                    this.options.disableFromHereBackwards,
+                    this.options.disableFromHereForwards
+                );
 
             if (!datesViableGivenOpts) {
                 //Indicate the invalid range if invalid

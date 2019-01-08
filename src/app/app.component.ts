@@ -16,10 +16,11 @@ export class AppComponent {
     private _FormBuilder: FormBuilder
   ) {
     this.calendarOptions = new AircalOptions({
-      inlineMode: true,
-      backgroundVisible: false,
+      // inlineMode: true,
+      // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
+      singlePicker: true,
       // defaultStart: new AircalDateModel({
       //   year: "2018", month: "11"
       // }),      

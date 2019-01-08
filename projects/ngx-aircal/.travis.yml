@@ -1,0 +1,23 @@
+sudo: required
+branches:
+    only:
+    - master
+addons:
+  chrome: stable
+language: node_js
+node_js:
+- node
+script:
+- npm run test-ci
+- npm run build-ci
+before_deploy:
+  - cd dist/ngx-aircal
+deploy:
+  provider: npm
+  email: chris.swarb@gmail.com
+  skip_cleanup: true
+  api_key:
+    secure: XXX
+  on:
+    tags: true
+    repo: cswarb/ngx-aircal
