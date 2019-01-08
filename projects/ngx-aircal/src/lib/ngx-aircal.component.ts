@@ -722,8 +722,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this._inputFieldChanged();
 
             if (isValid(model.start) && isValid(model.end)) {
-                if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
-                    this._dateRangeCommitted();
+                if(this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) {
+                    this.options.showApplyBtn ? this.needsApplying = true : this._dateRangeCommitted();
                 };
             };
         }
