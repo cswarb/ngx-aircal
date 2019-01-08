@@ -712,8 +712,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             this.invalidDateRange = false;
 
             //parse to model and validate input
-            this.aircal.selectedStartDate.day = start;
-            this.aircal.selectedEndDate.day = end;
+            this.aircal.selectedStartDate = new DateDisplayModel({
+                day: start
+            });
+            this.aircal.selectedEndDate = new DateDisplayModel({
+                day: end
+            });
          
             this._inputFieldChanged();
 
