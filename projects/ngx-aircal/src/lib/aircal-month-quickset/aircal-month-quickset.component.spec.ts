@@ -27,7 +27,7 @@ describe("AircalMonthQuicksetComponent", () => {
   it("should default props correctly", () => {
     expect(component.monthChoices).toEqual([]);
     expect(component.date.getDate()).toEqual(new Date().getDate());
-    expect(component.monthSelected).toEqual(new Subject();
+    expect(component.monthSelected).toEqual(new Subject());
   });
   
   it("should trigger a subscriber when month is selected", () => {
@@ -37,10 +37,7 @@ describe("AircalMonthQuicksetComponent", () => {
     component.selectMonth(0);
   });
   
-  it("should detect if the month is equal to the current month", () => {
-    let month = new Date().getMonth();
-    expect(component.isCurrentMonth(month)).toEqual(true);
-  });
+  
   
   it("should detect if the month is not equal to the current month", () => {
     let month = new Date().setMonth(new Date().getMonth() + 1);

@@ -41,7 +41,7 @@ describe("AircalYearQuicksetComponent", () => {
   
   it("should trigger a subscriber when previous year is selected", () => {
     component.prevYearChunks.subscribe((res: boolean) => {
-      expect(res).toEqual(true;
+      expect(res).toEqual(true);
     });
     component.getPrevYearChunks();
   });
