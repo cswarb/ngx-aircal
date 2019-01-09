@@ -100,7 +100,7 @@ describe("NgxAircalComponent", () => {
 
     //December has an additional date to create so it exceeds the calendar spaces logic. T@odo - Refactor it
     expect(data.spread.length).toBeLessThanOrEqual(AIRCAL_CALENDAR_SPACES);
-    expect(data.chunk.length).toBeLessThanOrEqual(5);
+    expect(data.chunk.length).toBeLessThanOrEqual(6);
     function isInstanceOfDateModel(dateModel) {
       return expect(dateModel instanceof DateDisplayModel).toEqual(true);
     }
