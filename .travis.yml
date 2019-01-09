@@ -1,20 +1,20 @@
 sudo: required
 branches:
-    only:
-    - master
-    - development
+  only:
+  - master
+  - development
 addons:
   chrome: stable
 language: node_js
 before_script:
-  - npm install -g @angular/cli
+- npm install -g @angular/cli
 node_js:
 - node
 script:
 - npm run test-ci
 - npm run build-ci
 before_deploy:
-  - cd dist/ngx-aircal
+- cd dist/ngx-aircal
 deploy:
   provider: npm
   email: chris.swarb@gmail.com
@@ -23,3 +23,5 @@ deploy:
   on:
     tags: true
     repo: cswarb/ngx-aircal
+  api_key:
+    secure: a7ho33bjXffD2eOGpSQQhHOVQnE9LBDJYRiQqUGFPIArA8+vmJMaLnzcSlcCpHrR+trqENU2VWnQK4meogZm2eOo7uOwVKsM9w3L05+VKEAkp8MDYkO7nR0R2X3Kh+kKSVXc5dHCsOL30ChoBwvaRsuQgoZ11hBsUHrDFDI+0hYP6wxbTX5pnEV/cY5jFIxFL/Sxor6RuhXb6tM2ulQwWVnATnphhsH6jgQW86KHQFa+1kUpWi0p9/8hCiA11Qy5OHlQbX+SxICojY4s47gV62jNcE2rbgqEWrjmgntF5JGumPFMD+RguOmA6J7dlbaYMOhWGg23CtLU3kE1Y5aAnCZvkgJqnOl3+OJ3ZLvQAzKIJ0fAmwNKcpgv+LQVBTR337e4XdSahacUjUnTO+J/nC2b9fkGh3g/EOkl7WpDhpZw61Txu1uj1x7EexNzYx2j0kOaH4XSXudOCpcNRxtTtoy/9MTHmuivuQqLSQbPG7U25qPgdV67/NdtbVx0QHgPO2dksiidsSOAAPMsFvG73CX5ctjrAMY4SUYRGqZMUjydlCH/sP0bGr6BXEoo7RLHhIlAh4JlgnqFsPrXcXubXubNU7CoUjMtvoCG7K/5gwtZsjV8tlU8oR8FHfwjUhorgVfwuzpVzGPnE7+64/mzI/UIZAPxTithx5R6E7rHpVw=
