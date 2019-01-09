@@ -1,7 +1,4 @@
 sudo: required
-branches:
-  only:
-  - master
 addons:
   chrome: stable
 language: node_js
