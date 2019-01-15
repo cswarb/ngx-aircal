@@ -4,7 +4,7 @@ export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_DAYS_IN_WEEK = 7;
 export const VISIBLE_YEAR_CHUNKS_AT_A_TIME = 11;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
-export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = "-";
+export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = " - ";
 
 export class AircalModel {
     public selectedStartDate: DateDisplayModel = new DateDisplayModel();
@@ -151,26 +151,55 @@ export class AircalUtils {
         return addType;
     };
 
-    public static getAndValidateModel(dateRangeStr: string): boolean {
+    public static getMonthStr(date: string, format: string, separator: string): number {
+        //escape the sep character
+        separator = `\\${separator}`;
+
+        //get the month and remove the seps. Find the index and substr to get the month number
+        let monthFormatter = format.replace(/[dy]/gi, "").replace(new RegExp(separator, "g"), "");
+        return parseInt(date.substr(format.indexOf(monthFormatter), monthFormatter.length));
+    }
+    
+    public static getDayStr(date: string, format: string, separator: string): number {
+        //escape the sep character
+        separator = `\\${separator}`;
+
+        //get the month and remove the seps. Find the index and substr to get the month number
+        let monthFormatter = format.replace(/[my]/gi, "").replace(new RegExp(separator, "g"), "");
+        return parseInt(date.substr(format.indexOf(monthFormatter), monthFormatter.length));
+    }
+
+    public static getAndValidateModel(dateRangeStr: string, dateFormat: string): boolean {
         //Make sure it is within valid and selectable range
         let isDateValid = false;
 
         try {
+            //Within a reasonable range?
+            if (dateRangeStr.length < 21 || dateRangeStr.length > 25) return isDateValid;
+
             let dates: Array<string> = dateRangeStr.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR);
 
+            //Have 2 separated dates?
             if (dates.length !== 2) {
                 isDateValid = false;
             };
 
             //we may have something to parse, continue
             dates.forEach((date: string) => {
-                let d = date.trim().split("/");
-                
+                date = date.trim();
+                const separator = dateFormat.replace(/[dmy]/gi, "")[0];
+                const d = date.trim().split(separator);
+
+                //what is the month value
+                const month: number = AircalUtils.getMonthStr(date, dateFormat, separator);
+                const day: number = AircalUtils.getDayStr(date, dateFormat, separator);
+
+                //3 parts to the date?
                 if(d.length !== 3) {
                     isDateValid = false;
-                };
+                };                
 
-                isDateValid = isValid(new Date(parseInt(d[2]), parseInt(d[1]), parseInt(d[0])));
+                isDateValid = isValid(new Date(parseInt(d[2]), month - 1, day));
             });
         } catch(e) {
             isDateValid = false;
@@ -219,22 +248,27 @@ export class AircalUtils {
         return `${begin} ${AIRCAL_CALENDAR_FORMAT_SEPARATOR} ${end}`;
     }
     
-    public static stringToStartAndEnd(startAndEnd: string): { start: Date, end: Date } {
+    public static stringToStartAndEnd(startAndEnd: string, dateFormat: string): { start: Date, end: Date } {
         try {
-            let d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
-                startDate = d[0].trim().split("/"),
-                endDate = d[1].trim().split("/");
+            const separator = dateFormat.replace(/[dmy]/gi, "")[0],
+                d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
+                startDate = d[0].trim().split(separator),
+                endDate = d[1].trim().split(separator),
+                startDateMonth = AircalUtils.getMonthStr(d[0].trim(), dateFormat, separator),
+                startDateDay = AircalUtils.getDayStr(d[0].trim(), dateFormat, separator),
+                endDateMonth = AircalUtils.getMonthStr(d[1].trim(), dateFormat, separator),
+                endDateDay = AircalUtils.getDayStr(d[1].trim(), dateFormat, separator);
 
             return {
                 start: new Date(
                     parseInt(startDate[2]),
-                    parseInt(startDate[1])-1,
-                    parseInt(startDate[0])
+                    startDateMonth-1,
+                    startDateDay
                 ),
                 end: new Date(
                     parseInt(endDate[2]),
-                    parseInt(endDate[1])-1,
-                    parseInt(endDate[0])
+                    endDateMonth-1,
+                    endDateDay
                 )
             };
         } catch(e) {

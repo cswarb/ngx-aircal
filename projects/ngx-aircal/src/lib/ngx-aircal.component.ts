@@ -650,7 +650,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         };
     }
 
-    public onUserDateRangeInput(value: string) {
+    public onUserInput(value: string): void {
         //When the form has a date manually entered, this fires...
         if (value.length === 0) {
             this._inputFieldChanged();
@@ -658,20 +658,18 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         } else {
             //Parse the string to a proper format, validate and assign if needed...
             //Return a model if valid, otherwise false
-            const isDateValid = AircalUtils.getAndValidateModel(
-                value
-            );
+            const isDateRangeValid = AircalUtils.getAndValidateModel(value, this.options.dateFormat);
             
-            if (!isDateValid) {
+            if (!isDateRangeValid) {
                 if (this.options.indicateInvalidDateRange) {
                     this.invalidDateRange = true;
                 };
                 this.onChangeCb(null);
                 return;
-            };
+            };            
 
             //Date is valid so is safe to parse
-            const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value);
+            const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value, this.options.dateFormat);
 
             if(!model) {
                 return;
