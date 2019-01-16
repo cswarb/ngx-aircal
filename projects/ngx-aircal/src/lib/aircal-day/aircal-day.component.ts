@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { format } from "date-fns";
-import { DateDisplayModel } from "../ngx-aircal.model";
+import { DateDisplayModel } from "../ngx-aircal-util.model";
 
 @Component({
     selector: "[data-aircal-day]",

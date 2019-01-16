@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { AircalSelectedTime } from "../ngx-aircal.model";
+import { AircalSelectedTime } from "../ngx-aircal-util.model";
 
 @Component({
     selector: "[data-aircal-daysselected]",

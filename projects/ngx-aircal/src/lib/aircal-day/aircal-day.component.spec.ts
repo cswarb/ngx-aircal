@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AircalDayComponent } from "./aircal-day.component";
-import { DateDisplayModel } from "../ngx-aircal.model";
+import { DateDisplayModel } from "../ngx-aircal-util.model";
 
 describe("AircalDayComponent", () => {
   let component: AircalDayComponent;

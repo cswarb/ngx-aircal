@@ -20,29 +20,7 @@ export class AppComponent {
       // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
-      singlePicker: true,
-      // defaultStart: new AircalDateModel({
-      //   year: "2018", month: "11"
-      // }),      
-      // minYear: 2017,
-      // maxYear: 2019,
-      // disableFromHereBackwards: new AircalDateModel({
-      //   year: "2018",
-      //   month: "10",
-      //   day: "14"
-      // }),
-      // disableFromHereBackwards: new Date(),
-      // disableFromHereForwards: new Date(2018, 11, 30)
-      // startDate: new AircalDateModel({
-      //   year: "2018",
-      //   month: "06",
-      //   day: "27"
-      // }),
-      // endDate: new AircalDateModel({
-      //   year: "2018",
-      //   month: "10",
-      //   day: "27"
-      // }),
+      // singlePicker: true
     });
 
     // this.dateRange = {

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Output, Input } from "@angular/core";
-import { AircalUtils } from "../ngx-aircal.model";
 import { Subject } from "rxjs";
+import { AircalUtils } from "../ngx-aircal-util.model";
 
 @Component({
     selector: "[data-aircal-month-quickset]",
