@@ -7,6 +7,8 @@
 
 This plugin is still in development
 
+![Aircal](aircal.png?raw=true "Aircal")
+
 ## Description
 ngx-aircal is a modern, configurable and lightweight Angular date range picker.
 

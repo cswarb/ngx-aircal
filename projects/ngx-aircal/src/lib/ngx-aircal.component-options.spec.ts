@@ -11,9 +11,9 @@ import { AircalSelectComponent } from "./aircal-select/aircal-select.component";
 import { CommonModule } from "@angular/common";
 import { NgxAircalModule } from "./ngx-aircal.module";
 import { Subject } from "rxjs";
-import { AircalOptions, AircalResponse } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, AircalDayLabels } from "./ngx-aircal.model";
 import { By } from "@angular/platform-browser";
-import { DateDisplayModel, AircalDayLabels } from "./ngx-aircal-util.model";
+import { DateDisplayModel } from "./ngx-aircal-util.model";
 
 describe("NgxAircalComponent", () => {
   let component: NgxAircalComponent;

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, Validators } from "@angular/forms";
-import { AircalOptions, AircalDayLabels } from "ngx-aircal";
+import { AircalOptions } from "ngx-aircal";
 
 @Component({
   selector: "app-root",
@@ -18,9 +18,10 @@ export class AppComponent {
     this.calendarOptions = new AircalOptions({
       // inlineMode: true,
       // backgroundVisible: false,
+      dateFormat: "DD/MM/YYYY",
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
-      // singlePicker: true
+      singlePicker: true
     });
 
     // this.dateRange = {

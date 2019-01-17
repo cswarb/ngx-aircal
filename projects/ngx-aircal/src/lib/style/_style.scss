@@ -163,10 +163,11 @@
     justify-content: space-between;
     padding: 0;
     &__quickset {
-      
+
     }
     &__clickable {
       margin: 0 0.5rem 0 0;
+      padding: 0.2rem;
       &:last-child {
         margin-right: 0;
       }
@@ -254,6 +255,11 @@
     }
     &__row {
       display: flex;
+      &--extended {
+        flex-flow: row wrap;
+        padding: 1rem 2rem;
+        justify-content: center;
+      }
       &__item {
         color: rgb(202, 204, 205);
         font-size: 0.8rem;
@@ -275,7 +281,7 @@
       flex: 1;
     }
     &--small {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
     }
     &--light {
       color: #717377;

@@ -649,24 +649,19 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         } else {
             //Parse the string to a proper format, validate and assign if needed...
             //Return a model if valid, otherwise false
-            const isDateRangeValid = AircalUtils.getAndValidateModel(value, this.options.dateFormat);
-            
-            if (!isDateRangeValid) {
+            const validatedDateRange = AircalUtils.getAndValidateModel(value, this.options.dateFormat);
+
+            if (!validatedDateRange) {
                 if (this.options.indicateInvalidDateRange) {
                     this.invalidDateRange = true;
                 };
                 this.onChangeCb(null);
                 return;
-            };            
-
-            //Date is valid so is safe to parse
-            const model: { start: Date, end: Date } = AircalUtils.stringToStartAndEnd(value, this.options.dateFormat);
-
-            if(!model) {
-                return;
             };
 
-            const {start, end} = model,
+            //We have a start and end in position, now test the viability
+            const start = validatedDateRange[0],
+                end = validatedDateRange[1],
                 datesViableGivenOpts = AircalUtils.isViableGivenOptions(
                     start,
                     end,
@@ -697,7 +692,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
          
             this._inputFieldChanged();
 
-            if (isValid(model.start) && isValid(model.end)) {
+            if (isValid(start) && isValid(end)) {
                 if(this.aircal.selectedStartDate.day && this.aircal.selectedEndDate.day) {
                     this.options.showApplyBtn ? this.needsApplying = true : this._dateRangeCommitted();
                 };

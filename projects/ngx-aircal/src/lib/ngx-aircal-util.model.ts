@@ -1,10 +1,26 @@
 import { addDays, addMonths, addYears, isSameMonth, isSameYear, isSameDay, isAfter, isBefore, isEqual, parse, isValid, getYear, format, setMonth, getMonth } from "date-fns";
+import { AircalDayLabels, arrowBias, calendarBias } from "./ngx-aircal.model";
 
 export const AIRCAL_CALENDAR_SPACES = 35;
 export const AIRCAL_DAYS_IN_WEEK = 7;
 export const VISIBLE_YEAR_CHUNKS_AT_A_TIME = 11;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
 export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = " - ";
+
+const monthLabels: Array<string> = [
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec"
+];
 
 export class AircalModel {
     public selectedStartDate: DateDisplayModel = new DateDisplayModel();
@@ -27,23 +43,6 @@ export class AircalSelectedTime {
         Object.assign(this, init);
     }
 }
-
-export class AircalDayLabels {
-    public mo: string = "Mo";
-    public tu: string = "Tu";
-    public we: string = "We";
-    public th: string = "Th";
-    public fr: string = "Fr";
-    public sa: string = "Sa";
-    public su: string = "Su";
-
-    constructor(init?: Partial<AircalDayLabels>) {
-        Object.assign(this, init);
-    }
-}
-
-export type arrowBias = "left" | "middle" | "right";
-export type calendarBias = "left" | "top" | "right" | "bottom";
 
 export class DateDisplayModel {
     public day: Date | null = null;
@@ -169,32 +168,47 @@ export class AircalUtils {
         return addType;
     };
 
-    public static extractDateValue(date: string, format: string, separator: string, regex: RegExp) {
+    public static extractDateValue(date: string, format: string, separator: string, regex: RegExp): number {
         //escape the sep character
         separator = `\\${separator}`;
 
+        
         //get the month and remove the seps. Find the index and substr to get the month number
-        let dateFormatter = format.replace(regex, "").replace(new RegExp(separator, "g"), "");
+        const dateFormatter = format.replace(regex, "").replace(new RegExp(separator, "g"), "");
+        const isLongMonth = dateFormatter.toLowerCase().indexOf("mmm") > -1;
+
+        if (isLongMonth) {
+            return AircalUtils.getMonthLabelValue(
+                date.substr(format.indexOf(dateFormatter), dateFormatter.length)
+            );
+        };
         return parseInt(date.substr(format.indexOf(dateFormatter), dateFormatter.length));
     }
 
-    public static getAndValidateModel(dateRangeStr: string, dateFormat: string): boolean {
+    public static getMonthLabelValue(monthLabel: string): number {
+        const res = monthLabels.findIndex((label: string) => {
+            label = label.toLowerCase();
+            return label === monthLabel.toLowerCase();
+        });
+        return res + 1;
+    }
+
+    public static getAndValidateModel(dateRangeStr: string, dateFormat: string): Array<Date> | null {
         //Make sure it is within valid and selectable range
-        let isDateValid = false;
 
         try {
             //Within a reasonable range?
-            // if (dateRangeStr.length < 21 || dateRangeStr.length > 25) return isDateValid;
+            // if (dateRangeStr.length < 21 || dateRangeStr.length > 25) return false;
 
             let dates: Array<string> = dateRangeStr.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR);
 
             //Have 2 separated dates?
             if (dates.length !== 2) {
-                return isDateValid = false;
+                return;
             };
 
             //we may have something to parse, continue
-            dates.forEach((date: string) => {
+            const dateCollection = dates.map((date: string) => {
                 date = date.trim();
                 const separator = dateFormat.replace(/[dmy]/gi, "")[0];
                 const d = date.trim().split(separator);
@@ -208,17 +222,19 @@ export class AircalUtils {
                 const day: number = AircalUtils.extractDateValue(date, dateFormat, separator, dayReg);
 
                 //3 parts to the date?
-                if (d.length !== 3 || (month < 0 || month > 11) || (day > 31)) {
-                    return isDateValid = false;
+                if (month === null || d.length !== 3 || (month < 0 || month > 11) || (day > 31)) {
+                    return;
                 };
 
-                isDateValid = isValid(new Date(year, month - 1, day));
+                return new Date(year, month - 1, day);
             });
+
+            return dateCollection.every(dt => !!dt) ? dateCollection : null;
         } catch (e) {
-            isDateValid = false;
+            return;
         };
 
-        return isDateValid;
+        return;
     }
 
     public static isViableGivenOptions(startDate: Date, endDate: Date, minYear: number, maxYear: number, disableFromHereBackwards: Date, disableFromHereForwards: Date): boolean {
@@ -259,39 +275,5 @@ export class AircalUtils {
 
     public static getSelectionText(begin: string, end: string): string {
         return `${begin} ${AIRCAL_CALENDAR_FORMAT_SEPARATOR} ${end}`;
-    }
-
-    public static stringToStartAndEnd(startAndEnd: string, dateFormat: string): { start: Date, end: Date } {
-        const dayReg = /[my]/gi;
-        const monthReg = /[dyo]/gi;
-        const yearReg = /[dmo]/gi;
-
-        try {
-            const separator = dateFormat.replace(/[dmy]/gi, "")[0],
-                d = startAndEnd.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR),
-                startDate = d[0].trim().split(separator),
-                endDate = d[1].trim().split(separator),
-                startDateMonth = AircalUtils.extractDateValue(d[0].trim(), dateFormat, separator, monthReg),
-                startDateDay = AircalUtils.extractDateValue(d[0].trim(), dateFormat, separator, dayReg),
-                startDateYear = AircalUtils.extractDateValue(d[0].trim(), dateFormat, separator, yearReg),
-                endDateMonth = AircalUtils.extractDateValue(d[1].trim(), dateFormat, separator, monthReg),
-                endDateDay = AircalUtils.extractDateValue(d[1].trim(), dateFormat, separator, dayReg),
-                endDateYear = AircalUtils.extractDateValue(d[1].trim(), dateFormat, separator, yearReg);
-
-            return {
-                start: new Date(
-                    startDateYear,
-                    startDateMonth - 1,
-                    startDateDay
-                ),
-                end: new Date(
-                    endDateYear,
-                    endDateMonth - 1,
-                    endDateDay
-                )
-            };
-        } catch (e) {
-            return null;
-        };
     }
 }

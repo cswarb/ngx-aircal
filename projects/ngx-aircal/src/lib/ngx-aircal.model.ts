@@ -1,5 +1,5 @@
-import { AircalDayLabels, arrowBias, calendarBias } from "./ngx-aircal-util.model";
-
+export type arrowBias = "left" | "middle" | "right";
+export type calendarBias = "left" | "top" | "right" | "bottom";
 export class AircalOptions {
     public defaultStart?: Date = new Date();
     public inlineMode: boolean = false;
@@ -41,6 +41,20 @@ export class AircalOptions {
     };
 
     constructor(init?: Partial<AircalOptions>) {
+        Object.assign(this, init);
+    }
+}
+
+export class AircalDayLabels {
+    public mo: string = "Mo";
+    public tu: string = "Tu";
+    public we: string = "We";
+    public th: string = "Th";
+    public fr: string = "Fr";
+    public sa: string = "Sa";
+    public su: string = "Su";
+
+    constructor(init?: Partial<AircalDayLabels>) {
         Object.assign(this, init);
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { AircalDayLabels } from "../ngx-aircal-util.model";
+import { AircalDayLabels } from "../ngx-aircal.model";
 
 @Component({
     selector: "[aircal-aircal-daysofweek]",
