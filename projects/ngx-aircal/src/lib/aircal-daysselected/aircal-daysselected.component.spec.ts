@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AircalDaysselectedComponent } from "./aircal-daysselected.component";
-import { AircalSelectedTime } from "../ngx-aircal.model";
+import { AircalSelectedTime } from "../ngx-aircal-util.model";
 
 describe("AircalDaysselectedComponent", () => {
   let component: AircalDaysselectedComponent;

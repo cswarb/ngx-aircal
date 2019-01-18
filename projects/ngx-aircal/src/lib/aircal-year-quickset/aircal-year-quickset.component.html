@@ -2,7 +2,7 @@
     <h5 class="aircal__text--reset">Select year</h5>
     <div class="aircal__meta">
         <button type="button" role="button" (click)="getPrevYearChunks()" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
-        <div class="aircal__meta aircal__meta__row">
+        <div class="aircal__meta aircal__meta__row aircal__meta__row--extended">
             <p class="aircal__text--small aircal__text--light aircal__clickable aircal__meta__clickable" *ngFor="let year of yearChoices">
                 <span (click)="selectYear(year)" [ngClass]="{'aircal__text--highlight': isCurrentYear(year)}">{{year}}</span>
             </p>

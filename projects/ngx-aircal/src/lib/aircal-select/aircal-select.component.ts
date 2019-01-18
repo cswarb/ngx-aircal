@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, OnDestroy } from "@angular/core";
-import { AircalOptions, AircalModel } from "../ngx-aircal.model";
+import { AircalOptions } from "../ngx-aircal.model";
 import { Subject } from "rxjs";
 
 @Component({
