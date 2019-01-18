@@ -20,7 +20,7 @@ export class AppComponent {
       // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
-      singlePicker: true
+      // singlePicker: true
     });
 
     // this.dateRange = {

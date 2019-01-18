@@ -20,7 +20,7 @@ export class AircalDayComponent implements OnInit {
 
     public getDate(date: DateDisplayModel | null): string {
         if (date && date.day) {
-            return isValid(date.day) ? format(date.day, "D", { awareOfUnicodeTokens: true }) : "";             
+            return isValid(date.day) ? format(date.day, "d", { awareOfUnicodeTokens: true }) : "";             
         };
         return "";
     }

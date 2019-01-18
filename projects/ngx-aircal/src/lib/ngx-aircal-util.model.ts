@@ -193,48 +193,9 @@ export class AircalUtils {
         return res + 1;
     }
 
-    public static getAndValidateModel(dateRangeStr: string, dateFormat: string): Array<Date> | null {
-        //Make sure it is within valid and selectable range
-
-        try {
-            //Within a reasonable range?
-            // if (dateRangeStr.length < 21 || dateRangeStr.length > 25) return false;
-
-            let dates: Array<string> = dateRangeStr.split(AIRCAL_CALENDAR_FORMAT_SEPARATOR);
-
-            //Have 2 separated dates?
-            if (dates.length !== 2) {
-                return;
-            };
-
-            //we may have something to parse, continue
-            const dateCollection = dates.map((date: string) => {
-                date = date.trim();
-                const separator = dateFormat.replace(/[dmy]/gi, "")[0];
-                const d = date.trim().split(separator);
-                const dayReg = /[my]/gi;
-                const monthReg = /[dyo]/gi;
-                const yearReg = /[dmo]/gi;
-
-                //what is the month value
-                const year: number = AircalUtils.extractDateValue(date, dateFormat, separator, yearReg);
-                const month: number = AircalUtils.extractDateValue(date, dateFormat, separator, monthReg);
-                const day: number = AircalUtils.extractDateValue(date, dateFormat, separator, dayReg);
-
-                //3 parts to the date?
-                if (month === null || d.length !== 3 || (month < 0 || month > 11) || (day > 31)) {
-                    return;
-                };
-
-                return new Date(year, month - 1, day);
-            });
-
-            return dateCollection.every(dt => !!dt) ? dateCollection : null;
-        } catch (e) {
-            return;
-        };
-
-        return;
+    public static formatDate(date: Date | DateDisplayModel, formatStr: string): string {
+        date instanceof DateDisplayModel ? date = date.day : date;
+        return format(date, formatStr, { awareOfUnicodeTokens: true });
     }
 
     public static isViableGivenOptions(startDate: Date, endDate: Date, minYear: number, maxYear: number, disableFromHereBackwards: Date, disableFromHereForwards: Date): boolean {

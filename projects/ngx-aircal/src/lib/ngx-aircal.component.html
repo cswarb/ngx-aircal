@@ -1,6 +1,6 @@
 <div class="aircal__container">
     <div class="aircal__meta__input__container" *ngIf="!options?.inlineMode">
-        <input type="text" class="aircal__meta__input" [placeholder]="this.getDynamicPlaceholderText()" [ngModel]="formSelectionText"
+        <input (keydown.enter)="$event.preventDefault();" type="text" class="aircal__meta__input" [placeholder]="this.getDynamicPlaceholderText()" [ngModel]="formSelectionText"
             (ngModelChange)="onUserInput($event)" [value]="formSelectionText" [disabled]="false" [readonly]="false"
             [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && invalidDateRange}"
             autocomplete="off" spellcheck="false" autocorrect="off" />
@@ -34,8 +34,10 @@
                     <tr class="aircal__meta">
                         <button type="button" [disabled]="options?.disablePreviousSelection || aircal?.disablePreviousSelection"
                             role="button" (click)="prevMonth()" [ngStyle]="{'background-image': options?.icons?.leftArrow && 'url(' + options?.icons?.leftArrow + ')'}" class="aircal__icon aircal__icon__button aircal__icon__prev"></button>
-                        <p class="aircal__text aircal__text__month"><span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(date, "MMMM")}}</span>
-                        <span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(date, "YYYY")}}</span></p>
+                        <p class="aircal__text aircal__text__month">
+                            <span class="aircal__text__month__item aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(date, "MMMM")}}</span>
+                            <span class="aircal__text__month__item aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(date, "YYYY")}}</span>
+                        </p>
                         <button *ngIf="options?.singlePicker" type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button"
                             (click)="nextMonth()" [ngStyle]="{'background-image': options?.icons?.rightArrow && 'url(' + options?.icons?.rightArrow + ')'}"
                             class="aircal__icon aircal__icon__button aircal__icon__next"></button>
@@ -61,8 +63,10 @@
             <table class="aircal__cal aircal__cal--double" *ngIf="!options?.singlePicker">
                 <thead>
                     <tr class="aircal__meta">
-                        <p class="aircal__text aircal__text__month"><span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(nextMonthDate, "MMMM")}}</span>
-                        <span class="aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(nextMonthDate, "YYYY")}}</span></p>
+                        <p class="aircal__text aircal__text__month">
+                            <span class="aircal__text__month__item aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetMonth}" (click)="toggleMonthSelection()">{{formatDate(nextMonthDate, "MMMM")}}</span>
+                            <span class="aircal__text__month__item aircal__meta__clickable" [ngClass]="{'aircal__clickable': options?.allowQuicksetYear}" (click)="toggleYearSelection()">{{formatDate(nextMonthDate, "YYYY")}}</span>
+                        </p>
                         <button type="button" [disabled]="options?.disableForwardSelection || aircal?.disableForwardSelection" role="button"
                             (click)="nextMonth()" [ngStyle]="{'background-image': options?.icons?.rightArrow && 'url(' + options?.icons?.rightArrow + ')'}" class="aircal__icon aircal__icon__button aircal__icon__next"></button>
                     </tr>
