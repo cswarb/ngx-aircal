@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AircalDayComponent } from "./aircal-day.component";
-import { DateDisplayModel } from "../ngx-aircal.model";
+import { DateDisplayModel } from "../ngx-aircal-util.model";
 
 describe("AircalDayComponent", () => {
   let component: AircalDayComponent;
@@ -25,7 +25,7 @@ describe("AircalDayComponent", () => {
   });
   
   it("should return a valid default date string for null", () => {
-    expect(component.getDate(new DateDisplayModel())).toEqual("1");
+    expect(component.getDate(new DateDisplayModel())).toEqual("");
   });
   
   it("should return a valid date day string given a valid date", () => {

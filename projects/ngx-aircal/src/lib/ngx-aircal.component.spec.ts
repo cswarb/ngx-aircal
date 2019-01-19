@@ -11,8 +11,9 @@ import { AircalSelectComponent } from "./aircal-select/aircal-select.component";
 import { CommonModule } from "@angular/common";
 import { NgxAircalModule } from "./ngx-aircal.module";
 import { Subject } from "rxjs";
-import { AIRCAL_CALENDAR_SPACES, AircalModel, AircalOptions, DateDisplayModel, VISIBLE_YEAR_CHUNKS_AT_A_TIME, AircalResponse } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse } from "./ngx-aircal.model";
 import { By } from "@angular/platform-browser";
+import { AIRCAL_CALENDAR_SPACES, AircalModel, DateDisplayModel, AircalHelpers, VISIBLE_YEAR_CHUNKS_AT_A_TIME } from "./ngx-aircal-util.model";
 
 describe("NgxAircalComponent", () => {
   let component: NgxAircalComponent;
@@ -114,7 +115,7 @@ describe("NgxAircalComponent", () => {
         new DateDisplayModel()
       );
     }
-    let chunked = component.chunk(d, 3);
+    let chunked = AircalHelpers.chunk(d, 3);
 
     expect(chunked.length).toEqual(12);
   });
@@ -208,17 +209,17 @@ describe("NgxAircalComponent", () => {
   
   it("should format the date", () => {
     let d = new Date(2019, 7, 10);
-    expect(component.formatDate(d)).toEqual("10/08/2019");
+    expect(component.formatDate(d, "dd/MM/yyyy")).toEqual("10/08/2019");
 
     let nd = new DateDisplayModel({
       day: new Date(2020, 6, 8)
     });
-    expect(component.formatDate(nd)).toEqual("08/07/2020");
+    expect(component.formatDate(nd, "dd/MM/yyyy")).toEqual("08/07/2020");
     
     let nd2 = new DateDisplayModel({
       day: new Date(2020, 6, 8)
     });
-    expect(component.formatDate(nd2, "DD-MM-YY")).toEqual("08-07-20");
+    expect(component.formatDate(nd2, "dd-MM-yy")).toEqual("08-07-20");
   });
   
   it("should detect if the current date is today", () => {
@@ -349,6 +350,49 @@ describe("NgxAircalComponent", () => {
     expect(component.isSelected(b)).toEqual(false);
   });
   
+  it("should allow the user to input a date", () => {
+    component.onUserInput("27/06/2018 - 28/06/2018");
+    const sd = new Date(2018, 5, 27);
+    const ed = new Date(2018, 5, 28);
+
+    expect(component.aircal.selectedStartDate.day).toEqual(sd);
+    expect(component.aircal.selectedEndDate.day).toEqual(ed);
+  });
+  
+  it("should not try to commit a date until both values are present and other scenarios", () => {
+    component.onUserInput("27/06/2018");
+    expect(component.aircal.selectedStartDate.day).toEqual(null);
+    expect(component.aircal.selectedEndDate.day).toEqual(null);
+
+    component.onUserInput("null");
+    expect(component.aircal.selectedStartDate.day).toEqual(null);
+    expect(component.aircal.selectedEndDate.day).toEqual(null);
+
+    component.onUserInput("");
+    expect(component.aircal.selectedStartDate.day).toEqual(null);
+    expect(component.aircal.selectedEndDate.day).toEqual(null);
+  });
+  
+  it("should honor the formatting while the user is inputting values", () => {
+    component.options.dateFormat = "MM.dd.yyyy";
+    component.onUserInput("06.15.2018 - 06.16.2018");
+    const sd = new Date(2018, 5, 15);
+    const ed = new Date(2018, 5, 16);
+    
+    expect(component.aircal.selectedStartDate.day).toEqual(sd);
+    expect(component.aircal.selectedEndDate.day).toEqual(ed); 
+  });
+  
+  it("should honor the formatting while the user is inputting values when incorrect input is given", () => {
+    component.options.dateFormat = "MM.dd.yyyy";
+    component.onUserInput("15.06.2018 - 16.06.2018");
+    const sd = new Date(2018, 5, 15);
+    const ed = new Date(2018, 5, 16);
+    
+    expect(component.aircal.selectedStartDate.day).toEqual(null);
+    expect(component.aircal.selectedEndDate.day).toEqual(null);
+  });
+  
   it("should detect date range committed event", () => {
     let d = new DateDisplayModel({
       day: new Date(2018, 11, 7)
@@ -401,8 +445,11 @@ describe("NgxAircalComponent", () => {
   });
   
   it("should detect calendar view changed event", () => {
-    component.onCalendarViewChanged.subscribe((res: any) => {
-      expect(res).toEqual(undefined);
+    component.onCalendarViewChanged.subscribe((res: AircalResponse) => {
+      expect(res.startDate).toEqual(null);
+      expect(res.endDate).toEqual(null);
+      expect(res.formattedEndDate).toEqual("");
+      expect(res.formattedStartDate).toEqual("");
     });
     component._calendarViewChanged(); 
   });
