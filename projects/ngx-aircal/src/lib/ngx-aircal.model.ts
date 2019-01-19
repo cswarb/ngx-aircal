@@ -2,9 +2,9 @@ export type arrowBias = "left" | "middle" | "right";
 export type calendarBias = "left" | "top" | "right" | "bottom";
 export class AircalOptions {
     public defaultStart?: Date = new Date();
-    public inlineMode: boolean = false;
-    public disable: boolean = false;
-    public singlePicker: boolean = false;
+    public inlineMode?: boolean = false;
+    public disable?: boolean = false;
+    public singlePicker?: boolean = false;
     public startDate?: Date = null;
     public endDate?: Date = null;
     public dayLabels: AircalDayLabels = new AircalDayLabels();
@@ -66,6 +66,18 @@ export class AircalResponse {
         public endDate: Date,
         public formattedStartDate: string,
         public formattedEndDate: string
+    ) {
+
+    }
+}
+
+export class AircalInputResponse {
+    constructor(
+        public startDate: Date,
+        public endDate: Date,
+        public formattedStartDate: string,
+        public formattedEndDate: string,
+        public isRangeValid: boolean
     ) {
 
     }

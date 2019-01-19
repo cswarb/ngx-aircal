@@ -344,6 +344,12 @@ $easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     &--small {
       font-size: 0.8rem;
     }
+    &--disabled {
+      opacity: 0.5;
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
     &--light {
       color: #717377;
     }
