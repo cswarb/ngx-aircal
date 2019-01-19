@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormControl, FormBuilder, Validators } from "@angular/forms";
-import { AircalOptions } from "ngx-aircal";
+import { AircalOptions, AircalResponse, AircalInputResponse } from "ngx-aircal";
 
 @Component({
   selector: "app-root",
@@ -20,6 +20,10 @@ export class AppComponent {
       // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
+      startDate: new Date(2019, 0, 18),
+      endDate: new Date(2019, 0, 19),
+      disableFromHereBackwards: new Date(2019, 0, 15),
+      disableFromHereForwards: new Date(2019, 0, 20)
       // singlePicker: true
     });
 
@@ -52,20 +56,33 @@ export class AppComponent {
   }
 
   public setDateRange(): void {
-    this.form.patchValue({
-      dateRange: {
-        startDate: new Date(
-          2018,
-          6,
-          27
-        ),
-        endDate: new Date(
-          2018,
-          10,
-          27
-        )
-      }
-    });
+    // this.form.patchValue({
+    //   dateRange: {
+    //     startDate: new Date(
+    //       2018,
+    //       6,
+    //       27
+    //     ),
+    //     endDate: new Date(
+    //       2018,
+    //       10,
+    //       27
+    //     )
+    //   }
+    // });
+
+    this.dateRange = {
+      startDate: new Date(
+        2019,
+        0,
+        17
+      ), 
+      endDate: new Date(
+        2019,
+        0,
+        17
+      )
+    };
   }
 
   public updateOptions() {
@@ -99,34 +116,36 @@ export class AppComponent {
 
   public clearDateRange(): void {
     // Clear the date range using the patchValue function
-    this.form.patchValue({ dateRange: "" });
+    // this.form.patchValue({ dateRange: "" });
+
+    this.dateRange = null;
   }
 
   public onSubmitReactiveForms() {
     console.log("form submit: ", this.form);
   }
 
-  public onDateRangeCommitted(event: any) {
+  public onDateRangeCommitted(event: AircalResponse) {
     console.log("date range committed: ", event);
   }
   
-  public onDateRangeInitialised(event: any) {
+  public onDateRangeInitialised(event: AircalResponse) {
     console.log("date range initialised: ", event);
   }
 
-  public onDateRangeChanged(event: any) {
+  public onDateRangeChanged(event: AircalResponse) {
     console.log("date range changed: ", event);
   }
 
-  public onInputFieldChanged(event: any) {
+  public onInputFieldChanged(event: AircalInputResponse) {
     console.log("input field changed: ", event);
   }
 
-  public onDateRangeCleared(event: any) {
+  public onDateRangeCleared(event: AircalResponse) {
     console.log("date range cleared: ", event);
   }
 
-  public onCalendarViewChanged(event: any) {
+  public onCalendarViewChanged(event: AircalResponse) {
     console.log("calendar view changed: ", event);
   }
 

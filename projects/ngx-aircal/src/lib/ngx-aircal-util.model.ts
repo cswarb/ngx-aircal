@@ -7,21 +7,6 @@ export const VISIBLE_YEAR_CHUNKS_AT_A_TIME = 11;
 export const AIRCAL_CALENDAR_SHORTCUT_SEPARATOR = ".";
 export const AIRCAL_CALENDAR_FORMAT_SEPARATOR = " - ";
 
-const monthLabels: Array<string> = [
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec"
-];
-
 export class AircalModel {
     public selectedStartDate: DateDisplayModel = new DateDisplayModel();
     public selectedEndDate: DateDisplayModel = new DateDisplayModel();
@@ -39,7 +24,7 @@ export class AircalSelectedTime {
     months?: number = 0;
     years?: number = 0;
 
-    constructor(init?: Partial<AircalOptions>) {
+    constructor(init?: Partial<AircalSelectedTime>) {
         Object.assign(this, init);
     }
 }
@@ -52,51 +37,6 @@ export class DateDisplayModel {
     public highlight: boolean = false;
 
     constructor(init?: Partial<DateDisplayModel>) {
-        Object.assign(this, init);
-    }
-}
-
-export class AircalOptions {
-    public defaultStart?: Date = new Date();
-    public inlineMode: boolean = false;
-    public disable: boolean = false;
-    public singlePicker: boolean = false;
-    public startDate?: Date = null;
-    public endDate?: Date = null;
-    public dayLabels: AircalDayLabels = new AircalDayLabels();
-    public selectionShortcuts?: any = { "7.days": "7 Days", "14.days": "14 Days", "1.months": "1 Month", "6.months": "6 Months", "1.years": "1 Year" };
-    public dateFormat?: string = "DD/MM/YYYY";
-    public previousMonthWrapAround?: boolean = true;
-    public nextMonthWrapAround?: boolean = true;
-    public daysSelectedCounterVisible?: boolean = true;
-    public selectionShortcutVisible?: boolean = false;
-    public backgroundVisible?: boolean = true;
-    public width?: string;
-    public height?: string;
-    public applyText?: string = "Apply";
-    public includeExamplePlaceholder?: boolean = true;
-    public clearText?: string = "Clear";
-    public highlightToday?: boolean = true;
-    public showClearBtn?: boolean = true;
-    public showApplyBtn?: boolean = true;
-    public minYear?: number = 1000;
-    public maxYear?: number = 9999;
-    public disablePreviousSelection?: boolean = false;
-    public disableForwardSelection?: boolean = false;
-    public disableFromHereBackwards?: Date = null;
-    public disableFromHereForwards?: Date = null;
-    public indicateInvalidDateRange?: boolean = true;
-    public hasArrow?: boolean = true;
-    public arrowBias?: arrowBias = "left";
-    public calendarPosition?: calendarBias = "bottom";
-    public allowQuicksetMonth?: boolean = false;
-    public allowQuicksetYear?: boolean = false;
-    public icons?: { leftArrow?: null | string, rightArrow?: null | string } = {
-        leftArrow: null,
-        rightArrow: null
-    };
-
-    constructor(init?: Partial<AircalOptions>) {
         Object.assign(this, init);
     }
 }
@@ -168,36 +108,15 @@ export class AircalUtils {
         return addType;
     };
 
-    public static extractDateValue(date: string, format: string, separator: string, regex: RegExp): number {
-        //escape the sep character
-        separator = `\\${separator}`;
-
-        
-        //get the month and remove the seps. Find the index and substr to get the month number
-        const dateFormatter = format.replace(regex, "").replace(new RegExp(separator, "g"), "");
-        const isLongMonth = dateFormatter.toLowerCase().indexOf("mmm") > -1;
-
-        if (isLongMonth) {
-            return AircalUtils.getMonthLabelValue(
-                date.substr(format.indexOf(dateFormatter), dateFormatter.length)
-            );
-        };
-        return parseInt(date.substr(format.indexOf(dateFormatter), dateFormatter.length));
-    }
-
-    public static getMonthLabelValue(monthLabel: string): number {
-        const res = monthLabels.findIndex((label: string) => {
-            label = label.toLowerCase();
-            return label === monthLabel.toLowerCase();
-        });
-        return res + 1;
-    }
-
     public static formatDate(date: Date | DateDisplayModel, formatStr: string): string {
         date instanceof DateDisplayModel ? date = date.day : date;
         if (!date || !isValid(date)) return "";
 
         return format(date, formatStr, { awareOfUnicodeTokens: true });
+    }
+
+    public static isCurrentYearViable(year: number, minYear: number, maxYear: number) {
+        return (year > minYear && year < maxYear);
     }
 
     public static isViableGivenOptions(startDate: Date, endDate: Date, minYear: number, maxYear: number, disableFromHereBackwards: Date, disableFromHereForwards: Date): boolean {

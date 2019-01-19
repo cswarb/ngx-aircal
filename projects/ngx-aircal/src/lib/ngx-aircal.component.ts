@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, Vie
 import { Subject } from "rxjs";
 import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isSameDay, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear, toDate } from "date-fns";
 
-import { AircalOptions, AircalResponse } from "./ngx-aircal.model";
+import { AircalOptions, AircalResponse, AircalInputResponse } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { DateDisplayModel, AIRCAL_CALENDAR_SPACES, AircalModel, AIRCAL_DAYS_IN_WEEK, VISIBLE_YEAR_CHUNKS_AT_A_TIME, AircalUtils, AircalHelpers } from "./ngx-aircal-util.model";
 
@@ -32,7 +32,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public allDaysArray: Array<DateDisplayModel> = [];
     public calendarSpaces: number = AIRCAL_CALENDAR_SPACES;
-    public invalidDateRange: boolean = false;
+    public dateRangeValid: boolean = true;
+    public dateRangeValidIndicator: boolean = true;
     public showCalendar: boolean = false;
     public needsApplying: boolean = false;
     public dynamicPlaceholderText: string = "";
@@ -42,6 +43,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
     public monthSelectionPanelOpen: boolean = false;
     public monthChoices: Array<number> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+    //Flags
+    public hasHadValuesBefore: boolean = false;
 
     //Form
     private onChangeCb: (_: any) => void = () => { };
@@ -226,12 +230,19 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return this.options.hasArrow && this.options.arrowBias;
     }
 
-    public prevYearChunks(load?: boolean) {
+    public prevYearChunks(load?: boolean): void {
         this.yearChoices = AircalHelpers.loadYearChunk(this.yearChoices.pop() - 20);
     }
    
-    public nextYearChunks(load?: boolean) {
+    public nextYearChunks(load?: boolean): void {
         this.yearChoices = AircalHelpers.loadYearChunk(this.yearChoices.pop());
+    }
+
+    public setDateRangeValidity(validity: boolean): void {
+        this.dateRangeValid = validity;
+        if (this.options.indicateInvalidDateRange) {
+            this.dateRangeValidIndicator = validity;
+        };
     }
     
     public toggleYearSelection() {
@@ -548,11 +559,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     public _inputFieldChanged(): AircalResponse {
-        const model = new AircalResponse(
+        const model = new AircalInputResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
             this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
-            this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
+            this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat),
+            this.dateRangeValid
         );
 
         this.onInputFieldChanged.next(
@@ -599,7 +611,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.aircal.selectedEndDate = freshModel.selectedEndDate;
         this.aircal.numberOfDaysSelected.days = freshModel.numberOfDaysSelected.days;
         this.formSelectionText = "";
-        this.invalidDateRange = false;
+        this.setDateRangeValidity(true);
+        
 
         this.onChangeCb(null);
 
@@ -613,11 +626,21 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         //Called after onInit
         //The initial form value passed from the parent must be written in here...
         if (value && value.startDate && value.endDate) {
+            this.hasHadValuesBefore = true;
             let start: Date = value.startDate,
                 end: Date = value.endDate;
 
-            if (isValid(start) && isValid(end)) {
-                this.invalidDateRange = false;
+            const datesViableGivenOpts = AircalUtils.isViableGivenOptions(
+                start,
+                end,
+                this.options.minYear,
+                this.options.maxYear,
+                this.options.disableFromHereBackwards,
+                this.options.disableFromHereForwards
+            );
+
+            if (datesViableGivenOpts && isValid(start) && isValid(end)) {
+                this.setDateRangeValidity(true);
                 this.aircal.selectedStartDate.day = value.startDate;
                 this.aircal.selectedEndDate.day = value.endDate;
 
@@ -632,12 +655,16 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 this._dateRangeInitialised();
                 this._dateRangeCommitted();
             } else {
-                this.invalidDateRange = true;
+                this.setDateRangeValidity(false);
+                this._inputFieldChanged();
+                this._dateRangeCleared();
+                this.onChangeCb(null);
                 return;
             };
         } else if (value === null || value === "") {
             //Ensure range is clear if we had at least a day selected
-            if(this.aircal.selectedStartDate.day) {
+            //Check flag because of framework issue: github.com/angular/angular/issues/14988
+            if(this.hasHadValuesBefore && (this.aircal.selectedStartDate.day || this.aircal.selectedEndDate.day)) {
                 this._dateRangeCleared();
             };
         };
@@ -655,7 +682,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
                 
             if (!dates || dates.length !== 2 || !dates.every(date => isValid(date))) {
                 if (this.options.indicateInvalidDateRange) {
-                    this.invalidDateRange = true;
+                    this.setDateRangeValidity(false);
                 };
                 this.onChangeCb(null);
                 return;
@@ -673,14 +700,15 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
             if (!datesViableGivenOpts) {
                 //Indicate the invalid range if invalid
-                if (this.options.indicateInvalidDateRange) {
-                    this.invalidDateRange = true;
-                };
+                this.setDateRangeValidity(false);
+
+                this._inputFieldChanged();
+
                 this.onChangeCb(null);
                 return;
             };
 
-            this.invalidDateRange = false;
+            this.setDateRangeValidity(true);
 
             //parse to model and validate input
             this.aircal.selectedStartDate = new DateDisplayModel({
