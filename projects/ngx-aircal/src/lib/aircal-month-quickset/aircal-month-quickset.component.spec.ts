@@ -37,7 +37,10 @@ describe("AircalMonthQuicksetComponent", () => {
     component.selectMonth(0);
   });
   
-  
+  it("should detect if the month is equal to the current month", () => {
+    let month = new Date().getMonth();
+    expect(component.isCurrentMonth(month)).toEqual(true);
+  });
   
   it("should detect if the month is not equal to the current month", () => {
     let month = new Date().setMonth(new Date().getMonth() + 1);
