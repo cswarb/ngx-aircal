@@ -10,6 +10,9 @@ import { AircalUtils } from "../ngx-aircal-util.model";
 export class AircalYearQuicksetComponent implements OnInit, OnDestroy {
     @Input() yearChoices: Array<number> = [];
     @Input() date: Date = new Date();
+    @Input() minYear: number = null;
+    @Input() maxYear: number = null;
+
     @Output() yearSelected: Subject<number> = new Subject();
     @Output() nextYearChunks: Subject<boolean> = new Subject();
     @Output() prevYearChunks: Subject<boolean> = new Subject();
@@ -39,9 +42,15 @@ export class AircalYearQuicksetComponent implements OnInit, OnDestroy {
     public isCurrentYear(year: number) {
         return AircalUtils.isCurrentYear(this.date, year);
     }
+    
+    public isCurrentYearViable(year: number) {
+        return AircalUtils.isCurrentYearViable(year, this.minYear, this.maxYear);
+    }
 
     public selectYear(year: number) {
-        this.yearSelected.next(year);
+        if(this.isCurrentYearViable(year)) {
+            this.yearSelected.next(year);
+        };
     }
 
 }

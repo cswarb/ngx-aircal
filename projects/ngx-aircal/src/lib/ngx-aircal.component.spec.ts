@@ -59,7 +59,8 @@ describe("NgxAircalComponent", () => {
     expect(component.nextMonthDaysArray).toEqual([]);
     expect(component.allDaysArray).toEqual(cur.spread.concat(nxt.spread));
     expect(component.calendarSpaces).toEqual(AIRCAL_CALENDAR_SPACES);
-    expect(component.invalidDateRange).toEqual(false);
+    expect(component.dateRangeValid).toEqual(true);
+    expect(component.dateRangeValidIndicator).toEqual(true);
     expect(component.showCalendar).toEqual(false);
     expect(component.needsApplying).toEqual(false);
     expect(component.yearSelectionPanelOpen).toEqual(false);

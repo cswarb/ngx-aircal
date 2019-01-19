@@ -29,9 +29,10 @@
   "scripts": {
     "build-ci": "npm run build-lib",
     "test-ci": "ng test ngx-aircal --watch=false --browsers=ChromeHeadless",
-    "build-lib": "ng build ngx-aircal && npm run build-mylib-styles",
+    "build-lib": "ng build ngx-aircal && npm run build-mylib-styles && npm run cp-mylib-images",
     "build-mylib-styles": "cpx \"./src/lib/style/**/*\" \"../../dist/ngx-aircal/style\" ",
     "cp-mylib-assets": "cpx \"./src/assets/**/*\" \"../../dist/ngx-aircal/assets\"",
+    "cp-mylib-images": "cpx \"./aircal.png\" \"../../dist/ngx-aircal/\"",
     "publish": "cd ../../dist/ngx-aircal && npm version && npm publish"
   },
   "repository": {

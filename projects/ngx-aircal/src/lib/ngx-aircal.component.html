@@ -2,7 +2,7 @@
     <div class="aircal__meta__input__container" *ngIf="!options?.inlineMode">
         <input (keydown.enter)="$event.preventDefault();" type="text" class="aircal__meta__input" [placeholder]="dynamicPlaceholderText" [ngModel]="formSelectionText"
             (ngModelChange)="onUserInput($event)" [value]="formSelectionText" [disabled]="false" [readonly]="false"
-            [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && invalidDateRange}"
+            [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && !dateRangeValid}"
             autocomplete="off" spellcheck="false" autocorrect="off" />
         <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--opening" [ngClass]="{'aircal__meta__input__icon--opening': !showCalendar, 'aircal__meta__input__icon--closing': showCalendar, 'aircal__meta__input__icon--disabled': options?.disable}" (click)="openCalendar()"></button>
         <button *ngIf="!options?.disable" type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()"></button>
@@ -12,7 +12,7 @@
         <div *ngIf="(options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)) || (options?.allowQuicksetMonth && (monthSelectionPanelOpen && !yearSelectionPanelOpen))" class="aircal__meta aircal__meta__rows aircal__meta__quickset">
             <div data-aircal-year-quickset class="aircal__meta__rows aircal__meta__choices" *ngIf="options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)"
                 (yearSelected)="selectYear($event)" (nextYearChunks)="nextYearChunks($event)" (prevYearChunks)="prevYearChunks($event)"
-                [date]="date" [yearChoices]="yearChoices"></div>
+                [date]="date" [minYear]="options?.minYear" [maxYear]="options?.maxYear" [yearChoices]="yearChoices"></div>
         
             <div data-aircal-month-quickset class="aircal__meta__rows aircal__meta__choices" *ngIf="options?.allowQuicksetMonth && (monthSelectionPanelOpen && !yearSelectionPanelOpen)"
                 (monthSelected)="selectMonth($event)" [date]="date" [monthChoices]="monthChoices"></div>
@@ -95,7 +95,7 @@
                     (click)="_dateRangeCleared()">{{options?.clearText}}</button>
             </div>
             <div>
-                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying" class="aircal__button aircal__button--apply"
+                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying || !dateRangeValid" class="aircal__button aircal__button--apply"
                     (click)="_dateRangeCommitted()">{{options?.applyText}}</button>
             </div>
         </div>
