@@ -405,19 +405,6 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         };
     }    
 
-    public changeMonth(): void {
-        this.date = addMonths(parse(this.date), 1);
-        this.nextMonthDate = addMonths(parse(this.date), 1);
-        this.createCalendars();
-    }
-    
-    public changeYear(): void {
-        this.date = addYears(parse(this.date), 1);
-        this.nextMonthDate = addMonths(parse(addYears(parse(this.date), 0)), 1);
-        this.createCalendars();
-    }
-    
-
     public selectionShortcutChanged(shortcut: string): string {
         if (!this.aircal.selectedStartDate.day) return;
 
