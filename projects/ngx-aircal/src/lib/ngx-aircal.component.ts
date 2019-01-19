@@ -35,6 +35,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     public invalidDateRange: boolean = false;
     public showCalendar: boolean = false;
     public needsApplying: boolean = false;
+    public dynamicPlaceholderText: string = "";
 
     public yearSelectionPanelOpen: boolean = false;
     public yearChoices: Array<number> = [];
@@ -81,7 +82,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     }
 
     ngOnInit() {
-        this.intialiseCalendar();        
+        this.intialiseCalendar();      
     }
 
     ngOnChanges(value: SimpleChanges) {
@@ -121,6 +122,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
         if (!this.canSelectNextMonth()) {
             this.aircal.disableForwardSelection = true;
+        };
+        
+        if (!this.options.inlineMode) {
+            this.dynamicPlaceholderText = this.getDynamicPlaceholderText();
         };
 
         this.createCalendars();
@@ -486,8 +491,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
+            this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
         );
 
         this.onDateRangeCommitted.next(
@@ -511,8 +516,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
+            this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
         );
 
         this.onDateRangeInitialised.next(
@@ -531,8 +536,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
+            this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
+            this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
         );
 
         this.onDateRangeChanged.next(
@@ -546,8 +551,8 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         const model = new AircalResponse(
             this.aircal.selectedStartDate.day,
             this.aircal.selectedEndDate.day,
-            format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
-            format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true })
+            this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
+            this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
         );
 
         this.onInputFieldChanged.next(
@@ -577,16 +582,16 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
             model = new AircalResponse(
                 this.aircal.selectedStartDate.day,
                 this.aircal.selectedEndDate.day,
-                format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
-                format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true })
+                this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
+                this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
             );
 
         this.onDateRangeCleared.next(
             new AircalResponse(
                 this.aircal.selectedStartDate.day,
                 this.aircal.selectedEndDate.day,
-                format(this.aircal.selectedStartDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true }),
-                format(this.aircal.selectedEndDate.day, this.options.dateFormat, { awareOfUnicodeTokens: true })
+                this.formatDate(this.aircal.selectedStartDate.day, this.options.dateFormat),
+                this.formatDate(this.aircal.selectedEndDate.day, this.options.dateFormat)
             )
         );
 

@@ -1,6 +1,6 @@
 <div class="aircal__container">
     <div class="aircal__meta__input__container" *ngIf="!options?.inlineMode">
-        <input (keydown.enter)="$event.preventDefault();" type="text" class="aircal__meta__input" [placeholder]="this.getDynamicPlaceholderText()" [ngModel]="formSelectionText"
+        <input (keydown.enter)="$event.preventDefault();" type="text" class="aircal__meta__input" [placeholder]="dynamicPlaceholderText" [ngModel]="formSelectionText"
             (ngModelChange)="onUserInput($event)" [value]="formSelectionText" [disabled]="false" [readonly]="false"
             [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && invalidDateRange}"
             autocomplete="off" spellcheck="false" autocorrect="off" />

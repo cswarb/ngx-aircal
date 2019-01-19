@@ -374,7 +374,7 @@ describe("NgxAircalComponent", () => {
   });
   
   it("should honor the formatting while the user is inputting values", () => {
-    component.options.dateFormat = "MM.DD.YYYY";
+    component.options.dateFormat = "MM.dd.yyyy";
     component.onUserInput("06.15.2018 - 06.16.2018");
     const sd = new Date(2018, 5, 15);
     const ed = new Date(2018, 5, 16);
@@ -384,7 +384,7 @@ describe("NgxAircalComponent", () => {
   });
   
   it("should honor the formatting while the user is inputting values when incorrect input is given", () => {
-    component.options.dateFormat = "MM.DD.YYYY";
+    component.options.dateFormat = "MM.dd.yyyy";
     component.onUserInput("15.06.2018 - 16.06.2018");
     const sd = new Date(2018, 5, 15);
     const ed = new Date(2018, 5, 16);
@@ -448,8 +448,8 @@ describe("NgxAircalComponent", () => {
     component.onCalendarViewChanged.subscribe((res: AircalResponse) => {
       expect(res.startDate).toEqual(null);
       expect(res.endDate).toEqual(null);
-      expect(res.formattedEndDate).toEqual(null);
-      expect(res.formattedStartDate).toEqual(null);
+      expect(res.formattedEndDate).toEqual("");
+      expect(res.formattedStartDate).toEqual("");
     });
     component._calendarViewChanged(); 
   });

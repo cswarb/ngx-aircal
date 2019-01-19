@@ -195,6 +195,8 @@ export class AircalUtils {
 
     public static formatDate(date: Date | DateDisplayModel, formatStr: string): string {
         date instanceof DateDisplayModel ? date = date.day : date;
+        if (!date || !isValid(date)) return "";
+
         return format(date, formatStr, { awareOfUnicodeTokens: true });
     }
 
