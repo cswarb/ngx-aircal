@@ -5,12 +5,15 @@
 ![weight](https://img.shields.io/bundlephobia/minzip/ngx-aircal.svg?colorB=00a699)
 ![dependencies](https://img.shields.io/david/cswarb/ngx-aircal.svg?colorB=00a699)
 
-This plugin is still in development
-
 ![Aircal](aircal.png?raw=true "Aircal")
 
 ## Description
 ngx-aircal is a modern, configurable and lightweight Angular date range picker.
+
+## Notes
+
+- The plugin uses an alpha version of date-fns to parse dates. This will be updated as soon as the stable version is released.
+- When setting the dateFormat option, be aware that you must use [Unicode tokens](https://date-fns.org/v2.0.0-alpha.27/docs/Unicode-Tokens)
 
 ## How do I install the library?
 
@@ -78,7 +81,7 @@ export class AppComponent {
 | endDate | null | Date | Set an end date. If no start date is set, it will fall back to become the start date. |
 | dayLabels | new AircalDayLabels() | AircalDayLabels | Set the label values for each day of the week |
 | selectionShortcuts | { "7.days": "7 Days", "14.days": "14 Days", "1.months": "1 Month", "6.months": "6 Months", "1.years": "1 Year" } | Object | Options and values to pass to the quick selection component when _selectionShortcutVisible_ is true. Key is the value parsed by the plugin, and the value is what is shown in the input dropdown. Separate the key length and duration values by a '.'. It can parse different durations. e.g. "7.weeks": "7 Weeks" |
-| dateFormat | "dd/MM/yyyy" | String | Format the date displayed in the input, and given in the callback response. Format is Unicode Technical Standard #35. Uses date-fns library to format the dates. |
+| dateFormat | "dd/MM/yyyy" | String | Format the date displayed in the input, and given in the callback response. Format is Unicode Technical Standard #35. Uses date-fns library to format the dates. When setting the dateFormat option, be aware that you must use [Unicode tokens](https://date-fns.org/v2.0.0-alpha.27/docs/Unicode-Tokens) |
 | previousMonthWrapAround | true | Boolean | Should dates be shown in the previous month spaces |
 | nextMonthWrapAround | true | Boolean | Should dates be shown in the next month spaces |
 | daysSelectedCounterVisible | true | Boolean | Should the calendar display the number of days selected |
