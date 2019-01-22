@@ -1,6 +1,6 @@
 {
   "name": "ngx-aircal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "peerDependencies": {
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0"
@@ -10,11 +10,14 @@
   },
   "keywords": [
     "angular",
-    "angular2",
-    "angular4",
-    "angular5",
+    "angular 2",
+    "angular 4",
+    "angular 5",
+    "angular 6",
+    "angular 7",
     "calendar",
     "calendar plugin",
+    "calendar range plugin",
     "date range",
     "date range plugin",
     "angular date range",

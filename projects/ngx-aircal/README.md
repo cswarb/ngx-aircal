@@ -5,7 +5,7 @@
 ![weight](https://img.shields.io/bundlephobia/minzip/ngx-aircal.svg?colorB=00a699)
 ![dependencies](https://img.shields.io/david/cswarb/ngx-aircal.svg?colorB=00a699)
 
-![Aircal](aircal.png?raw=true "Aircal")
+![Aircal](/projects/ngx-aircal/aircal.png?raw=true "Aircal")
 
 ## Description
 ngx-aircal is a modern, configurable and lightweight Angular date range picker.
@@ -225,7 +225,7 @@ All callbacks will return __AircalResponse__ or __AircalInputResponse__ type. __
 
 | Callback name | Response type | Description |
 | ------------- | ------------- | ----- |
-| onDateRangeCommitted | AircalResponse | When the range is committed by the user. Normally by the apply button, but in case _showApplyBtn_ is false, it will respond automatically when the end date is selected |
+| onDateRangeCommitted | AircalResponse | When the range is committed by the user. Normally by the apply button, but in case __showApplyBtn__ is false, it will respond automatically when the end date is selected |
 | onDateRangeChanged | AircalResponse | When the start or end date is changed by the user. |
 | onCalendarViewChanged | AircalResponse | When the view is changed left or right using the arrows |
 | onInputFieldChanged  | AircalInputResponse | When the user modifies the input field. |
