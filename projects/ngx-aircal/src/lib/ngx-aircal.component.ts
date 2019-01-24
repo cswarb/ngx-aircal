@@ -410,7 +410,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this._dateRangeChanged();
 
         if(this.aircal.selectedStartDate && this.aircal.selectedEndDate) {
-            if(forceCommit || !this.options.showApplyBtn) {
+            if (forceCommit || !this.options.showApplyBtn || this.options.autoApplyAndClose) {
                 this._dateRangeCommitted();
             };
         };
@@ -512,6 +512,10 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
 
         //Update form to committed values
         this.updateFormSelectionText();
+
+        if (this.options.autoApplyAndClose) {
+            this.showCalendar = false;
+        };
 
         //Update form model
         this.onChangeCb(

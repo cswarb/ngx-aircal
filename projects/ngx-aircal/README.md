@@ -3,7 +3,7 @@
 ![version](https://img.shields.io/npm/v/ngx-aircal.svg?colorB=00a699)
 ![license](https://img.shields.io/github/license/cswarb/ngx-aircal.svg?colorB=00a699)
 ![weight](https://img.shields.io/bundlephobia/minzip/ngx-aircal.svg?colorB=00a699)
-![dependencies](https://img.shields.io/david/cswarb/ngx-aircal.svg?colorB=00a699)
+![build](https://img.shields.io/travis/cswarb/ngx-aircal.svg?colorB=00a699)
 
 ![Aircal](/projects/ngx-aircal/aircal.png?raw=true "Aircal")
 
@@ -90,6 +90,7 @@ export class AppComponent {
 | width | "" | String | Overwrite the width set in the css |
 | height | "" | String | Overwrite the width set in the css |
 | applyText | "Apply" | String | Change the text to commit the date range |
+| autoApplyAndClose | false | Boolean | When an end date is selected (or a start date if a start and end already exist), automatically apply the date selection and close the calendar |
 | includeExamplePlaceholder | true | Boolean | Show an placeholder example for the input field. Dynamically generates example dates based on _dateFormat_ option |
 | clearText | "Clear" | String | Change the text to clear the date range |
 | highlightToday | true | Boolean | Highlight the cell colour for today |
