@@ -9,7 +9,7 @@
     </div>
 
     <div *ngIf="!options?.allowUserInputField" class="">
-        <button type="button" (click)="openCalendar()" class="aircal__text-brand aircal__button aircal__button--cancel">{{!!formSelectionText.length ? formSelectionText : options?.selectText}}</button>
+        <button type="button" (click)="openCalendar()" class="aircal__text-brand aircal__button aircal__button--open">{{!!formSelectionText.length ? formSelectionText : options?.selectText}}</button>
     </div>
     
     <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="(showCalendar && !options?.disable) || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
