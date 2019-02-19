@@ -91,6 +91,7 @@ $easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   & * {
     box-sizing: border-box;
   }
+
   &__orient {
     &--bottom {
       top: 125%;
@@ -196,9 +197,13 @@ $easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-size: 0.8rem;
   }
   &__clickable {
+      border-bottom: 1px dotted transparent;
       &:hover {
         cursor: pointer;
-        text-decoration: underline;
+        // text-decoration: underline;
+        // text-decoration-style: dotted;
+        text-decoration: none;
+        border-bottom: 1px dotted #484848;
       }
       &:focus, &:active {
 
@@ -321,8 +326,54 @@ $easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
       margin: 0;
     }
   }
+
+  &__button {
+    outline: none;
+    border: 0;
+    margin: 1rem 0;
+    background: transparent;
+    color: rgb(72, 72, 72);
+    font-size: 0.85rem;
+    justify-content: space-between;
+    align-content: space-between;
+    border-bottom: 1px dotted transparent;
+    padding: 0;
+    &:hover:not(:disabled) {
+      cursor: pointer;
+      // text-decoration: underline;
+      // text-decoration-style: dotted;
+      text-decoration: none;
+      border-bottom: 1px dotted;
+    }
+    &:disabled {
+      opacity: 0.2;
+      &:hover {
+        cursor: auto;
+      }
+    }
+    &--apply {
+      color: $cal-selected;
+      margin-bottom: 0;
+      &:hover {
+        border-color: $cal-selected;
+      }
+    }
+    &--cancel {
+      // color: red;
+      margin-bottom: 0;
+      &:hover {
+        border-color: inherit;
+      }
+    }
+  }
+
   &__text {
     color: rgb(72, 72, 72);
+
+    &-brand {
+      color: $cal-selected;
+    }
+
     &__month {
       font-weight: 700;
       margin: 0;
@@ -398,34 +449,7 @@ $easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
     }
   }
-  &__button {
-    outline: none;
-    border: 0;
-    margin: 1rem 0;
-    background: transparent;
-    color: rgb(72, 72, 72);
-    font-size: 0.85rem;
-    justify-content: space-between;
-    align-content: space-between;
-    &:hover:not(:disabled) {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    &:disabled {
-      opacity: 0.2;
-      &:hover {
-        cursor: auto;
-      }
-    }
-    &--apply {
-      color: $cal-selected;
-      margin-bottom: 0;
-    }
-    &--cancel {
-      // color: red;
-      margin-bottom: 0;
-    }
-  }
+  
   &__actions {
     display: flex;
     margin: 1rem 0 0 0;
@@ -492,6 +516,7 @@ $easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
     }
   }
+
   &__daysofweek {
     align-items: center;
     color: rgb(72, 72, 72);

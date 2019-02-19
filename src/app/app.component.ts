@@ -18,14 +18,13 @@ export class AppComponent {
     this.calendarOptions = new AircalOptions({
       // inlineMode: true,
       // backgroundVisible: false,
-      showApplyBtn: false,
-      autoApplyAndClose: true,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
       startDate: new Date(2019, 0, 18),
       endDate: new Date(2019, 0, 19),
       disableFromHereBackwards: new Date(2019, 0, 15),
-      disableFromHereForwards: new Date(2019, 0, 20)
+      disableFromHereForwards: new Date(2019, 0, 20),
+      allowUserInputField: false
       // singlePicker: true
     });
 

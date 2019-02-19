@@ -17,6 +17,7 @@ export class AircalOptions {
     public backgroundVisible?: boolean = true;
     public width?: string;
     public height?: string;
+    public selectText?: string = "Select a date range";
     public applyText?: string = "Apply";
     public includeExamplePlaceholder?: boolean = true;
     public clearText?: string = "Clear";
@@ -36,6 +37,7 @@ export class AircalOptions {
     public allowQuicksetMonth?: boolean = false;
     public allowQuicksetYear?: boolean = false;
     public autoApplyAndClose?: boolean = false;
+    public allowUserInputField?: boolean = true;
     public icons?: { leftArrow?: null | string, rightArrow?: null | string } = {
         leftArrow: null,
         rightArrow: null
