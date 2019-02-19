@@ -95,11 +95,11 @@
     
         <div class="aircal__actions aircal__meta__rows--last">
             <div>
-                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day)"
+                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="(!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day)) && !(options?.allowInfiniteEndDate && this.aircal.selectedStartDate?.day && !this.aircal.selectedEndDate?.day)"
                     (click)="_dateRangeCleared()">{{options?.clearText}}</button>
             </div>
             <div>
-                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying || !dateRangeValid" class="aircal__button aircal__button--apply"
+                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="(!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying || !dateRangeValid) && !(options?.allowInfiniteEndDate && this.aircal.selectedStartDate?.day && !this.aircal.selectedEndDate?.day)" class="aircal__button aircal__button--apply"
                     (click)="_dateRangeCommitted()">{{options?.applyText}}</button>
             </div>
         </div>

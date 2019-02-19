@@ -71,6 +71,20 @@ export class AppComponent {
 }
 ```
 
+You can update options by passing an object into the constructor:
+
+```ts
+export class AppComponent {
+    ...
+    public calendarOptions: AircalOptions = new AircalOptions({
+      inlineMode: true,
+      daysSelectedCounterVisible: false
+    });
+    ...
+}
+```
+
+
 | Option name | Default value | Type | Description |
 | ------------- | ------------- | ----- | --- |
 | defaultStart | new Date() | Date | Set the default start view when the calendar is opened |

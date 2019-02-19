@@ -20,11 +20,13 @@ export class AppComponent {
       // backgroundVisible: false,
       allowQuicksetMonth: true,
       allowQuicksetYear: true,
-      startDate: new Date(2019, 0, 18),
-      endDate: new Date(2019, 0, 19),
-      disableFromHereBackwards: new Date(2019, 0, 15),
-      disableFromHereForwards: new Date(2019, 0, 20),
-      allowUserInputField: false
+      // startDate: new Date(2019, 0, 18),
+      // endDate: new Date(2019, 0, 19),
+      // disableFromHereBackwards: new Date(2019, 0, 15),
+      // disableFromHereForwards: new Date(2019, 0, 20),
+      allowInfiniteEndDate: false,
+      allowUserInputField: false,
+      singlePicker: true
       // singlePicker: true
     });
 
