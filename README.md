@@ -122,6 +122,9 @@ export class AppComponent {
 | calendarPosition | calendarBias | "bottom" | Where does the calendar display in relation to the input |
 | allowQuicksetMonth | false | Boolean | Allow the quick selection on months by clicking the month |
 | allowQuicksetYear | false | Boolean | Allow the quick selection of years by clicking the year |
+| allowUserInputField | true | Boolean | Should the default view be an input field, or just a button that contains text |
+| allowInfiniteEndDate | false | Boolean | Allow no end date to be set |
+| closeOnOutsideClick | false | Boolean | Allow the calendar to be closed by clicking outside the component |
 | icons | {leftArrow: null, rightArrow: null } | { leftArrow?: null \| string, rightArrow?: null \| string } | Option to provide a base64 image to replace the existing arrows on the main calendar |
 
 ## Models
