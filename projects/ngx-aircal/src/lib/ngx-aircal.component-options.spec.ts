@@ -181,6 +181,45 @@ describe("NgxAircalComponent", () => {
     });
   });
   
+  it("should honor closeOnOutsideClick", () => {
+    const d = component.options.closeOnOutsideClick = true;
+    component.ngOnInit();
+
+    expect(component.options.closeOnOutsideClick).toEqual(true);
+    
+    // fixture.detectChanges();
+    // fixture.whenStable().then(() => {
+    //   fixture.debugElement.query(By.css(".aircal__meta__input__icon")).nativeElement.click();
+    //   expect(fixture.debugElement.query(By.css(".aircal")).nativeElement.classList.length).toEqual(true);
+    // });
+  });
+  
+  it("should honor allowUserInputField", () => {
+    const d = component.options.allowUserInputField = false;
+    component.ngOnInit();
+
+    expect(component.options.allowUserInputField).toEqual(false);
+    
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(fixture.debugElement.query(By.css(".aircal__meta__input__container")).nativeElement.childNodes[0].nativeElement.classList.contains("aircal__button")).toEqual("");
+    });
+  });
+  
+  it("should honor allowInfiniteEndDate", () => {
+    const d = component.options.allowInfiniteEndDate = true;
+    const sDate = component.options.startDate = new Date(2019, 5, 5);
+    component.ngOnInit();
+
+    expect(component.options.allowInfiniteEndDate).toEqual(true);
+
+    component.aircal.selectedStartDate.day = sDate;
+
+    expect(component.aircal.selectedStartDate.day).toEqual(new Date(2019, 5, 5));
+    expect(component.aircal.selectedEndDate.day).toEqual(null);
+    
+  });
+  
   it("should honor startDate", () => {
     const d = component.options.startDate = new Date(2019, 5, 5);
     component.ngOnInit();

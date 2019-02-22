@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges } from "@angular/core";
+import { Component, Input, OnInit, Output, OnDestroy, forwardRef, OnChanges, ViewEncapsulation, SimpleChanges, HostListener, ElementRef } from "@angular/core";
 import { Subject } from "rxjs";
-import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, format, subMonths, getYear, differenceInDays, isSameDay, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear, toDate } from "date-fns";
+import { parse, addMonths, addDays, startOfMonth, getDaysInMonth, subDays, isBefore, format, subMonths, getYear, differenceInDays, isSameDay, startOfWeek, getDay, isValid, addYears, setMonth, getMonth, setYear, toDate } from "date-fns";
 
 import { AircalOptions, AircalResponse, AircalInputResponse } from "./ngx-aircal.model";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
@@ -72,7 +72,19 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
     //When a date range is passed in, the user may want to have a consistent callback, so provide this immediately
     @Output() onDateRangeInitialised: Subject<any> = new Subject();
 
-    constructor() {
+    @HostListener("document:click", ["$event"])
+    clickOutside(event: any) {
+        if (!this.options.closeOnOutsideClick) return;
+        
+        const clickedOutside = !this._ElementRef.nativeElement.contains(event.target);
+        if (clickedOutside) {
+            this.showCalendar = false;
+        };
+    }
+
+    constructor(
+        private _ElementRef: ElementRef
+    ) {
         
     }
 
@@ -364,8 +376,12 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         if (!this.aircal.selectedStartDate.day) {
             this.aircal.selectedStartDate = date;
         } else if (this.aircal.selectedStartDate.day && !this.aircal.selectedEndDate.day) {
-            this.aircal.selectedEndDate = date;
-            this.needsApplying = true;
+            if(isBefore(date.day, this.aircal.selectedStartDate.day)) {
+                this.aircal.selectedStartDate = date;
+            } else {
+                this.aircal.selectedEndDate = date;
+                this.needsApplying = true;
+            };
         } else {
             if(isShortcutSelection) {
                 this.aircal.selectedEndDate = date;

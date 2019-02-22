@@ -1,11 +1,15 @@
 <div class="aircal__container">
-    <div class="aircal__meta__input__container" *ngIf="!options?.inlineMode">
+    <div class="aircal__meta__input__container" *ngIf="!options?.inlineMode && options?.allowUserInputField">
         <input (keydown.enter)="$event.preventDefault();" type="text" class="aircal__meta__input" [placeholder]="dynamicPlaceholderText" [ngModel]="formSelectionText"
             (ngModelChange)="onUserInput($event)" [value]="formSelectionText" [disabled]="false" [readonly]="false"
             [ngClass]="{'aircal__meta__input--invalid': options?.indicateInvalidDateRange && !dateRangeValid}"
             autocomplete="off" spellcheck="false" autocorrect="off" />
         <button type="button" class="aircal__meta__input__icon aircal__meta__input__icon--opening" [ngClass]="{'aircal__meta__input__icon--opening': !showCalendar, 'aircal__meta__input__icon--closing': showCalendar, 'aircal__meta__input__icon--disabled': options?.disable}" (click)="openCalendar()"></button>
         <button *ngIf="!options?.disable" type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()"></button>
+    </div>
+
+    <div *ngIf="!options?.allowUserInputField" class="aircal__meta__input__container">
+        <button type="button" (click)="openCalendar()" class="aircal__text-brand aircal__button aircal__button--open">{{!!formSelectionText.length ? formSelectionText : options?.selectText}}</button>
     </div>
     
     <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="(showCalendar && !options?.disable) || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
@@ -91,11 +95,11 @@
     
         <div class="aircal__actions aircal__meta__rows--last">
             <div>
-                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day)"
+                <button *ngIf="options?.showClearBtn" type="button" class="aircal__button aircal__button--cancel" [disabled]="(!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day)) && !(options?.allowInfiniteEndDate && this.aircal.selectedStartDate?.day && !this.aircal.selectedEndDate?.day)"
                     (click)="_dateRangeCleared()">{{options?.clearText}}</button>
             </div>
             <div>
-                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying || !dateRangeValid" class="aircal__button aircal__button--apply"
+                <button *ngIf="options?.showApplyBtn" type="button" [disabled]="(!(this.aircal.selectedStartDate?.day && this.aircal.selectedEndDate?.day) || !needsApplying || !dateRangeValid) && !(options?.allowInfiniteEndDate && this.aircal.selectedStartDate?.day && !this.aircal.selectedEndDate?.day)" class="aircal__button aircal__button--apply"
                     (click)="_dateRangeCommitted()">{{options?.applyText}}</button>
             </div>
         </div>
