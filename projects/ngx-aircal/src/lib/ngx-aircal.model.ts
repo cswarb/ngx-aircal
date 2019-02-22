@@ -39,6 +39,7 @@ export class AircalOptions {
     public autoApplyAndClose?: boolean = false;
     public allowUserInputField?: boolean = true;
     public allowInfiniteEndDate?: boolean = false;
+    public closeOnOutsideClick?: boolean = false;
     public icons?: { leftArrow?: null | string, rightArrow?: null | string } = {
         leftArrow: null,
         rightArrow: null

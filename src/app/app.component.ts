@@ -24,9 +24,9 @@ export class AppComponent {
       // endDate: new Date(2019, 0, 19),
       // disableFromHereBackwards: new Date(2019, 0, 15),
       // disableFromHereForwards: new Date(2019, 0, 20),
-      allowInfiniteEndDate: false,
+      allowInfiniteEndDate: true,
       allowUserInputField: false,
-      singlePicker: true
+      singlePicker: true,
       // singlePicker: true
     });
 

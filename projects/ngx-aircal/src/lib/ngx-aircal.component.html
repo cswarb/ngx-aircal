@@ -8,7 +8,7 @@
         <button *ngIf="!options?.disable" type="button" class="aircal__meta__input__icon aircal__meta__input__icon--alt aircal__meta__input__icon--closing" [ngClass]="{'aircal__meta__input__icon--opening': showCalendar, 'aircal__meta__input__icon--closing': !showCalendar}" (click)="openCalendar()"></button>
     </div>
 
-    <div *ngIf="!options?.allowUserInputField" class="">
+    <div *ngIf="!options?.allowUserInputField" class="aircal__meta__input__container">
         <button type="button" (click)="openCalendar()" class="aircal__text-brand aircal__button aircal__button--open">{{!!formSelectionText.length ? formSelectionText : options?.selectText}}</button>
     </div>
     
