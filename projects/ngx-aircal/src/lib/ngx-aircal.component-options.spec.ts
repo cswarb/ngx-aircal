@@ -317,6 +317,7 @@ describe("NgxAircalComponent", () => {
   
   it("should honor nextMonthWrapAround", () => {
     component.options.nextMonthWrapAround = false;
+    component.options.defaultStart = new Date(2019, 4, 20);
     component.ngOnInit();
     
     let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
