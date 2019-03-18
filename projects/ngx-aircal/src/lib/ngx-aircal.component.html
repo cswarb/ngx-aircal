@@ -12,7 +12,7 @@
         <button type="button" (click)="openCalendar()" class="aircal__text-brand aircal__button aircal__button--open">{{!!formSelectionText.length ? formSelectionText : options?.selectText}}</button>
     </div>
     
-    <div class="aircal" [ngClass]="['aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="(showCalendar && !options?.disable) || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
+    <div class="aircal" [ngClass]="[options?.inlineMode ? 'aircal--relative' : '', 'aircal__orient--' + getCalendarOrientation(), options?.hasArrow ? 'aircal--' + getArrowBiasClass() + '-bias' : '', options?.hasArrow && !options?.inlineMode ? 'aircal--has-arrow' : '', !options?.backgroundVisible ? 'aircal--transparent' : '']" *ngIf="(showCalendar && !options?.disable) || options?.inlineMode" [ngStyle]="{'width': options?.width, 'height': options?.height}">       
         <div *ngIf="(options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)) || (options?.allowQuicksetMonth && (monthSelectionPanelOpen && !yearSelectionPanelOpen))" class="aircal__meta aircal__meta__rows aircal__meta__quickset">
             <div data-aircal-year-quickset class="aircal__meta__rows aircal__meta__choices" *ngIf="options?.allowQuicksetYear && (yearSelectionPanelOpen && !monthSelectionPanelOpen)"
                 (yearSelected)="selectYear($event)" (nextYearChunks)="nextYearChunks($event)" (prevYearChunks)="prevYearChunks($event)"
