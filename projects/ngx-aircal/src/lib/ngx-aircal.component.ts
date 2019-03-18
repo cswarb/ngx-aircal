@@ -351,17 +351,17 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         return this.allDaysArray;
     }
 
-    public canSelectPreviousMonth(): boolean {
+    public canSelectPreviousMonth(optionalDate?: Date): boolean {
         //See what year the user will be navigating to
-        const goingToYear = getYear(subMonths(this.date, 1));
+        const goingToYear = getYear(subMonths(!!optionalDate ? optionalDate : this.date, 1));
 
         //Compare to the minYear option
         return !!(goingToYear > this.options.minYear);
     }
 
-    public canSelectNextMonth(): boolean {
+    public canSelectNextMonth(optionalDate?: Date): boolean {
         //See what year the user will be navigating to
-        const goingToYear = getYear(addMonths(this.nextMonthDate, 1));
+        const goingToYear = getYear(addMonths(!!optionalDate ? optionalDate : this.nextMonthDate, 1));
 
         //Compare to the minYear option
         return !!(goingToYear < this.options.maxYear);
@@ -464,11 +464,15 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         !this.canSelectPreviousMonth() ? this.aircal.disablePreviousSelection = true : this.aircal.disablePreviousSelection = false;
 
         //Check the month after to see if we should disable the button
-        this.canSelectNextMonth() ? this.aircal.disableForwardSelection = false : this.aircal.disableForwardSelection = true;
+        if (this.canSelectNextMonth(this.date)) {
+            // disableForwardSelection
+            // disablePreviousSelection
+            this.aircal.disableForwardSelection = false;
+        };
     }
 
     public nextMonth(): void {
-        if (this.canSelectNextMonth()) {
+        if (this.canSelectNextMonth(this.date)) {
             this.date = addMonths(this.date, 1);
             this.nextMonthDate = addMonths(this.date, 1);
             this.createCalendars();
@@ -479,7 +483,9 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         this.canSelectPreviousMonth() ? this.aircal.disablePreviousSelection = false : this.aircal.disablePreviousSelection = true;
 
         //Check the month after to see if we should disable the button
-        !this.canSelectNextMonth() ? this.aircal.disableForwardSelection = true : this.aircal.disableForwardSelection = false;
+        if (!this.canSelectNextMonth(this.date)) {
+            this.aircal.disableForwardSelection = true;
+        };
     }
 
     public isSelected(date: DateDisplayModel): boolean {
