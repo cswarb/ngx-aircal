@@ -310,6 +310,7 @@ describe("NgxAircalComponent", () => {
   it("should honor the disabling of forward selection", () => {
     component.options.minYear = 2018;
     component.options.maxYear = 2018;
+    component.date = new Date(2018, 0, 1);
 
     component.nextMonth();
     expect(component.aircal.disableForwardSelection).toEqual(true);
@@ -321,6 +322,7 @@ describe("NgxAircalComponent", () => {
   it("should honor the disabling of forward and previous selection", () => {
     component.options.minYear = 2018;
     component.options.maxYear = 2018;
+    component.date = new Date(2018, 0, 1);
 
     component.nextMonth();
     expect(component.aircal.disableForwardSelection).toEqual(true);
