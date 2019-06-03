@@ -286,7 +286,6 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         if(getYear(this.date) === year) {
             return;
         };
-        this.toggleYearSelection();
         this.date = setYear(this.date, year);
         this.nextMonthDate = addMonths(this.date, 1);
         this.createCalendars();
