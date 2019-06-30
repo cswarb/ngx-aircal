@@ -528,7 +528,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         //Update form to committed values
         this.updateFormSelectionText();
 
-        if (this.options.autoApplyAndClose) {
+        if (this.options.autoApplyAndClose || this.options.autoCloseWhenApplied) {
             this.showCalendar = false;
         };
 
