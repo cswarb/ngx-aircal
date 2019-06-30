@@ -106,6 +106,7 @@ export class AppComponent {
 | applyText | "Apply" | String | Change the text to commit the date range |
 | autoApplyAndClose | false | Boolean | When an end date is selected (or a start date if a start and end already exist), automatically apply the date selection and close the calendar |
 | includeExamplePlaceholder | true | Boolean | Show an placeholder example for the input field. Dynamically generates example dates based on _dateFormat_ option |
+| autoCloseWhenApplied | false | Boolean | Close the calendar when the apply button is pressed |
 | clearText | "Clear" | String | Change the text to clear the date range |
 | highlightToday | true | Boolean | Highlight the cell colour for today |
 | showClearBtn | true | Boolean | Should the clear button be shown on the UI |
