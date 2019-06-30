@@ -136,6 +136,29 @@ describe("NgxAircalComponent", () => {
     });
   });
   
+  it("should honor autoCloseWhenApplied option when true", () => {
+    component.options.autoCloseWhenApplied = true;
+    component.ngOnInit();
+    let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
+    btn.triggerEventHandler("click", () => { });
+
+    let sd = new DateDisplayModel();
+    sd.day = new Date(2019, 0, 10);
+    let ed = new DateDisplayModel();
+    ed.day = new Date(2019, 0, 11);
+
+    component.selectDate(sd);
+    component.selectDate(ed);
+
+    component._dateRangeCommitted();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      let cal = fixture.nativeElement.querySelectorAll(".aircal").length;
+      expect(cal).toEqual(0);
+    });
+  });
+  
   it("should honor includeExamplePlaceholder", () => {
     const d = component.options.includeExamplePlaceholder = true;
     component.ngOnInit();

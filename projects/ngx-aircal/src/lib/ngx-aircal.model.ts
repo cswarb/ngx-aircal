@@ -37,6 +37,7 @@ export class AircalOptions {
     public allowQuicksetMonth?: boolean = false;
     public allowQuicksetYear?: boolean = false;
     public autoApplyAndClose?: boolean = false;
+    public autoCloseWhenApplied?: boolean = false;
     public allowUserInputField?: boolean = true;
     public allowInfiniteEndDate?: boolean = false;
     public closeOnOutsideClick?: boolean = false;
