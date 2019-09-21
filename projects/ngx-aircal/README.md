@@ -12,7 +12,6 @@ ngx-aircal is a modern, configurable and lightweight Angular date range picker.
 
 ## Notes
 
-- The plugin uses an alpha version of date-fns to parse dates. This will be updated as soon as the stable version is released.
 - When setting the dateFormat option, be aware that you must use [Unicode tokens](https://date-fns.org/v2.0.0-alpha.27/docs/Unicode-Tokens)
 
 ## How do I install the library?

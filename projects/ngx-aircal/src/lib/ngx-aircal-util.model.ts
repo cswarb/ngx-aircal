@@ -112,7 +112,7 @@ export class AircalUtils {
         date instanceof DateDisplayModel ? date = date.day : date;
         if (!date || !isValid(date)) return "";
 
-        return format(date, formatStr, { awareOfUnicodeTokens: true });
+        return format(date, formatStr, { useAdditionalDayOfYearTokens: true, useAdditionalWeekYearTokens: true });
     }
 
     public static isCurrentYearViable(year: number, minYear: number, maxYear: number) {
