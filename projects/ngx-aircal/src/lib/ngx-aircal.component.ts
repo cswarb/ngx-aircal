@@ -460,9 +460,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         };
 
         //Check the month before to see if we should disable the button
-        if (!this.canSelectPreviousMonth()) {
-            this.aircal.disablePreviousSelection = true;
-        };
+        !this.canSelectPreviousMonth() ? this.aircal.disablePreviousSelection = true : this.aircal.disablePreviousSelection = false;
 
         //Check the month after to see if we should disable the button
         if (this.canSelectNextMonth(this.date)) {
@@ -481,9 +479,7 @@ export class NgxAircalComponent implements OnInit, OnDestroy, OnChanges, Control
         };
 
         //Check the month before to see if we should disable the button
-        if (this.canSelectPreviousMonth()) {
-            this.aircal.disablePreviousSelection = false;
-        };
+        this.canSelectPreviousMonth() ? this.aircal.disablePreviousSelection = false : this.aircal.disablePreviousSelection = true;
 
         //Check the month after to see if we should disable the button
         if (!this.canSelectNextMonth(this.date)) {
