@@ -327,6 +327,7 @@ describe("NgxAircalComponent", () => {
   it("should honor previousMonthWrapAround", () => {
     //This alters highlighting behaviour?
     component.options.previousMonthWrapAround = false;
+    component.options.defaultStart = new Date(2019, 4, 20);
     component.ngOnInit();
     
     let btn = fixture.debugElement.query(By.css(".aircal__meta__input__icon.aircal__meta__input__icon--opening"));
